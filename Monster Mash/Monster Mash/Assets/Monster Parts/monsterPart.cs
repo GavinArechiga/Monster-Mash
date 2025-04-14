@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,6 +39,9 @@ public class monsterPart : MonoBehaviour
     public bool isTorso;
     public bool isHorn;
     public bool isDecor;
+
+    public SelectedMonsterPartType SelectedMonsterPartType;
+    private MonsterPartType monsterPartTypeRef;
 
     [Header("Damage and Status Effects")]
     public int baseNeutralAttackDamage = 0;
@@ -258,6 +262,38 @@ public class monsterPart : MonoBehaviour
 
     #region Build a Scare Tools
 
+    /// <summary>
+    /// Uses reflection to assign the MonsterPartRef varable to the corect class based on the selected monster part.
+    /// if a new type of monster part is added this approach makes it so the code does not need to be updated, and also avoids having a long switch statement or a long chain of if's 
+    /// </summary>
+    public void TriggerPartTypeSetup()
+    {
+        // checks if the monster part type has been assigned in the inspector
+        if (SelectedMonsterPartType == SelectedMonsterPartType.None)
+        {
+            Debug.LogError("Monster part type not assigned in inspector on" + gameObject.name);
+            monsterPartTypeRef = null;
+        }
+        else
+        {
+            // gets the class name of the selected monster part by matching it with the enum
+            string typeName = $"{typeof(MonsterPartType).Namespace}.{SelectedMonsterPartType}Type";
+            // Converts the class name into a Type
+            Type type = Type.GetType(typeName);
+
+            if (type == null)
+            {
+                Debug.LogError("Could not find class for type " + typeName);
+                monsterPartTypeRef = null;
+            }
+            else
+            {
+                // Casts the type to MonsterPartType so that it can be assigned to monsterPartTypeRef
+                monsterPartTypeRef = Activator.CreateInstance(type) as MonsterPartType;
+            }
+        }
+    }
+
     public void changeAttackAnimationAtRuntime()
     {
         //this will be expanded to include all monster parts
@@ -320,7 +356,6 @@ public class monsterPart : MonoBehaviour
     #endregion
 
     #region Animation Set Up
-
     public void triggerAnimationSetUp()
     {
         myAnimator = this.GetComponent<Animator>();
