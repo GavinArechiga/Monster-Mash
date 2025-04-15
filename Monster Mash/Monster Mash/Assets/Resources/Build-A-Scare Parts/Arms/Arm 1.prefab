@@ -8396,11 +8396,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -8544,11 +8539,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -19573,11 +19563,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -19888,11 +19873,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -25256,11 +25236,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -37354,11 +37329,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 1
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -44957,6 +44927,7 @@ MonoBehaviour:
   isTorso: 0
   isHorn: 0
   isDecor: 0
+  SelectedMonsterPart: 1
   baseNeutralAttackDamage: 5
   baseHeavyAttackDamage: 10
   builtUpAddedDamage: 5
@@ -45449,11 +45420,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 75.56, y: 3.73, z: 2.99}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 7.63
-  boxOrientation: 1
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0
@@ -45764,11 +45730,6 @@ MonoBehaviour:
   isGrapple: 0
   isBoomerang: 0
   isChargingJab: 0
-  boxSize: {x: 0, y: 0, z: 0}
-  boxRotation: {x: 0, y: 0, z: 0}
-  boxMaxDistance: 0
-  boxOrientation: 0
-  showDebug: 0
   damage: 0
   hasTickDamage: 0
   tickDamage: 0

@@ -1,4 +1,4 @@
-public enum SelectedMonsterPartType
+public enum SelectedMonsterPart
 {
     None,
     Arm,

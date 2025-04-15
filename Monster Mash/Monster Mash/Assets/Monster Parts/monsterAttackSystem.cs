@@ -345,6 +345,7 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].mainTorso = mainTorso;
             allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
+            allMonsterParts[i].TriggerPartTypeSetup();
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 

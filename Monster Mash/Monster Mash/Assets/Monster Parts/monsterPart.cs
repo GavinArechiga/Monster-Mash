@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class monsterPart : MonoBehaviour
 {
@@ -40,7 +41,7 @@ public class monsterPart : MonoBehaviour
     public bool isHorn;
     public bool isDecor;
 
-    public SelectedMonsterPartType SelectedMonsterPartType;
+    public SelectedMonsterPart SelectedMonsterPart;
     private MonsterPartType monsterPartTypeRef;
 
     [Header("Damage and Status Effects")]
@@ -263,35 +264,25 @@ public class monsterPart : MonoBehaviour
     #region Build a Scare Tools
 
     /// <summary>
-    /// Uses reflection to assign the MonsterPartRef varable to the corect class based on the selected monster part.
-    /// if a new type of monster part is added this approach makes it so the code does not need to be updated, and also avoids having a long switch statement or a long chain of if's 
+    /// Assigns the monster part type to the monster part depending on the value of the selected monster part enum.
     /// </summary>
     public void TriggerPartTypeSetup()
     {
-        // checks if the monster part type has been assigned in the inspector
-        if (SelectedMonsterPartType == SelectedMonsterPartType.None)
+        if (SelectedMonsterPart == SelectedMonsterPart.None)
         {
-            Debug.LogError("Monster part type not assigned in inspector on" + gameObject.name);
-            monsterPartTypeRef = null;
+            Debug.LogError("Monster part type not assigned in the inspector on " + gameObject.name);
+            return;
         }
-        else
-        {
-            // gets the class name of the selected monster part by matching it with the enum
-            string typeName = $"{typeof(MonsterPartType).Namespace}.{SelectedMonsterPartType}Type";
-            // Converts the class name into a Type
-            Type type = Type.GetType(typeName);
 
-            if (type == null)
-            {
-                Debug.LogError("Could not find class for type " + typeName);
-                monsterPartTypeRef = null;
-            }
-            else
-            {
-                // Casts the type to MonsterPartType so that it can be assigned to monsterPartTypeRef
-                monsterPartTypeRef = Activator.CreateInstance(type) as MonsterPartType;
-            }
-        }
+        // gets the path to the matching class name of the selected monster part enum and saves it as a string
+        string selectedPartName = $"{typeof(MonsterPartType).Namespace}.{SelectedMonsterPart}, {typeof(MonsterPartType).Assembly.FullName}";
+        // converts the string to a Type
+        Type selectedClassType = Type.GetType(selectedPartName);
+        // converts the type to MonsterPartType and creates an instance of it
+        monsterPartTypeRef = Activator.CreateInstance(selectedClassType) as MonsterPartType;
+
+        Debug.Log(monsterPartTypeRef);
+
     }
 
     public void changeAttackAnimationAtRuntime()

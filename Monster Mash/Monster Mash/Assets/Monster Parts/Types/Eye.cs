@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EyeType : MonsterPartType
+public class Eye : MonsterPartType
 {
    
 }
