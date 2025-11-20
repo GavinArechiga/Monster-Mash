@@ -48,7 +48,7 @@ public class EmoteManager
     private monsterAttackSystem attackSystem;
     private bool isInitilised;
 
-    public void Initilize(monsterAttackSystem attackSystem, playerController player)
+    public void Initilize(monsterAttackSystem attackSystem, NewPlayerController player)
     {
         if (isInitilised) { return; }
 

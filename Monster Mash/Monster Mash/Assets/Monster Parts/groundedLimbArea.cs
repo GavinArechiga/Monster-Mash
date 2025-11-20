@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class groundedLimbArea : MonoBehaviour
 {
-    [SerializeField] private playerController myPlayer;
+    [SerializeField] private NewPlayerController myPlayer;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

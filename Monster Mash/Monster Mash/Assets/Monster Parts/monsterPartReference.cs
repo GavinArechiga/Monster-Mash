@@ -72,7 +72,7 @@ public class monsterPartReference : MonoBehaviour
                     {
                         //attack
                         pointOfContact = other.ClosestPointOnBounds(transform.position);
-                        playerController player = GetComponentInParent<playerController>();
+                        NewPlayerController player = GetComponentInParent<NewPlayerController>();
                         damagedMonster.myPlayer.damaged(damage, markedHeavy, player.transform.position, pointOfContact);
 
                         if (hasStatusEffect && markedHeavy)
@@ -107,7 +107,6 @@ public class monsterPartReference : MonoBehaviour
                             if (directionOfAttack == 1 || directionOfAttack == -1)
                             {
                                 //grapple into a body smash
-                                mainSystem.myPlayer.playerGrapple(damagedMonster.myPlayer);
                             }
                             else if (directionOfAttack == 2)
                             {
@@ -142,7 +141,6 @@ public class monsterPartReference : MonoBehaviour
                 {
                     //mainSystem.myPlayer.leftRightGrapple(false, pointOfContact);
                     //grapple into wall
-                    mainSystem.myPlayer.wallGrapple(pointOfContact);
                     print("wall detected");
                 }
                 else if (directionOfAttack == 2)

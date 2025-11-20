@@ -396,8 +396,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7387445060917446183}
-  - component: {fileID: 1351053803857597442}
   - component: {fileID: 5364141700156790741}
+  - component: {fileID: -8793189436877943876}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -425,7 +425,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1351053803857597442
+--- !u!50 &5364141700156790741
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010151266505952126}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 20
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!114 &-8793189436877943876
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -434,7 +455,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2010151266505952126}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9420c0b3226a57945a1d78b00d0798a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c575b6360d35f84cb21bcb335db8897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerIndex: 0
@@ -451,6 +472,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   playerInput: {fileID: 0}
+  currentPlatformCollider: {fileID: 0}
   facingRight: 0
   isAttacking: 0
   canMove: 1
@@ -558,27 +580,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   yMultiplier: 1.5
   allParts: []
---- !u!50 &5364141700156790741
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2010151266505952126}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 20
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 0
-  m_CollisionDetection: 1
-  m_Constraints: 4
+  legs: []
 --- !u!1 &2252039416887785429
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8176efd88a70ad4409eed33d88f104d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPlayer: {fileID: 1351053803857597442}
+  myPlayer: {fileID: -8793189436877943876}
 --- !u!61 &8551292697588775064
 BoxCollider2D:
   m_ObjectHideFlags: 0

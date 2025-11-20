@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class playerManager : MonoBehaviour
 {
     private PlayerInputManager playerInputManager;
-    public List<playerController> players = new List<playerController>();
+    public List<NewPlayerController> players = new List<NewPlayerController>();
     private List<string> playerNumbersAvailable = new List<string>() { "Player 1" , "Player 2", "Player 3", "Player 4"};
     public DynamicCamera battleCamera;
 
@@ -40,7 +40,7 @@ public class playerManager : MonoBehaviour
     {
         #region Rename, Add to Lists, and Player Order
 
-        playerController[] potentialNewPlayer = FindObjectsOfType<playerController>();
+        NewPlayerController[] potentialNewPlayer = FindObjectsOfType<NewPlayerController>();
 
         if (potentialNewPlayer.Length != players.Count) //only go through this process if its a new scene or a new player clone has been added
         {
@@ -163,7 +163,7 @@ public class playerManager : MonoBehaviour
 
     }
 
-    public void RemovePlayer(playerController player)
+    public void RemovePlayer(NewPlayerController player)
     {
         battleCamera.playerTransforms.Remove(player.transform);
         players.Remove(player);

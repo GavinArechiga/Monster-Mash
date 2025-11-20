@@ -141,7 +141,7 @@ public class monsterSelectManager : MonoBehaviour
         if (monsterInLibrary == 0)
         {
             monsterAttackSystem selectedMonster = tempMonsterLibrary[monsterInLibrary];
-            playerController player1 = GameObject.Find("Player 1").GetComponent<playerController>();
+            NewPlayerController player1 = GameObject.Find("Player 1").GetComponent<NewPlayerController>();
             selectedMonster.transform.parent = player1.transform;
             player1.myMonster = selectedMonster;
             player1.myMonster.myPlayer = player1;
@@ -152,7 +152,7 @@ public class monsterSelectManager : MonoBehaviour
         else if (monsterInLibrary == 1)
         {
             monsterAttackSystem selectedMonster = tempMonsterLibrary[monsterInLibrary];
-            playerController player2 = GameObject.Find("Player 2").GetComponent<playerController>();
+            NewPlayerController player2 = GameObject.Find("Player 2").GetComponent<NewPlayerController>();
             selectedMonster.transform.parent = player2.transform;
             player2.myMonster = selectedMonster;
             player2.myMonster.myPlayer = player2;

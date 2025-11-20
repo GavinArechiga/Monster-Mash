@@ -46,7 +46,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
             dynamicCam.playerTransforms.Add(spawnedPlayer.transform);
 
-            playerController controller = spawnedPlayer.GetComponent<playerController>();
+            NewPlayerController controller = spawnedPlayer.GetComponent<NewPlayerController>();
 
             controller.playerIndex = (transfer.storedPlayerInformation[i].playerIndex + 1);
 
@@ -96,7 +96,7 @@ public class PlayerSpawnManager : MonoBehaviour
         }
     }
 
-    IEnumerator Delay(monsterAttackSystem monsterControl, playerController controller)
+    IEnumerator Delay(monsterAttackSystem monsterControl, NewPlayerController controller)
     {
         yield return new WaitForSeconds(0.1f);
 

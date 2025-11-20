@@ -48,7 +48,7 @@ public class monsterAttackSystem : MonoBehaviour
     private bool forceFallingActivated = false;
     private bool isLaunching = false;
 
-    public playerController myPlayer;
+    public NewPlayerController myPlayer;
     public Animator myAnimator;
     private Animator mainTorso;
 
@@ -429,7 +429,7 @@ public class monsterAttackSystem : MonoBehaviour
         
     }
 
-    public void AssignMyPlayer(playerController controller)
+    public void AssignMyPlayer(NewPlayerController controller)
     {
         myPlayer = controller;
     }
@@ -1046,49 +1046,6 @@ public class monsterAttackSystem : MonoBehaviour
         stopForceFall();
         leapingAttackVisual.Stop();
         leapingAttackVisual.Play();
-    }
-
-    #endregion
-
-    #region Player Controller Reactions i.e. Leaping with attacks
-    public void smallLeapAttackForward()
-    {
-        myPlayer.smallLeapAttackForward();
-    }
-
-    public void smallLeapAttackBackward()
-    {
-        myPlayer.smallLeapAttackBackward();
-    }
-
-    public void smallLeapAttackUpward()
-    {
-        myPlayer.smallLeapAttackUpward();
-    }
-
-    public void smallLeapAttackDownward()
-    {
-        myPlayer.smallLeapAttackDownward();
-    }
-
-    public void leapAttackForward()
-    {
-        myPlayer.leapAttackForward();
-    }
-
-    public void leapAttackBackward()
-    {
-        myPlayer.leapAttackBackward();
-    }
-
-    public void leapAttackUpward()
-    {
-        myPlayer.leapAttackUpward();
-    }
-
-    public void leapAttackDownward()
-    {
-        myPlayer.leapAttackDownward();
     }
 
     #endregion
