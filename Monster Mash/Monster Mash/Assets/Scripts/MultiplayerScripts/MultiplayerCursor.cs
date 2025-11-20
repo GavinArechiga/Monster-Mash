@@ -14,6 +14,8 @@ public class MultiplayerCursor : MonoBehaviour
 
     VirtualMouseInput cursor;
 
+    [SerializeField] private RectTransform canvasRectTransform;
+    private Camera UICamera;
     public int cursorIndex;
 
     [HideInInspector]
@@ -34,6 +36,7 @@ public class MultiplayerCursor : MonoBehaviour
     // Start is called before the first frame update
     public void Enabled(PlayerInput spawnedPlayer)
     {
+        UICamera = canvasRectTransform.GetComponent<Canvas>().worldCamera;
         player = spawnedPlayer;
 
         spawnedPlayer.SwitchCurrentActionMap("UI Navagation");
@@ -74,14 +77,15 @@ public class MultiplayerCursor : MonoBehaviour
 
     private void Update()
     {
-       
+
     }
     void LateUpdate()
     {
         Vector2 mousePos = cursor.virtualMouse.position.ReadValue();
 
-        mousePos.x = Mathf.Clamp(mousePos.x, 0f, Screen.width);
-        mousePos.y = Mathf.Clamp(mousePos.y, 0f, Screen.height);
+        // changed from using Screen.Width and Screen.Height to instead use the canvas rect so that it scales with the resolution.
+        mousePos.x = Mathf.Clamp(mousePos.x, 0f, canvasRectTransform.rect.width);
+        mousePos.y = Mathf.Clamp(mousePos.y, 0f, canvasRectTransform.rect.height);
 
         InputState.Change(cursor.virtualMouse.position, mousePos);
     }
@@ -90,7 +94,8 @@ public class MultiplayerCursor : MonoBehaviour
     {
         eventData = new PointerEventData(eventSystem);
 
-        eventData.position = transform.GetChild(0).localPosition;
+        // Replaced eventData.position = transform.GetChild(0).localPosition; With world to screen point so that the cordinates allign at any resolution.
+        eventData.position = RectTransformUtility.WorldToScreenPoint(UICamera, movingCursor.transform.position);
 
         List<RaycastResult> results = new List<RaycastResult>();
 
