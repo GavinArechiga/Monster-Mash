@@ -295,7 +295,6 @@ public class NewPlayerController : MonoBehaviour
         //This section moves the x axis of the player
         //For moving the y axis of the player, check out the jumping category of the movement section
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
-        UpdateInputDirection();
         if (monsterControllerActive)
         {
 
@@ -675,7 +674,7 @@ public class NewPlayerController : MonoBehaviour
                     }
                 }
 
-                //Debug.Log($"Last Input Direction:{lastInputDirection}");
+                //Debug.Log($"Last Input Direction:{lastInputDirection} Vector: {lastInputDirectionVector}");
             }
 
             if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
@@ -1093,8 +1092,7 @@ public class NewPlayerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[2] == null) { return; }
             myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(1, (int)lastInputDirection);
-            buttonB_Pressed = true;
+            myMonster.attack(2, (int)lastInputDirection);
             buttonX_Pressed = true;
         }
     }
@@ -1111,8 +1109,7 @@ public class NewPlayerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[3] == null) { return; }
             myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(1, (int)lastInputDirection);
-            buttonB_Pressed = true;
+            myMonster.attack(3, (int)lastInputDirection);
             buttonY_Pressed = true;
         }
     }
@@ -1304,54 +1301,6 @@ public class NewPlayerController : MonoBehaviour
         myRigidbody.gravityScale = slowFallGravityPower;
     }
 
-    public void damageLockPlayercontroller()
-    {
-        //canMove = false;
-        isRunning = false;
-        isWalking = false;
-        //antiPhase(false);
-
-        if (grounded)
-        {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-        }
-
-        myRigidbody.velocity = Vector2.zero;
-        myRigidbody.angularVelocity = 0;
-    }
-
-    public void damageUnlockPlayerController()
-    {
-        canMove = true;
-        isRunning = false;
-        isWalking = false;
-        //isAttacking = false;
-        //myRigidbody.gravityScale = gravityPower;
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-
-        if (isDashing == false && isRolling == false)
-        {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            turnOnFriction();
-            landDetectionReady = true;
-        }
-
-        if (requiresLateLand)
-        {
-            requiresLateLand = false;
-            //lateLandVisualCorrections();
-        }
-
-
-
-        /*
-        if (grounded)
-        {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-        }
-        */
-    }
-
     public void lockPlayerController()
     {
         //Debug.Log("Player Controller Locked");
@@ -1398,45 +1347,6 @@ public class NewPlayerController : MonoBehaviour
         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
     }
 
-    public void leapAttackForward()
-    {
-        //turnOffFriction();
-
-        if (isFacingEdge() == false)
-        {
-            if (grounded)
-            {
-                turnOnFriction();
-                myRigidbody.velocity = new Vector2(0, 0);
-                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
-            }
-            else
-            {
-                //heavyActivated();
-                myRigidbody.velocity = new Vector2(0, 0);
-                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
-                StartCoroutine(leapAttackForwardControl());
-            }
-        }
-    }
-
-    private void UpdateInputDirection()
-    {
-        float deadZone = 0.2f;
-        Vector2 input = leftJoystickVector.normalized;
-        if (leftJoystickValue >= deadZone)
-        {
-            if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-            {
-                lastInputDirectionVector = new Vector2Int(input.x > 0 ? 1 : -1, 0);
-            }
-            else if (Mathf.Abs(input.y) > 0)
-            {
-                lastInputDirectionVector = new Vector2Int(0, input.y > 0 ? 1 : -1);
-            }
-        }
-    }
-
     // Listens for when an attack calls Trigger Attack Release
     public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
     {
@@ -1478,53 +1388,6 @@ public class NewPlayerController : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
     }
-
-
-    IEnumerator leapAttackForwardControl()
-    {
-        yield return new WaitForSeconds(0.1f);
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-    }
-
-    public void forceStopLeap()
-    {
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-    }
-
-    public void leapAttackBackward()
-    {
-        if (isFacingEdge() || atPlatformEdge == false)
-        {
-            //myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
-        }
-    }
-
-    public void leapAttackUpward()
-    {
-
-        if (grounded)
-        {
-            myRigidbody.velocity = new Vector2(0, 60);
-            grounded = false;
-            lateAttackReleaseVisualCorrections();
-        }
-        else
-        {
-            myRigidbody.velocity = new Vector2(0, 60);
-            grounded = false;
-        }
-
-        StartCoroutine(leapAttackUpwardControl());
-    }
-
-    IEnumerator leapAttackUpwardControl()
-    {
-        yield return new WaitForSeconds(0.1f);
-        myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 0);
-        myRigidbody.gravityScale = 0;
-    }
-
-
 
     public IEnumerator DisableJumping(float seconds)
     {
@@ -1749,18 +1612,6 @@ public class NewPlayerController : MonoBehaviour
         if (hasSlime)
         {
 
-        }
-    }
-
-    private bool isFacingEdge()
-    {
-        if (atPlatformEdge && ((facingRight && transform.position.x < platformEdgeCooridinates.x) || (facingRight == false && transform.position.x > platformEdgeCooridinates.x)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 

@@ -90,7 +90,6 @@ public class monsterPartReference : MonoBehaviour
                         if (isJabOrSlash)
                         {
                             partReference.triggerJabOrSlashHitDetect();
-                            mainSystem.myPlayer.forceStopLeap();
 
                             if (isChargingJab && isFullyChargedHeavy)
                             {
@@ -156,7 +155,6 @@ public class monsterPartReference : MonoBehaviour
             if (isJabOrSlash)
             {
                 partReference.triggerJabOrSlashHitDetect();
-                mainSystem.myPlayer.forceStopLeap();
 
                 if (isChargingJab && isFullyChargedHeavy)
                 {
