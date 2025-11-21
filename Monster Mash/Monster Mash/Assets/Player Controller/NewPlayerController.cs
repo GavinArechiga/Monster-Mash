@@ -675,7 +675,7 @@ public class NewPlayerController : MonoBehaviour
                     }
                 }
 
-                Debug.Log($"Last Input Direction:{lastInputDirection}");
+                //Debug.Log($"Last Input Direction:{lastInputDirection}");
             }
 
             if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
