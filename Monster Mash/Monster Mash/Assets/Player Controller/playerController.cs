@@ -47,7 +47,6 @@ public class playerController : MonoBehaviour
     public bool canMove = true;
     public bool isWalking = false;
     public bool isRunning = false;
-    private int directionModifier = -1;
     //
     public bool grounded = false;
     private bool atPlatformEdge = false;
@@ -123,8 +122,17 @@ public class playerController : MonoBehaviour
 
     [SerializeField]
     private Rigidbody2D myRigidbody;
-    private int inputModifier = 1;
-    private Vector2Int lastInputDirection;
+    Vector2 lastInputDirectionVector;
+    float directionThreshold = 0.2f;
+    private enum InputDirection
+    {
+        Forward = 1,
+        Backward = -1,
+        Up = 2,
+        Down = 0
+    }
+
+    private InputDirection lastInputDirection = InputDirection.Forward;
 
     [Header("Damage Launching")]
     [SerializeField] private AnimationCurve damageToForceCurve;
@@ -904,70 +912,31 @@ public class playerController : MonoBehaviour
         if (context.canceled)
         {
             jumpButtonReset = true;
-            inputModifier = 1;
+            lastInputDirection = facingRight ? InputDirection.Forward : InputDirection.Backward;
+            return;
         }
-
-        /*
-        if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
-        {
-            if (facingRight == false && leftJoystickVector.x > 0.1f)
-            {
-                //face right
-                facingRight = true;
-                directionModifier = 1;
-                flipRightVisual();
-            }
-            else if (facingRight && leftJoystickVector.x < -0.1f)
-            {
-                //face left
-                facingRight = false;
-                directionModifier = -1;
-                flipLeftVisual();
-            }
-        }
-        */
-
-        /*if (!isAttacking && !willAttack)
-        {
-            canMove = true;
-        }*/
-
 
         if (context.performed)
         {
-            if ((leftJoystickVector.x > 0.9f && facingRight) || (leftJoystickVector.x < -0.9f && facingRight == false))
+            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
             {
-                inputModifier = 1; //they'll be attacking forward
-            }
-            else if (leftJoystickVector.y > 0.2f)
-            {
-                inputModifier = 2;
-            }
-            else if (leftJoystickVector.y < -0.2f)
-            {
-                inputModifier = 0;
-            }
-            else if ((leftJoystickVector.x > 0.9f && facingRight == false) || (leftJoystickVector.x < -0.9f && facingRight))
-            {
-                inputModifier = -1;
-            }
+                lastInputDirectionVector = leftJoystickVector.normalized;
+                UpdateInputDirection(lastInputDirectionVector);
+                
 
-            if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
-            {
-                if (facingRight == false && leftJoystickVector.x > 0.1f)
+                if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
                 {
-                    //face right
-                    facingRight = true;
-                    directionModifier = 1;
-                    flipRightVisual();
+                    if (lastInputDirection is InputDirection.Forward)
+                    {
+                        flipRightVisual();
+                    }
+                    else if (lastInputDirection is InputDirection.Backward)
+                    {
+                        flipLeftVisual();
+                    }
                 }
-                else if (facingRight && leftJoystickVector.x < -0.1f)
-                {
-                    //face left
-                    facingRight = false;
-                    directionModifier = -1;
-                    flipLeftVisual();
-                }
+
+                Debug.Log($"Last Input Direction:{lastInputDirection}");
             }
 
             if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
@@ -1012,6 +981,33 @@ public class playerController : MonoBehaviour
         }
     }
 
+
+    private void UpdateInputDirection(Vector2 directionVector)
+    {
+        if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
+        {
+            if (directionVector.x > directionThreshold)
+            {
+                lastInputDirection = InputDirection.Forward;
+            }
+            else if (directionVector.x < -directionThreshold)
+            {
+                lastInputDirection = InputDirection.Backward;
+            }
+        }
+        else if (Mathf.Abs(directionVector.y) > directionThreshold)
+        {
+            if (directionVector.y > directionThreshold)
+            {
+                lastInputDirection = InputDirection.Up;
+            }
+            else if (directionVector.y < -directionThreshold)
+            {
+                lastInputDirection = InputDirection.Down;
+            }
+        }
+    }
+
     private bool isGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, solidGroundLayer);
@@ -1052,16 +1048,6 @@ public class playerController : MonoBehaviour
         //canDash = true;
         insideFloor = false;
         //canRoll = true;
-
-        if (facingRight)
-        {
-            lastInputDirection = new Vector2Int(1, 0);
-        }
-        else
-        {
-            lastInputDirection = new Vector2Int(-1, 0);
-        }
-
 
         if (grabbingWall)
         {
@@ -1621,8 +1607,8 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[1] == null) { return; }
-            myMonster.attackSlotMonsterParts[1].attackAnimationID = inputModifier;
-            myMonster.attack(1, inputModifier);
+            myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
+            myMonster.attack(1, (int)lastInputDirection);
             //canMove = false;
             buttonB_Pressed = true;
         }
@@ -1644,8 +1630,9 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[2] == null) { return; }
-            myMonster.attackSlotMonsterParts[2].attackAnimationID = inputModifier;
-            myMonster.attack(2, inputModifier);
+
+            myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
+            myMonster.attack(2, (int)lastInputDirection);
             //canMove = false;
             buttonX_Pressed = true;
         }
@@ -1667,8 +1654,9 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[3] == null) { return; }
-            myMonster.attackSlotMonsterParts[3].attackAnimationID = inputModifier;
-            myMonster.attack(3, inputModifier);
+
+            myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
+            myMonster.attack(3, (int)lastInputDirection);
             //canMove = false;
             buttonY_Pressed = true;
         }
@@ -1681,11 +1669,13 @@ public class playerController : MonoBehaviour
     private void flipLeftVisual()
     {
         myMonster.flipLeft();
+        facingRight = false;
     }
 
     private void flipRightVisual()
     {
         myMonster.flipRight();
+        facingRight = true;
     }
 
     /*
@@ -1941,16 +1931,8 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         }
 
-        //temp code
-        if (grounded)
-        {
-            turnOffFriction();
-            myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
-        }
-        else
-        {
-            myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
-        }
+        myRigidbody.velocity = Vector2.zero;
+        myRigidbody.angularVelocity = 0;
     }
 
     public void damageUnlockPlayerController()
@@ -2233,13 +2215,13 @@ public class playerController : MonoBehaviour
             {
                 turnOnFriction();
                 myRigidbody.velocity = new Vector2(0, 0);
-                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
             }
             else
             {
                 heavyActivated();
                 myRigidbody.velocity = new Vector2(0, 0);
-                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
                 StartCoroutine(leapAttackForwardControl());
             }
         }
@@ -2270,11 +2252,11 @@ public class playerController : MonoBehaviour
 
             if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
             {
-                lastInputDirection = new Vector2Int(input.x > 0 ? 1 : -1, 0);
+                lastInputDirectionVector = new Vector2Int(input.x > 0 ? 1 : -1, 0);
             }
             else if (Mathf.Abs(input.y) > 0)
             {
-                lastInputDirection = new Vector2Int(0, input.y > 0 ? 1 : -1);
+                lastInputDirectionVector = new Vector2Int(0, input.y > 0 ? 1 : -1);
             }
         }
     }
@@ -2284,16 +2266,23 @@ public class playerController : MonoBehaviour
     {
         leftStickIsAttacking = true;
 
-        var currentMovementModifier = lastInputDirection switch
+        Vector2 currentMovementModifier = Vector2.zero;
+        switch (lastInputDirection)
         {
-            var dir when dir == Vector2Int.left => eventArgs.MovementModifier.Left,
-            var dir when dir == Vector2Int.right => eventArgs.MovementModifier.Right,
-            var dir when dir == Vector2Int.up => eventArgs.MovementModifier.Up,
-            var dir when dir == Vector2Int.down => eventArgs.MovementModifier.Down,
-            _ => Vector2.zero,
-        };
+            case InputDirection.Forward:
+                currentMovementModifier = eventArgs.MovementModifier.Right;
+                break;
+            case InputDirection.Backward:
+                currentMovementModifier = eventArgs.MovementModifier.Left;
+                break;
+            case InputDirection.Up:
+                currentMovementModifier = eventArgs.MovementModifier.Up;
+                break;
+            case InputDirection.Down:
+                currentMovementModifier = eventArgs.MovementModifier.Down;
+                break;
+        }
 
-        // using the animation clip length so that the movement duration matches the animation
         StartCoroutine(ApplySmoothedMovementModifier(currentMovementModifier, eventArgs.ClipLength));
     }
 
@@ -2330,7 +2319,7 @@ public class playerController : MonoBehaviour
     {
         if (isFacingEdge() || atPlatformEdge == false)
         {
-            myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
+            //myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
         }
 
         /*
@@ -2486,15 +2475,11 @@ public class playerController : MonoBehaviour
             if (facingRight == false)
             {
                 //face right
-                facingRight = true;
-                directionModifier = 1;
                 flipRightVisual();
             }
             else if (facingRight)
             {
                 //face left
-                facingRight = false;
-                directionModifier = -1;
                 flipLeftVisual();
             }
         }

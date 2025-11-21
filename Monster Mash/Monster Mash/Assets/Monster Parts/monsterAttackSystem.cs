@@ -1131,34 +1131,12 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipLeft()
     {
-        if (damageLocked)
+        if (damageLocked || !facingRight)
         {
             return;
         }
-        myAnimator.ResetTrigger("Flip to Left");
 
-        /*
-        if (focusedAttackActive == false)
-        {
-            myAnimator.SetFloat("Flipping Speed", 1.5f);
-            facingRight = false;
-            myAnimator.SetBool("Facing Right", facingRight);
-            myAnimator.SetTrigger("Flip to Left");
-            dashSplat.transform.localEulerAngles = leftDashSplatRotation;
-            if (wallSplat != null)
-            {
-                wallSplat.transform.localEulerAngles = leftDashSplatRotation;
-            }
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].facingRight = false;
-            }
-            forceEndEmote();
-            forceStopCrouch();
-            getOutOfLaunch();
-        }
-        */
-
+        ForceResetTriggers(myAnimator);
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         facingRight = false;
         myAnimator.SetBool("Facing Right", facingRight);
@@ -1179,35 +1157,12 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipRight()
     {
-        if (damageLocked)
+        if (damageLocked || facingRight)
         {
             return;
         }
 
-        myAnimator.ResetTrigger("Flip to Right");
-
-        /*
-        if (focusedAttackActive == false)
-        {
-            myAnimator.SetFloat("Flipping Speed", 1.5f);
-            facingRight = true;
-            myAnimator.SetBool("Facing Right", facingRight);
-            myAnimator.SetTrigger("Flip to Right");
-            dashSplat.transform.localEulerAngles = rightDashSplatRotation;
-            if (wallSplat != null)
-            {
-                wallSplat.transform.localEulerAngles = rightDashSplatRotation;
-            }
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].facingRight = true;
-            }
-            forceEndEmote();
-            forceStopCrouch();
-            getOutOfLaunch();
-        }
-        */
-
+        ForceResetTriggers(myAnimator);
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         facingRight = true;
         myAnimator.SetBool("Facing Right", facingRight);
@@ -1224,6 +1179,17 @@ public class monsterAttackSystem : MonoBehaviour
         forceEndEmote();
         forceStopCrouch();
         getOutOfLaunch();
+    }
+
+    public void ForceResetTriggers(Animator animator)
+    {
+        foreach (var param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Trigger)
+            {
+                animator.ResetTrigger(param.name);
+            }
+        }
     }
 
     public void walk()
