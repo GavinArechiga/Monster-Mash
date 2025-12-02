@@ -549,8 +549,12 @@ GameObject:
   - component: {fileID: 1243658206702877023}
   - component: {fileID: 1243658206702877022}
   - component: {fileID: 8718990575797280829}
+  - component: {fileID: -5348194425993638010}
+  - component: {fileID: 933191940247432166}
   - component: {fileID: 4229966510964483241}
   - component: {fileID: 4345462728179244029}
+  - component: {fileID: -821466358424072107}
+  - component: {fileID: 455517892923429620}
   m_Layer: 0
   m_Name: Eye 5
   m_TagString: Connection - Monster Part
@@ -625,7 +629,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.021088235
+  m_Radius: 0.1
   m_Center: {x: 0, y: 0.05, z: -0.02}
 --- !u!114 &8718990575797280829
 MonoBehaviour:
@@ -649,7 +653,7 @@ MonoBehaviour:
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
-  PartType: 0
+  PartType: 7
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -661,8 +665,7 @@ MonoBehaviour:
   squashedStatusEffect: 0
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
-  neutralAttack:
-    rid: 3665106684488712230
+  neutralAttack: {fileID: -5348194425993638010}
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -671,8 +674,7 @@ MonoBehaviour:
   isReloadedHeavy: 1
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  heavyAttack:
-    rid: 3665106684488712231
+  heavyAttack: {fileID: 933191940247432166}
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -711,29 +713,42 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 3665106684488712230
-      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 0
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
-    - rid: 3665106684488712231
-      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 0
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
+--- !u!114 &-5348194425993638010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243658206702876992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38213cae9c40e4c489d046fff0869b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 10
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
+--- !u!114 &933191940247432166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243658206702876992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88e36005a1729104ead11ab203714b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 90
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
 --- !u!114 &4229966510964483241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825,7 +840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPart:
-    partPrefabPath: Build-A-Scare Parts/Eye/Eye 5
+    partPrefabPath: Build-A-Scare Parts/Eyes/Eye 5
     partRotation: {x: 0, y: 0, z: 0, w: 0}
     partScale: {x: 0, y: 0, z: 0}
     partPosition: {x: 0, y: 0, z: 0}
@@ -833,6 +848,119 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &-821466358424072107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243658206702876992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae2aec29747c2f44ada2f72c6796745, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flippedMaterial: {fileID: 0}
+  rend: {fileID: 0}
+  partFlip: 
+  flipColliders: []
+  flipParticle: []
+--- !u!82 &455517892923429620
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243658206702876992}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1243658206842660602
 GameObject:
   m_ObjectHideFlags: 0

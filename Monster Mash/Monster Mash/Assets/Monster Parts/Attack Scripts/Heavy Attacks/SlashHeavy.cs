@@ -1,13 +1,10 @@
-using System;
-
-[Serializable]
 public class SlashHeavy : HeavyAttack
 {
     public SlashHeavy()
     {
-        Attack = HeavyAttackType.Slash;
         DamageRange = DamageRange.Range4;
     }
+
     public override void triggerHeavyAttackVisuals()
     {
         if (monsterPartRef.jabOrSlashLanded == false && monsterPartVisualRef.heavyMissVFXHolder != null)
@@ -22,9 +19,9 @@ public class SlashHeavy : HeavyAttack
         monsterPartRef.heavyColliderReference.damage = Damage;
         monsterPartRef.heavyColliderReference.markedHeavy = true;
     }
-    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    public override void triggerAttackRelease()
     {
-        base.triggerAttackRelease(monsterPartRef);
+        base.triggerAttackRelease();
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

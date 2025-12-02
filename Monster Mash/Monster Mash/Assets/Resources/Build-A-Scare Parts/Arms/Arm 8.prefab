@@ -1863,10 +1863,14 @@ GameObject:
   - component: {fileID: 5912620942567442534}
   - component: {fileID: 1855286316351909640}
   - component: {fileID: 8532707253833157021}
+  - component: {fileID: 3584150375138803515}
+  - component: {fileID: 2377671679189194903}
   - component: {fileID: 8956234022411172868}
   - component: {fileID: 2253748556358223592}
   - component: {fileID: 1757886984324390077}
   - component: {fileID: 1990853734266274471}
+  - component: {fileID: 2050126984863960497}
+  - component: {fileID: 6664900037548533377}
   m_Layer: 0
   m_Name: Arm 8
   m_TagString: Connection - Monster Part
@@ -1893,7 +1897,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &1855286316351909640
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1910,7 +1914,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8532707253833157021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1930,16 +1935,10 @@ MonoBehaviour:
   PartVisual: {fileID: 0}
   requiresUniqueAnimationOffset: 0
   stompDetection: {fileID: 0}
-  monsterPartHealth: 100
   monsterPartID: 1
   attackAnimationID: 1
   connected: 1
   PartType: 2
-  baseNeutralAttackDamage: 0
-  baseHeavyAttackDamage: 0
-  builtUpAttackPower: 0
-  builtUpAddedDamage: 0
-  damage: 0
   burnedStatusEffect: 0
   electrifiedStatusEffect: 0
   poisonedStatusEffect: 0
@@ -1951,8 +1950,7 @@ MonoBehaviour:
   squashedStatusEffect: 0
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
-  neutralAttack:
-    rid: 7677421872298590210
+  neutralAttack: {fileID: 3584150375138803515}
   neutralCollider: {fileID: 2713449220743351691}
   neutralColliderReference: {fileID: 4848234249283667390}
   needsReloadNeutral: 0
@@ -1961,8 +1959,7 @@ MonoBehaviour:
   isReloadedHeavy: 1
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  heavyAttack:
-    rid: 7677421872298590211
+  heavyAttack: {fileID: 2377671679189194903}
   heavyCollider: {fileID: 1733662198339559810}
   heavyColliderReference: {fileID: 660549356470844039}
   heavyMuzzle: {fileID: 0}
@@ -2001,29 +1998,42 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 7677421872298590210
-      type: {class: SlashNeutral, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 50
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 2
-    - rid: 7677421872298590211
-      type: {class: ReelHeavy, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 10
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 6
+--- !u!114 &3584150375138803515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432839868718830300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aef9aaf9fdf21a48824aefb4b70b645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 10
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
+--- !u!114 &2377671679189194903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432839868718830300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed4bd92c08ee4e04baf1dd643bb237b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 10
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
 --- !u!114 &8956234022411172868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2114,7 +2124,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2129,7 +2139,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.1
   m_Center: {x: -0.01, y: 0, z: 0}
 --- !u!114 &1990853734266274471
 MonoBehaviour:
@@ -2152,6 +2162,119 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &2050126984863960497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432839868718830300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae2aec29747c2f44ada2f72c6796745, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flippedMaterial: {fileID: 0}
+  rend: {fileID: 0}
+  partFlip: 
+  flipColliders: []
+  flipParticle: []
+--- !u!82 &6664900037548533377
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432839868718830300}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6544940884533847948
 GameObject:
   m_ObjectHideFlags: 0

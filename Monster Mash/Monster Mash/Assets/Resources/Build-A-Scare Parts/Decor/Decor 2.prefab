@@ -153,6 +153,8 @@ GameObject:
   - component: {fileID: 724654338358135441}
   - component: {fileID: 724654338358135440}
   - component: {fileID: 522898304633709040}
+  - component: {fileID: 8429401317976506365}
+  - component: {fileID: 367855205262945566}
   - component: {fileID: 1343057411532038940}
   - component: {fileID: 724654338358135442}
   - component: {fileID: 724654338358135453}
@@ -236,8 +238,7 @@ MonoBehaviour:
   squashedStatusEffect: 0
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
-  neutralAttack:
-    rid: 3665106684488712322
+  neutralAttack: {fileID: 8429401317976506365}
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -246,8 +247,7 @@ MonoBehaviour:
   isReloadedHeavy: 1
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  heavyAttack:
-    rid: 3665106684488712323
+  heavyAttack: {fileID: 367855205262945566}
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -286,29 +286,42 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 3665106684488712322
-      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 0
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
-    - rid: 3665106684488712323
-      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 0
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
+--- !u!114 &8429401317976506365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724654338358135455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 775350f4aeaa45e4ca130a3b0e8bca10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 0
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
+--- !u!114 &367855205262945566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724654338358135455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60afccfa524f2a54f9eb7b50916dc5fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 0
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
 --- !u!114 &1343057411532038940
 MonoBehaviour:
   m_ObjectHideFlags: 0

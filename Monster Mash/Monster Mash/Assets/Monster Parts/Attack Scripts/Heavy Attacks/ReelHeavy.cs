@@ -1,13 +1,10 @@
-using System;
-
-[Serializable]
 public class ReelHeavy : HeavyAttack
 {
     public ReelHeavy()
     {
-        Attack = HeavyAttackType.Reel;
         DamageRange = DamageRange.Range2;
     }
+
     public override void triggerHeavyAttackVisuals()
     {
         if (!monsterPartRef.reelAttackLanded)

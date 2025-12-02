@@ -1136,7 +1136,7 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
-        ForceResetTriggers(myAnimator);
+        myAnimator.ForceResetTriggers();
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         facingRight = false;
         myAnimator.SetBool("Facing Right", facingRight);
@@ -1162,7 +1162,7 @@ public class monsterAttackSystem : MonoBehaviour
             return;
         }
 
-        ForceResetTriggers(myAnimator);
+        myAnimator.ForceResetTriggers();
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         facingRight = true;
         myAnimator.SetBool("Facing Right", facingRight);
@@ -1179,17 +1179,6 @@ public class monsterAttackSystem : MonoBehaviour
         forceEndEmote();
         forceStopCrouch();
         getOutOfLaunch();
-    }
-
-    public void ForceResetTriggers(Animator animator)
-    {
-        foreach (var param in animator.parameters)
-        {
-            if (param.type == AnimatorControllerParameterType.Trigger)
-            {
-                animator.ResetTrigger(param.name);
-            }
-        }
     }
 
     public void walk()

@@ -1,11 +1,7 @@
-using System;
-
-[Serializable]
 public class ProjectileNeutral : NeutralAttack
 {
     public ProjectileNeutral()
     {
-        Attack = AttackType.Projectile;
         DamageRange = DamageRange.Range2;
     }
 
@@ -13,17 +9,17 @@ public class ProjectileNeutral : NeutralAttack
     {
         if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
-        monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
+        //monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
     }
 
     public override void statusEffectAndDamageCalculations()
     {
         if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
-        monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
+        //monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
     }
 
-    public override void triggerNeutralAttackVisuals()
+    /*public override void triggerNeutralAttackVisuals()
     {
         if (monsterPartVisualRef.neutralAttackHitVFXArray.Length != 0)
         {
@@ -35,7 +31,7 @@ public class ProjectileNeutral : NeutralAttack
                 monsterPartVisualRef.neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
             }
         }
-    }
+    }*/
 
     public override void SetupVFX()
     {

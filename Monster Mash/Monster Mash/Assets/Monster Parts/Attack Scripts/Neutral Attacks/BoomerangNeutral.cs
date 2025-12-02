@@ -1,13 +1,10 @@
-using System;
-
-[Serializable]
 public class BoomerangNeutral : NeutralAttack
 {
     public BoomerangNeutral()
     {
-        Attack = AttackType.Boomerang;
         DamageRange = DamageRange.Range2;
     }
+
     public override void PassDamage()
     {
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;

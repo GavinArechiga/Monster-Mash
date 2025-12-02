@@ -363,7 +363,7 @@ public class MonsterPartVisual : MonoBehaviour
                     }
                 }
 
-                monsterPartRef.heavyAttack.triggerAttackRelease(monsterPartRef);
+                monsterPartRef.heavyAttack.triggerAttackRelease();
             }
             else
             {
@@ -430,7 +430,7 @@ public class MonsterPartVisual : MonoBehaviour
 
                 }
 
-                monsterPartRef.neutralAttack.triggerAttackRelease(monsterPartRef);
+                monsterPartRef.neutralAttack.triggerAttackRelease();
             }
         }
     }
