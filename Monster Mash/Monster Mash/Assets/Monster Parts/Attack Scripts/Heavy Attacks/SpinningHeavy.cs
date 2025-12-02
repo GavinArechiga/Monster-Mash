@@ -2,12 +2,13 @@ public class SpinningHeavy : HeavyAttack
 {
     public SpinningHeavy()
     {
+        Attack = HeavyAttackType.Spinning;
         DamageRange = DamageRange.Range4;
     }
 
-    public override void triggerAttackRelease()
+    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
-        base.triggerAttackRelease();
+        base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
         monsterPartRef.myMainSystem.StartCoroutine(monsterPartRef.myMainSystem.SpinTimer());
     }

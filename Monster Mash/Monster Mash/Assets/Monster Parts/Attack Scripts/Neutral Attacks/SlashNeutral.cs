@@ -1,10 +1,13 @@
+using System;
+
+[Serializable]
 public class SlashNeutral : NeutralAttack
 {
     public SlashNeutral()
     {
+        Attack = AttackType.Slash;
         DamageRange = DamageRange.Range3;
     }
-    
     public override void PassDamage()
     {
         monsterPartRef.neutralColliderReference.resetAttackHistory();
@@ -18,9 +21,9 @@ public class SlashNeutral : NeutralAttack
         monsterPartRef.neutralColliderReference.damage = Damage;
     }
 
-    public override void triggerAttackRelease()
+    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
     {
-        base.triggerAttackRelease();
+        base.triggerAttackRelease(monsterPartRef);
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

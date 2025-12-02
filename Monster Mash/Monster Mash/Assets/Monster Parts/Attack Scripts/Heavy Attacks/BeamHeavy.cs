@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
+[Serializable]
 public class BeamHeavy : HeavyAttack
 {
     public BeamHeavy()
     {
+        Attack = HeavyAttackType.Beam;
         DamageRange = DamageRange.Range0;
     }
 
