@@ -149,6 +149,22 @@ public class NewPlayerController : MonoBehaviour
 
     private void Awake()
     {
+
+        inputHandler.OnButtonB_Canceled += () =>
+        {
+            myMonster.attackCancel(1);
+        };
+
+        inputHandler.OnButtonX_Canceled += () =>
+        {
+            myMonster.attackCancel(2);
+        };
+
+        inputHandler.OnButtonY_Canceled += () =>
+        {
+            myMonster.attackCancel(3);
+        };
+
         playerInput = GetComponent<PlayerInput>();
         playerControlsMap = new PlayerControls();
         myAudioSystem = GetComponentInChildren<playerAudioManager>();
@@ -197,28 +213,30 @@ public class NewPlayerController : MonoBehaviour
         SubscribeActionMap();
     }
 
+    private PlayerInputHandler inputHandler = new PlayerInputHandler();
+
     private void SubscribeActionMap()
     {
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += OnLeftStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += inputHandler.OnLeftStick;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled += OnLeftStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled += inputHandler.OnLeftStick;
 
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed += OnRightStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed += inputHandler.OnRightStick;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled += OnRightStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled += inputHandler.OnRightStick;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started += onButtonA;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled += onButtonA;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started += inputHandler.OnButtonA;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled += inputHandler.OnButtonA;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started += onButtonB;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled += onButtonB;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started += inputHandler.OnButtonB;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled += inputHandler.OnButtonB;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started += onButtonX;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled += onButtonX;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started += inputHandler.OnButtonX;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled += inputHandler.OnButtonX;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started += onButtonY;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += onButtonY;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started += inputHandler.OnButtonY;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += inputHandler.OnButtonY;
 
         playerInput.actions.FindAction("ShowMenu").Enable();
         playerInput.actions.FindAction("ShowMenu").performed += ShowRemappingMenu;
@@ -228,26 +246,26 @@ public class NewPlayerController : MonoBehaviour
     {
         if (playerInput == null) {  return; }
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= OnLeftStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= inputHandler.OnLeftStick;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= OnLeftStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= inputHandler.OnLeftStick;
 
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed -= OnRightStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed -= inputHandler.OnRightStick;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled -= OnRightStick;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled -= inputHandler.OnRightStick;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started -= onButtonA;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled -= onButtonA;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started -= inputHandler.OnButtonA;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled -= inputHandler.OnButtonA;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started -= onButtonB;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled -= onButtonB;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started -= inputHandler.OnButtonB;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled -= inputHandler.OnButtonB;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started -= onButtonX;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled -= onButtonX;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started -= inputHandler.OnButtonX;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled -= inputHandler.OnButtonX;
 
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started -= onButtonY;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= onButtonY;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started -= inputHandler.OnButtonY;
+        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= inputHandler.OnButtonY;
 
         playerInput.actions.FindAction("ShowMenu").Disable();
         playerInput.actions.FindAction("ShowMenu").performed -= ShowRemappingMenu;
@@ -290,8 +308,128 @@ public class NewPlayerController : MonoBehaviour
         }
     }
 
+    private PlayerState currentState;
+
+    public void ChangeState(PlayerState newState)
+    {
+        if (currentState != null) currentState.Exit();
+        currentState = newState;
+        currentState.Enter();
+    }
+
+
     private void Update()
     {
+
+        if (currentState != null)
+        {
+            currentState.HandleInput();
+            currentState.Update();
+        }
+
+        if (inputHandler.ButtonA_Pressed)
+        {
+            if (grabbingWall)
+            {
+                if (facingRight)
+                    wallJump(-1);
+                else
+                    wallJump(1);
+
+                bigJumpVisual();
+            }
+            else
+            {
+                if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
+                    bigJump();
+            }
+            inputHandler.ButtonA_Pressed = false;
+        }
+
+
+        if (inputHandler.ButtonB_Pressed)
+        {
+            if (myMonster.attackSlotMonsterParts[1] != null)
+            {
+                myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
+                myMonster.attack(1, (int)lastInputDirection);
+            }
+            inputHandler.ButtonB_Pressed = false;
+        }
+
+        if (inputHandler.ButtonX_Pressed)
+        {
+            if (myMonster.attackSlotMonsterParts[2] != null)
+            {
+                myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
+                myMonster.attack(2, (int)lastInputDirection);
+            }
+            inputHandler.ButtonB_Pressed = false;
+        }
+
+        if (inputHandler.ButtonY_Pressed)
+        {
+            if (myMonster.attackSlotMonsterParts[3] != null)
+            {
+                myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
+                myMonster.attack(3, (int)lastInputDirection);
+            }
+            inputHandler.ButtonB_Pressed = false;
+        }
+
+
+        // --- Movement logic using inputHandler.LeftStick ---
+        Vector2 moveInput = inputHandler.LeftStick;
+        float moveValue = moveInput.magnitude;
+
+        if (Mathf.Abs(moveInput.x) > directionThreshold || Mathf.Abs(moveInput.y) > directionThreshold)
+        {
+            lastInputDirectionVector = moveInput.normalized;
+            UpdateInputDirection(lastInputDirectionVector);
+
+            if (!grabbingWall && !isDashing && !isRolling && canMove)
+            {
+                if (lastInputDirection == InputDirection.Forward)
+                    flipRightVisual();
+                else if (lastInputDirection == InputDirection.Backward)
+                    flipLeftVisual();
+            }
+        }
+
+        if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || !canMove)
+            return;
+
+        if (!isPhasingThroughPlatform && groundFrictionCollider.enabled && !isCrouching && canMove && !isAttacking)
+            turnOffFriction();
+
+        if (canMove && !isAttacking)
+        {
+            if (moveInput.x > 0.9f || moveInput.x < -0.9f)
+            {
+                // Run
+                if (!isRunning)
+                {
+                    isRunning = true;
+                    isWalking = false;
+                    startRunningVisual();
+                    turnOffFriction();
+                }
+            }
+            else if (moveInput.x > 0.2f || moveInput.x < -0.2f)
+            {
+                // Walk
+                if (!isWalking)
+                {
+                    isWalking = true;
+                    isRunning = false;
+                    startWalkingVisual();
+                    stopRunningVisual();
+                    turnOffFriction();
+                }
+            }
+        }
+
+
         //This section moves the x axis of the player
         //For moving the y axis of the player, check out the jumping category of the movement section
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
@@ -313,7 +451,7 @@ public class NewPlayerController : MonoBehaviour
             }
             else
             {
-                antiPhase(true);
+                antiPhase();
             }
 
             if (isPhasingThroughPlatform)
@@ -379,10 +517,10 @@ public class NewPlayerController : MonoBehaviour
                     }
                      
 
-                    if ((leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f))
+                    if ((inputHandler.LeftStick.x > 0.9f || inputHandler.LeftStick.x < -0.9f))
                     {
                         //run
-                        if (leftJoystickVector.x > 0.9f)
+                        if (inputHandler.LeftStick.x > 0.9f)
                         {
                             //right
                             if (isRunning == false)
@@ -409,10 +547,10 @@ public class NewPlayerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * runSpeed, myRigidbody.velocity.y);
                         }
                     }
-                    else if ((leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f))
+                    else if ((inputHandler.LeftStick.x > 0.2f || inputHandler.LeftStick.x < -0.2f))
                     {
 
-                        if (leftJoystickVector.x > 0.2f)
+                        if (inputHandler.LeftStick.x > 0.2f)
                         {
                             myRigidbody.velocity = new Vector2(1 * walkSpeed, myRigidbody.velocity.y);
                         }
@@ -421,7 +559,7 @@ public class NewPlayerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed, myRigidbody.velocity.y);
                         }
                     }
-                    else if ((leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
+                    else if ((inputHandler.LeftStick.x < 0.1f && inputHandler.LeftStick.x > -0.1f))
                     {
                         myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
 
@@ -447,10 +585,10 @@ public class NewPlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
+                    if (inputHandler.LeftStick.x > 0.9f || inputHandler.LeftStick.x < -0.9f)
                     {
 
-                        if (leftJoystickVector.x > 0.9f)
+                        if (inputHandler.LeftStick.x > 0.9f)
                         {
                             //right
                             myRigidbody.velocity = new Vector2(1 * runSpeed / 1.8f, myRigidbody.velocity.y);
@@ -461,10 +599,10 @@ public class NewPlayerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * runSpeed / 1.8f, myRigidbody.velocity.y);
                         }
                     }
-                    else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f)
+                    else if (inputHandler.LeftStick.x > 0.2f || inputHandler.LeftStick.x < -0.2f)
                     {
 
-                        if (leftJoystickVector.x > 0.2f)
+                        if (inputHandler.LeftStick.x > 0.2f)
                         {
                             //right
                             myRigidbody.velocity = new Vector2(1 * walkSpeed / 2, myRigidbody.velocity.y);
@@ -475,7 +613,7 @@ public class NewPlayerController : MonoBehaviour
                             myRigidbody.velocity = new Vector2(-1 * walkSpeed / 2, myRigidbody.velocity.y);
                         }
                     }
-                    else if ((leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
+                    else if ((inputHandler.LeftStick.x < 0.1f && inputHandler.LeftStick.x > -0.1f))
                     {
                         myRigidbody.velocity = new Vector2(myRigidbody.velocity.x - 0.001f, myRigidbody.velocity.y);
 
@@ -512,7 +650,7 @@ public class NewPlayerController : MonoBehaviour
 
                 if (buttonA_Pressed == false && buttonB_Pressed == false && buttonX_Pressed == false && buttonY_Pressed == false && isAttacking == false)
                 {
-                    if (leftJoystickVector.y > 0.4f && Mathf.Abs(leftJoystickVector.x) < 0.4f)
+                    if (inputHandler.LeftStick.y > 0.4f && Mathf.Abs(inputHandler.LeftStick.x) < 0.4f)
                     {
                         // Cancels the jump if you attack during the delay window. I don't like using a seperate bool for this but isAttacking does not work reliably 
                         if (leftStickIsAttacking)
@@ -540,7 +678,7 @@ public class NewPlayerController : MonoBehaviour
                         
                     }
 
-                    if (leftJoystickVector.y < 0.05f && jumpButtonReset == false)
+                    if (inputHandler.LeftStick.y < 0.05f && jumpButtonReset == false)
                     {
                         jumpButtonReset = true;
                     }
@@ -548,7 +686,7 @@ public class NewPlayerController : MonoBehaviour
 
 
 
-                    if (leftJoystickVector.y < -0.6f && (leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
+                    if (inputHandler.LeftStick.y < -0.6f && (inputHandler.LeftStick.x < 0.1f && inputHandler.LeftStick.x > -0.1f))
                     {
                         //down stick -> either crouch or go through semi solid or fast fall
                         if (isGrounded())
@@ -640,86 +778,6 @@ public class NewPlayerController : MonoBehaviour
             }
         }
     }
-
-
-    public void OnLeftStick(InputAction.CallbackContext context)
-    {
-        leftJoystickVector = context.ReadValue<Vector2>();
-        leftJoystickValue = context.ReadValue<Vector2>().magnitude;
-
-        if (context.canceled)
-        {
-            jumpButtonReset = true;
-            lastInputDirection = facingRight ? InputDirection.Forward : InputDirection.Backward;
-            return;
-        }
-
-        if (context.performed)
-        {
-            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
-            {
-                lastInputDirectionVector = leftJoystickVector.normalized;
-                UpdateInputDirection(lastInputDirectionVector);
-
-
-                if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
-                {
-                    if (lastInputDirection is InputDirection.Forward)
-                    {
-                        flipRightVisual();
-                    }
-                    else if (lastInputDirection is InputDirection.Backward)
-                    {
-                        flipLeftVisual();
-                    }
-                }
-
-                //Debug.Log($"Last Input Direction:{lastInputDirection} Vector: {lastInputDirectionVector}");
-            }
-
-            if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
-            {
-                return;
-            }
-
-            if (isPhasingThroughPlatform == false && groundFrictionCollider.enabled && isCrouching == false && canMove && isAttacking == false)
-            {
-                turnOffFriction();
-            }
-
-            if (canMove && isAttacking == false)
-            {
-                if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
-                {
-                    //run
-
-                    if (isRunning == false)
-                    {
-                        isRunning = true;
-                        isWalking = false;
-                        startRunningVisual();
-                        //stopWalkingVisual();
-                        turnOffFriction();
-                    }
-                }
-                else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f || leftJoystickVector.x == 0.2f || leftJoystickVector.x == -0.2f)
-                {
-                    //walk
-
-                    if (isWalking == false)
-                    {
-                        isWalking = true;
-                        isRunning = false;
-                        startWalkingVisual();
-                        stopRunningVisual();
-                        turnOffFriction();
-                    }
-                }
-            }
-        }
-    }
-
-
     private void UpdateInputDirection(Vector2 directionVector)
     {
         if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
@@ -936,7 +994,9 @@ public class NewPlayerController : MonoBehaviour
                             flipLeftVisual();
                         }
 
-                        StartCoroutine(dashTime());
+                        // air dash
+
+                        //StartCoroutine(dashTime());
                     }
                 }
             }
@@ -1029,89 +1089,6 @@ public class NewPlayerController : MonoBehaviour
         canRoll = true;
         canDash = true;
         canMove = true;
-    }
-
-    public void onButtonA(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            if (grabbingWall)
-            {
-                if (facingRight)
-                {
-                    wallJump(-1);
-                }
-                else
-                {
-                    wallJump(1);
-                }
-
-                bigJumpVisual();
-            }
-            else
-            {
-                if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
-                {
-                    bigJump();
-                }
-            }
-        }
-
-        if (context.canceled)
-        {
-            jumpButtonReset = true;
-        }
-    }
-
-    public void onButtonB(InputAction.CallbackContext context)
-    {
-        if (context.canceled)
-        {
-            myMonster.attackCancel(1);
-            buttonB_Pressed = false;
-        }
-
-        if (context.started)
-        {
-            if (myMonster.attackSlotMonsterParts[1] == null) { return; }
-            myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(1, (int)lastInputDirection);
-            buttonB_Pressed = true;
-        }
-    }
-
-    public void onButtonX(InputAction.CallbackContext context)
-    {
-        if (context.canceled)
-        {
-            myMonster.attackCancel(2);
-            buttonX_Pressed = false;
-        }
-
-        if (context.started)
-        {
-            if (myMonster.attackSlotMonsterParts[2] == null) { return; }
-            myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(2, (int)lastInputDirection);
-            buttonX_Pressed = true;
-        }
-    }
-
-    public void onButtonY(InputAction.CallbackContext context)
-    {
-        if (context.canceled)
-        {
-            myMonster.attackCancel(3);
-            buttonY_Pressed = false;
-        }
-
-        if (context.started)
-        {
-            if (myMonster.attackSlotMonsterParts[3] == null) { return; }
-            myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(3, (int)lastInputDirection);
-            buttonY_Pressed = true;
-        }
     }
 
     private void flipLeftVisual()
@@ -1282,9 +1259,9 @@ public class NewPlayerController : MonoBehaviour
         }    
     }
 
-    private void antiPhase(bool hasOverride)
+    private void antiPhase()
     {
-        if (hasOverride || insideFloor == false)
+        if (insideFloor == false)
         {
             if (currentPlatformCollider != null)
             {
@@ -1622,7 +1599,7 @@ public class NewPlayerController : MonoBehaviour
             if (isPhasingThroughPlatform)
             {
                 isPhasingThroughPlatform = false;
-                antiPhase(true);
+                antiPhase();
                 
             }
         }
@@ -1671,7 +1648,173 @@ public class NewPlayerController : MonoBehaviour
             {
                 NewPlayerController fellowPlayer = collision.transform.parent.gameObject.GetComponent<NewPlayerController>();
             }
-        }
-        
+        }   
     }
+
+
+    // Old Logic
+
+    /*
+    public void OnLeftStick(InputAction.CallbackContext context)
+    {
+        leftJoystickVector = context.ReadValue<Vector2>();
+        leftJoystickValue = context.ReadValue<Vector2>().magnitude;
+
+        if (context.canceled)
+        {
+            jumpButtonReset = true;
+            lastInputDirection = facingRight ? InputDirection.Forward : InputDirection.Backward;
+            return;
+        }
+
+        if (context.performed)
+        {
+            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
+            {
+                lastInputDirectionVector = leftJoystickVector.normalized;
+                UpdateInputDirection(lastInputDirectionVector);
+
+
+                if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
+                {
+                    if (lastInputDirection is InputDirection.Forward)
+                    {
+                        flipRightVisual();
+                    }
+                    else if (lastInputDirection is InputDirection.Backward)
+                    {
+                        flipLeftVisual();
+                    }
+                }
+
+                //Debug.Log($"Last Input Direction:{lastInputDirection} Vector: {lastInputDirectionVector}");
+            }
+
+            if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
+            {
+                return;
+            }
+
+            if (isPhasingThroughPlatform == false && groundFrictionCollider.enabled && isCrouching == false && canMove && isAttacking == false)
+            {
+                turnOffFriction();
+            }
+
+            if (canMove && isAttacking == false)
+            {
+                if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
+                {
+                    //run
+
+                    if (isRunning == false)
+                    {
+                        isRunning = true;
+                        isWalking = false;
+                        startRunningVisual();
+                        //stopWalkingVisual();
+                        turnOffFriction();
+                    }
+                }
+                else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f || leftJoystickVector.x == 0.2f || leftJoystickVector.x == -0.2f)
+                {
+                    //walk
+
+                    if (isWalking == false)
+                    {
+                        isWalking = true;
+                        isRunning = false;
+                        startWalkingVisual();
+                        stopRunningVisual();
+                        turnOffFriction();
+                    }
+                }
+            }
+        }
+    }*/
+
+
+    /*public void onButtonA(InputAction.CallbackContext context)
+{
+    if (context.started)
+    {
+        if (grabbingWall)
+        {
+            if (facingRight)
+            {
+                wallJump(-1);
+            }
+            else
+            {
+                wallJump(1);
+            }
+
+            bigJumpVisual();
+        }
+        else
+        {
+            if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
+            {
+                bigJump();
+            }
+        }
+    }
+
+    if (context.canceled)
+    {
+        jumpButtonReset = true;
+    }
+}
+
+public void onButtonB(InputAction.CallbackContext context)
+{
+    if (context.canceled)
+    {
+        myMonster.attackCancel(1);
+        buttonB_Pressed = false;
+    }
+
+    if (context.started)
+    {
+        if (myMonster.attackSlotMonsterParts[1] == null) { return; }
+        myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
+        myMonster.attack(1, (int)lastInputDirection);
+        buttonB_Pressed = true;
+    }
+}
+
+public void onButtonX(InputAction.CallbackContext context)
+{
+    if (context.canceled)
+    {
+        myMonster.attackCancel(2);
+        buttonX_Pressed = false;
+    }
+
+    if (context.started)
+    {
+        if (myMonster.attackSlotMonsterParts[2] == null) { return; }
+        myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
+        myMonster.attack(2, (int)lastInputDirection);
+        buttonX_Pressed = true;
+    }
+}
+
+public void onButtonY(InputAction.CallbackContext context)
+{
+    if (context.canceled)
+    {
+        myMonster.attackCancel(3);
+        buttonY_Pressed = false;
+    }
+
+    if (context.started)
+    {
+        if (myMonster.attackSlotMonsterParts[3] == null) { return; }
+        myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
+        myMonster.attack(3, (int)lastInputDirection);
+        buttonY_Pressed = true;
+    }
+}
+*/
+
 }
