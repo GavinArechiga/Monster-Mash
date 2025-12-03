@@ -36,7 +36,7 @@ public class NewPlayerController : MonoBehaviour
     // Normal is attacking only works when player is on the ground and we need it to work while in the air for the left stick jump
     private bool leftStickIsAttacking = false;
 
-    private float walkSpeed = 5f;
+    public float walkSpeed = 5f;
     private float runSpeed = 25f;
     private float groundedModifer = 1;
     private float airbornModifer = 0.75f;
@@ -186,6 +186,7 @@ public class NewPlayerController : MonoBehaviour
     }
     private void Start()
     {
+        ChangeState(new IdleState(this));
         allParts = GetAllPartsInRoot();
         legs = allParts.Where(part => part.PartType == MonsterPartType.Leg).ToList();
     }
@@ -213,7 +214,7 @@ public class NewPlayerController : MonoBehaviour
         SubscribeActionMap();
     }
 
-    private PlayerInputHandler inputHandler = new PlayerInputHandler();
+    public PlayerInputHandler inputHandler = new PlayerInputHandler();
 
     private void SubscribeActionMap()
     {
@@ -377,7 +378,7 @@ public class NewPlayerController : MonoBehaviour
             inputHandler.ButtonB_Pressed = false;
         }
 
-
+        
         // --- Movement logic using inputHandler.LeftStick ---
         Vector2 moveInput = inputHandler.LeftStick;
         float moveValue = moveInput.magnitude;
@@ -428,6 +429,7 @@ public class NewPlayerController : MonoBehaviour
                 }
             }
         }
+        
 
 
         //This section moves the x axis of the player
@@ -505,6 +507,7 @@ public class NewPlayerController : MonoBehaviour
                 startRunningVisual();
             }
 
+            
             if (canMove)
             {
 
@@ -776,6 +779,7 @@ public class NewPlayerController : MonoBehaviour
                     myRigidbody.velocity = new Vector2(-1 * (runSpeed * 2), myRigidbody.velocity.y);
                 }
             }
+            
         }
     }
     private void UpdateInputDirection(Vector2 directionVector)
@@ -1128,12 +1132,12 @@ public class NewPlayerController : MonoBehaviour
         myMonster.stopRunning();
     }
 
-    private void startWalkingVisual()
+    public void startWalkingVisual()
     {
         myMonster.walk();
     }
 
-    private void stopWalkingVisual()
+    public void stopWalkingVisual()
     {
         myMonster.stopWalking();
     }

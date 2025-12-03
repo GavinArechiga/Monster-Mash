@@ -34,7 +34,10 @@ public class PlayerInputHandler
     public void OnButtonB(InputAction.CallbackContext context)
     {
         if (context.started)
+        {
             ButtonB_Pressed = true;
+        }
+
         if (context.canceled)
         {
             ButtonB_Pressed = false;
@@ -45,7 +48,10 @@ public class PlayerInputHandler
     public void OnButtonX(InputAction.CallbackContext context)
     {
         if (context.started)
+        {
             ButtonX_Pressed = true;
+        }
+
         if (context.canceled)
         {
             ButtonX_Pressed = false;
@@ -56,7 +62,10 @@ public class PlayerInputHandler
     public void OnButtonY(InputAction.CallbackContext context)
     {
         if (context.started)
+        {
             ButtonY_Pressed = true;
+        }
+
         if (context.canceled)
         {
             ButtonY_Pressed = false;
