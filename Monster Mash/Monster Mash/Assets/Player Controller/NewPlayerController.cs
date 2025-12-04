@@ -7,139 +7,103 @@ using System.Linq;
 
 public class NewPlayerController : MonoBehaviour
 {
-    public int playerIndex;
+
+    // Components
     public monsterAttackSystem myMonster;
     private playerAudioManager myAudioSystem;
     public CapsuleCollider2D bodyCollider;
     public CircleCollider2D smallBodyCollider;
     public BoxCollider2D groundFrictionCollider;
-    //public brainSFX mySFXBrain;
-    //public MeshRenderer standingVisual;
-    //public MeshRenderer ballVisual;
     public Transform groundCheck;
     public Transform headCheck;
-    public LayerMask solidGroundLayer;
-    public LayerMask semiSolidGroundLayer;
     public PlayerInput playerInput;
     public PlayerControls playerControlsMap;
+    [SerializeField] public Rigidbody2D myRigidbody;
+
+    // Input
+    public PlayerInputHandler inputHandler = new PlayerInputHandler();
     private InputActionMap startingActionMap;
     private InputActionMap UIcontrols;
-    //private bool UIcontrolsNeeded = true;
     private InputActionMap monsterControls;
-    [SerializeField] private Collider2D currentPlatformCollider;
-    //private bool monsterControlsNeeded = false;
-    bool monsterControllerActive = false;
-    public bool facingRight;
-    Vector2 leftJoystickVector; //gives us direction on x axis
-    float leftJoystickValue; //gives us nuance of input between magnitudes
-    public bool isAttacking = false;
-    // Normal is attacking only works when player is on the ground and we need it to work while in the air for the left stick jump
-    private bool leftStickIsAttacking = false;
+    public int playerIndex;
+    public Vector2 lastInputDirectionVector;
+    public float directionThreshold = 0.2f;
+    public enum InputDirection { Forward = 1, Backward = -1, Up = 2, Down = 0 }
+    public InputDirection lastInputDirection = InputDirection.Forward;
+    public Vector2 rightJoystickVector;
+    Vector2 leftJoystickVector;
+    public float leftJoystickValue;
 
+    // State Machine
+    private PlayerState currentState;
+
+    // Movement
     public float walkSpeed = 5f;
-    private float runSpeed = 25f;
-    private float groundedModifer = 1;
-    private float airbornModifer = 0.75f;
-    private float currentGroundedStateModifier = 1;
-    private bool isDamageLaunching;
+    public float runSpeed = 25f;
     public bool canMove = true;
     public bool isWalking = false;
     public bool isRunning = false;
-
     public bool grounded = false;
+    public bool isCrouching = false;
+    public bool isPhasingThroughPlatform;
+    public bool isFastFalling = false;
+    public bool slowFallBlocked = false;
+    public float slowFallGravityPower = 6;
+    private float gravityPower;
+    public bool monsterControllerActive = false;
+    public bool facingRight;
+    public bool grabbingWall = false;
+    public bool chargingForward = false;
+    public bool landDetectionReady = true;
+    public Collider2D currentPlatformCollider;
+    private bool isDamageLaunching;
     private bool atPlatformEdge = false;
     private Vector2 platformEdgeCooridinates;
-    private bool requiresLateLand = false;
-    public bool landDetectionReady = true;
-    //public bool onSemiSolid = false;
-    private bool isCrouching = false;
-    public bool isPhasingThroughPlatform;
-    private bool isFastFalling = false;
-    public bool canJump = true;
-    bool jumpButtonReset = false;
-    //public bool primedForBigJump = false;
-    public int numberOfJumps = 2;
-    public int numberOfJumpsLeft = 2;
-    /// <summary>
-    /// When holding the left stick up how many secounds before the jump actually activates
-    /// </summary>
-    private float LeftStickJumpDelayTime = 0.1f;
-    /// <summary>
-    /// How many secounds the player has been holding the left stick in the upwards direction
-    /// </summary>
-    private float leftStickElapsedJumpTime;
-    private Vector2 jumpValue;
-    private bool jumpValueHasBeenRead = true;
-    private float bigJumpPower = 65;//80
-    private float littleJumpPower = 45;//60
-    private bool slowFallBlocked = false;
-    private float slowFallGravityPower = 6;
-    private float gravityPower;
     private bool insideFloor = false;
 
-    public bool isGooball; //flings self through air, splats on walls, ball rolls on ground, double jump, medium movement, limited air control
-    public bool isGlider; //glides through air, grabs opponents, slow fall flying while holding A, many more jumps, slower ground movement
-    public bool isHunter; //zips through opponents, in air connects to nearest opponent in radius, faster ground movement, triple jump
-    public bool isTechnoid; //places or destroys portals, can attack through portals, in air can place platforms that destroy upon exit
+    // Jumping
+    public bool canJump = true;
+    public bool jumpButtonReset = false;
+    public int numberOfJumps = 2;
+    public int numberOfJumpsLeft = 2;
+    public float LeftStickJumpDelayTime = 0.1f;
+    public float leftStickElapsedJumpTime;
+    private float wallJumpPower = 28f;
+    private float bigJumpPower = 65;
 
-    private float rollSpeed = 50f;//50
-    Vector2 rightJoystickVector; //gives us direction on x axis for roll
+    // Attacks
+    public bool isAttacking = false;
+    public bool leftStickIsAttacking = false;
+    public bool buttonA_Pressed = false;
+    public bool buttonB_Pressed = false;
+    public bool buttonX_Pressed = false;
+    public bool buttonY_Pressed = false;
+    float lastAttackTime = -Mathf.Infinity;
+
+    // Platform
+    public LayerMask solidGroundLayer;
+    public LayerMask semiSolidGroundLayer;
+
+    // Abilities
+    public float rollSpeed = 50f;
     public bool isRolling = false;
     public bool canRoll = true;
-
-    private float dashSpeed = 60f;
     public bool isDashing = false;
     public bool canDash = true;
-
-    private bool ledgeHopAvailable = true;
-
     public bool grappling = false;
     public bool grapplingPlayer = false;
     public bool grapplingWall = false;
-    private float grappleSpeed = 300;
-    private float endPlayerGrappleDistance = 8f;
-    private float endWallPlayerGrappledistance = 5f;
     public NewPlayerController grapplePlayerTarget;
     public Vector3 wallGrapplePoint;
 
-    public bool chargingForward = false;
+    // Animation
+    public List<NewMonsterPart> allParts;
+    public List<NewMonsterPart> legs;
 
-    public bool grabbingWall = false;
-    private float wallGrabbingGravityPower = 0.2f;
-    private float wallJumpPower = 28f;
-
-    private bool buttonA_Pressed = false;
-    private bool buttonB_Pressed = false;
-    private bool buttonX_Pressed = false;
-    private bool buttonY_Pressed = false;
-
-    private int neutralAttackSFXIndex = 1;
-    private int heavyAttackSFXIndex = 1;
-
-    [SerializeField]
-    private Rigidbody2D myRigidbody;
-    Vector2 lastInputDirectionVector;
-    float directionThreshold = 0.2f;
-    private enum InputDirection
-    {
-        Forward = 1,
-        Backward = -1,
-        Up = 2,
-        Down = 0
-    }
-
-    private InputDirection lastInputDirection = InputDirection.Forward;
-
+    // Damage Launching
     [Header("Damage Launching")]
     [SerializeField] private AnimationCurve damageToForceCurve;
     [SerializeField, Tooltip("Controls how much of an arc the launch has for left and right")] private float yMultiplier = 1.5f;
-
-
-    // damage timer
-    float lastAttackTime = -Mathf.Infinity;
-
-    public List<NewMonsterPart> allParts;
-    public List<NewMonsterPart> legs;
 
     private List<NewMonsterPart> GetAllPartsInRoot()
     {
@@ -214,17 +178,12 @@ public class NewPlayerController : MonoBehaviour
         SubscribeActionMap();
     }
 
-    public PlayerInputHandler inputHandler = new PlayerInputHandler();
-
     private void SubscribeActionMap()
     {
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += inputHandler.OnLeftStick;
-
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled += inputHandler.OnLeftStick;
 
-
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed += inputHandler.OnRightStick;
-
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled += inputHandler.OnRightStick;
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started += inputHandler.OnButtonA;
@@ -248,12 +207,9 @@ public class NewPlayerController : MonoBehaviour
         if (playerInput == null) {  return; }
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= inputHandler.OnLeftStick;
-
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= inputHandler.OnLeftStick;
 
-
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed -= inputHandler.OnRightStick;
-
         playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled -= inputHandler.OnRightStick;
 
         playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started -= inputHandler.OnButtonA;
@@ -278,8 +234,6 @@ public class NewPlayerController : MonoBehaviour
 
         InputRemapper.Instance.ShowMenu(playerInput);
     }
-
-    
 
     public void switchActionMap(string newActionMap)
     {
@@ -309,8 +263,6 @@ public class NewPlayerController : MonoBehaviour
         }
     }
 
-    private PlayerState currentState;
-
     public void ChangeState(PlayerState newState)
     {
         if (currentState != null) currentState.Exit();
@@ -318,10 +270,8 @@ public class NewPlayerController : MonoBehaviour
         currentState.Enter();
     }
 
-
     private void Update()
     {
-
         if (currentState != null)
         {
             currentState.HandleInput();
@@ -377,412 +327,8 @@ public class NewPlayerController : MonoBehaviour
             }
             inputHandler.ButtonB_Pressed = false;
         }
-
-        
-        // --- Movement logic using inputHandler.LeftStick ---
-        Vector2 moveInput = inputHandler.LeftStick;
-        float moveValue = moveInput.magnitude;
-
-        if (Mathf.Abs(moveInput.x) > directionThreshold || Mathf.Abs(moveInput.y) > directionThreshold)
-        {
-            lastInputDirectionVector = moveInput.normalized;
-            UpdateInputDirection(lastInputDirectionVector);
-
-            if (!grabbingWall && !isDashing && !isRolling && canMove)
-            {
-                if (lastInputDirection == InputDirection.Forward)
-                    flipRightVisual();
-                else if (lastInputDirection == InputDirection.Backward)
-                    flipLeftVisual();
-            }
-        }
-
-        if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || !canMove)
-            return;
-
-        if (!isPhasingThroughPlatform && groundFrictionCollider.enabled && !isCrouching && canMove && !isAttacking)
-            turnOffFriction();
-
-        if (canMove && !isAttacking)
-        {
-            if (moveInput.x > 0.9f || moveInput.x < -0.9f)
-            {
-                // Run
-                if (!isRunning)
-                {
-                    isRunning = true;
-                    isWalking = false;
-                    startRunningVisual();
-                    turnOffFriction();
-                }
-            }
-            else if (moveInput.x > 0.2f || moveInput.x < -0.2f)
-            {
-                // Walk
-                if (!isWalking)
-                {
-                    isWalking = true;
-                    isRunning = false;
-                    startWalkingVisual();
-                    stopRunningVisual();
-                    turnOffFriction();
-                }
-            }
-        }
-        
-
-
-        //This section moves the x axis of the player
-        //For moving the y axis of the player, check out the jumping category of the movement section
-        //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
-        if (monsterControllerActive)
-        {
-
-            if (!isPhasingThroughPlatform && !isGrounded())
-            {
-                Collider2D platform = GetClosestPlatform();
-                if (platform != null)
-                {
-                    currentPlatformCollider = platform;
-                }   
-            }
-
-            if (isPhasingThroughPlatform)
-            {
-                phase();
-            }
-            else
-            {
-                antiPhase();
-            }
-
-            if (isPhasingThroughPlatform)
-            {
-                // Only check for re-enabling if we are currently phasing
-                bool touching = false;
-                if (bodyCollider.IsTouchingLayers(semiSolidGroundLayer)) touching = true;
-                if (smallBodyCollider.IsTouchingLayers(semiSolidGroundLayer)) touching = true;
-                if (groundFrictionCollider.IsTouchingLayers(semiSolidGroundLayer)) touching = true;
-
-                if (!touching)
-                {
-                    currentPlatformCollider = null;
-                    isPhasingThroughPlatform = false;
-                }
-            }
-
-
-            if (isGrounded() && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f))
-            {
-                if (grounded == false)
-                {
-                    land();
-                }
-            }
-            else if (isSemiGrounded())
-            {
-                if (grounded == false && (myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && isPhasingThroughPlatform == false && landDetectionReady)
-                {
-                    land();
-                }
-
-            }
-            else if ((myRigidbody.velocity.y < 0f || myRigidbody.velocity.y == 0f) && myRigidbody.gravityScale != slowFallGravityPower && canMove && slowFallBlocked == false)
-            {
-                //falling
-                activateSlowFall();
-            }
-
-            if(isWalking == false && myMonster.isWalking)
-            {
-                stopWalkingVisual();
-            }
-
-            if(isRunning == false && myMonster.isRunning)
-            {
-                stopRunningVisual();
-            }
-            else if (isRunning && myMonster.isRunning == false)
-            {
-                startRunningVisual();
-            }
-
-            
-            if (canMove)
-            {
-
-                if (isGrounded() || isSemiGrounded())
-                {
-
-                    if (isWalking == false && isRunning == false && isPhasingThroughPlatform == false && groundFrictionCollider.enabled == false && grounded)
-                    {
-                        turnOnFriction();
-                    }
-                     
-
-                    if ((inputHandler.LeftStick.x > 0.9f || inputHandler.LeftStick.x < -0.9f))
-                    {
-                        //run
-                        if (inputHandler.LeftStick.x > 0.9f)
-                        {
-                            //right
-                            if (isRunning == false)
-                            {
-                                isRunning = true;
-                                isWalking = false;
-                                stopWalkingVisual();
-                                startRunningVisual();
-                            }
-
-                            myRigidbody.velocity = new Vector2(1 * runSpeed, myRigidbody.velocity.y);
-                        }
-                        else
-                        {
-                            //left
-                            if (isRunning == false)
-                            {
-                                isRunning = true;
-                                isWalking = false;
-                                stopWalkingVisual();
-                                startRunningVisual();
-                            }
-
-                            myRigidbody.velocity = new Vector2(-1 * runSpeed, myRigidbody.velocity.y);
-                        }
-                    }
-                    else if ((inputHandler.LeftStick.x > 0.2f || inputHandler.LeftStick.x < -0.2f))
-                    {
-
-                        if (inputHandler.LeftStick.x > 0.2f)
-                        {
-                            myRigidbody.velocity = new Vector2(1 * walkSpeed, myRigidbody.velocity.y);
-                        }
-                        else
-                        {
-                            myRigidbody.velocity = new Vector2(-1 * walkSpeed, myRigidbody.velocity.y);
-                        }
-                    }
-                    else if ((inputHandler.LeftStick.x < 0.1f && inputHandler.LeftStick.x > -0.1f))
-                    {
-                        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-
-                        if (isWalking && isPhasingThroughPlatform == false && grounded)
-                        {
-                            isWalking = false;
-                            isRunning = false;
-                            stopWalkingVisual();
-                            startMiscIdleAnimations();
-                            turnOnFriction();
-                        }
-
-                        if (isRunning && isPhasingThroughPlatform == false && grounded)
-                        {
-                            isRunning = false;
-                            isWalking = false;
-                            stopRunningVisual();
-                            startMiscIdleAnimations();
-                        }
-                    }
-                    
-
-                }
-                else
-                {
-                    if (inputHandler.LeftStick.x > 0.9f || inputHandler.LeftStick.x < -0.9f)
-                    {
-
-                        if (inputHandler.LeftStick.x > 0.9f)
-                        {
-                            //right
-                            myRigidbody.velocity = new Vector2(1 * runSpeed / 1.8f, myRigidbody.velocity.y);
-                        }
-                        else
-                        {
-                            //left
-                            myRigidbody.velocity = new Vector2(-1 * runSpeed / 1.8f, myRigidbody.velocity.y);
-                        }
-                    }
-                    else if (inputHandler.LeftStick.x > 0.2f || inputHandler.LeftStick.x < -0.2f)
-                    {
-
-                        if (inputHandler.LeftStick.x > 0.2f)
-                        {
-                            //right
-                            myRigidbody.velocity = new Vector2(1 * walkSpeed / 2, myRigidbody.velocity.y);
-                        }
-                        else
-                        {
-                            //left
-                            myRigidbody.velocity = new Vector2(-1 * walkSpeed / 2, myRigidbody.velocity.y);
-                        }
-                    }
-                    else if ((inputHandler.LeftStick.x < 0.1f && inputHandler.LeftStick.x > -0.1f))
-                    {
-                        myRigidbody.velocity = new Vector2(myRigidbody.velocity.x - 0.001f, myRigidbody.velocity.y);
-
-                        if (isWalking && isPhasingThroughPlatform == false)
-                        {
-                            isWalking = false;
-                            isRunning = false;
-                            stopWalkingVisual();
-                            stopRunningVisual();
-                            startMiscIdleAnimations();
-                        }
-
-                        if (isRunning && isPhasingThroughPlatform == false)
-                        {
-                            isRunning = false;
-                            isWalking = false;
-                            stopWalkingVisual();
-                            stopRunningVisual();
-                            startMiscIdleAnimations();
-                        }
-                    }
-                }
-
-                if (isBelowSemiGround() && isGrounded() == false)
-                {
-                    if (isPhasingThroughPlatform == false)
-                    {
-                        phase();
-                        isPhasingThroughPlatform = true;
-                        isCrouching = false;
-                        isFastFalling = false;
-                    }
-                }
-
-                if (buttonA_Pressed == false && buttonB_Pressed == false && buttonX_Pressed == false && buttonY_Pressed == false && isAttacking == false)
-                {
-                    if (inputHandler.LeftStick.y > 0.4f && Mathf.Abs(inputHandler.LeftStick.x) < 0.4f)
-                    {
-                        // Cancels the jump if you attack during the delay window. I don't like using a seperate bool for this but isAttacking does not work reliably 
-                        if (leftStickIsAttacking)
-                        {
-                            return;
-                        }
-                       
-                        leftStickElapsedJumpTime += Time.deltaTime;
-                        if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
-                        {
-                            // Adds a delay so that the movement modifiers have time to activate
-                            if (leftStickElapsedJumpTime >= LeftStickJumpDelayTime)
-                            {
-                                bigJump();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (leftJoystickValue < 0.1f)
-                        {
-                            leftStickElapsedJumpTime = 0;
-                            leftStickIsAttacking = false;
-                        }
-                        
-                    }
-
-                    if (inputHandler.LeftStick.y < 0.05f && jumpButtonReset == false)
-                    {
-                        jumpButtonReset = true;
-                    }
-                    
-
-
-
-                    if (inputHandler.LeftStick.y < -0.6f && (inputHandler.LeftStick.x < 0.1f && inputHandler.LeftStick.x > -0.1f))
-                    {
-                        //down stick -> either crouch or go through semi solid or fast fall
-                        if (isGrounded())
-                        {
-                            //crouch
-                            if (isCrouching == false)
-                            {
-                                startCrouchVisual();
-                                isCrouching = true;
-                                isPhasingThroughPlatform = false;
-                                isFastFalling = false;
-
-                                if ((isRunning || isWalking))
-                                {
-                                    if (isWalking)
-                                    {
-                                        stopWalkingVisual();
-                                    }
-
-                                    if (isRunning)
-                                    {
-                                        stopRunningVisual();
-                                    }
-
-                                    isRunning = false;
-                                    isWalking = false;
-                                    startMiscIdleAnimations();
-                                }
-                                else
-                                {
-                                    turnOnFriction();
-                                }
-                            }
-                        }
-                        else if (isSemiGrounded())
-                        {
-                            //fall through platform
-                            if (isPhasingThroughPlatform == false)
-                            {
-                                phase();
-                                phaseThroughPlatformVisual();
-                                grounded = false;
-                                isCrouching = false;
-                                isFastFalling = false;
-                                landDetectionReady = false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (isCrouching)
-                        {
-                            endCrouchVisual();
-                            isCrouching = false;
-                        }
-                    }
-                    
-                }
-
-            }
-
-            if (isAttacking == false)
-            {
-                if (isRolling)
-                {
-
-                    if (rightJoystickVector.x > 0.2f)
-                    {
-                        myRigidbody.velocity = new Vector2(1 * rollSpeed, myRigidbody.velocity.y);
-                    }
-                    else if (rightJoystickVector.x < -0.2f)
-                    {
-                        myRigidbody.velocity = new Vector2(-1 * rollSpeed, myRigidbody.velocity.y);
-                    }
-                    
-                }
-            }
-
-            if (chargingForward)
-            {
-                if (facingRight)
-                {
-                    myRigidbody.velocity = new Vector2(1 * (runSpeed * 2), myRigidbody.velocity.y);
-                }
-                else
-                {
-                    myRigidbody.velocity = new Vector2(-1 * (runSpeed * 2), myRigidbody.velocity.y);
-                }
-            }
-            
-        }
     }
-    private void UpdateInputDirection(Vector2 directionVector)
+    public void UpdateInputDirection(Vector2 directionVector)
     {
         if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
         {
@@ -808,27 +354,27 @@ public class NewPlayerController : MonoBehaviour
         }
     }
 
-    private bool isGrounded()
+    public bool isGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, solidGroundLayer);
     }
 
-    private bool isSemiGrounded()
+    public bool isSemiGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, semiSolidGroundLayer);
     }
 
-    private bool isBelowSemiGround()
+    public bool isBelowSemiGround()
     {
         return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
     }
 
-    private Collider2D GetClosestPlatform()
+    public Collider2D GetClosestPlatform()
     {
         return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
     }
 
-    private void land()
+    public void land()
     {
         isDamageLaunching = false;
         grounded = true;
@@ -888,8 +434,7 @@ public class NewPlayerController : MonoBehaviour
             turnOnFriction();
         }
     }
-
-    private void bigJump()
+    public void bigJump()
     {
 
         if (numberOfJumpsLeft > 0)
@@ -1095,19 +640,19 @@ public class NewPlayerController : MonoBehaviour
         canMove = true;
     }
 
-    private void flipLeftVisual()
+    public void flipLeftVisual()
     {
         myMonster.flipLeft();
         facingRight = false;
     }
 
-    private void flipRightVisual()
+    public void flipRightVisual()
     {
         myMonster.flipRight();
         facingRight = true;
     }
 
-    private void startMiscIdleAnimations()
+    public void startMiscIdleAnimations()
     {
         canMove = true;
         myMonster.focusedAttackActive = false;
@@ -1122,12 +667,12 @@ public class NewPlayerController : MonoBehaviour
         }
     }
 
-    private void startRunningVisual()
+    public void startRunningVisual()
     {
         myMonster.run();
     }
 
-    private void stopRunningVisual()
+    public void stopRunningVisual()
     {
         myMonster.stopRunning();
     }
@@ -1164,7 +709,7 @@ public class NewPlayerController : MonoBehaviour
         playDoubleJumpSound();
     }
 
-    private void phaseThroughPlatformVisual()
+    public void phaseThroughPlatformVisual()
     {
         myMonster.goThroughPlatform();
     }
@@ -1179,12 +724,12 @@ public class NewPlayerController : MonoBehaviour
         myMonster.forceUngrounded();
     }
 
-    private void startCrouchVisual()
+    public void startCrouchVisual()
     {
         myMonster.crouch();
     }
 
-    private void endCrouchVisual()
+    public void endCrouchVisual()
     {
         myMonster.stopCrouching();
     }
@@ -1252,7 +797,7 @@ public class NewPlayerController : MonoBehaviour
         groundFrictionCollider.enabled = false;
     }
 
-    private void phase()
+    public void phase()
     {
         if (currentPlatformCollider != null)
         {
@@ -1263,7 +808,7 @@ public class NewPlayerController : MonoBehaviour
         }    
     }
 
-    private void antiPhase()
+    public void antiPhase()
     {
         if (insideFloor == false)
         {
@@ -1277,7 +822,7 @@ public class NewPlayerController : MonoBehaviour
         }
     }
 
-    private void activateSlowFall()
+    public void activateSlowFall()
     {
         myRigidbody.gravityScale = slowFallGravityPower;
     }
@@ -1654,171 +1199,4 @@ public class NewPlayerController : MonoBehaviour
             }
         }   
     }
-
-
-    // Old Logic
-
-    /*
-    public void OnLeftStick(InputAction.CallbackContext context)
-    {
-        leftJoystickVector = context.ReadValue<Vector2>();
-        leftJoystickValue = context.ReadValue<Vector2>().magnitude;
-
-        if (context.canceled)
-        {
-            jumpButtonReset = true;
-            lastInputDirection = facingRight ? InputDirection.Forward : InputDirection.Backward;
-            return;
-        }
-
-        if (context.performed)
-        {
-            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
-            {
-                lastInputDirectionVector = leftJoystickVector.normalized;
-                UpdateInputDirection(lastInputDirectionVector);
-
-
-                if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
-                {
-                    if (lastInputDirection is InputDirection.Forward)
-                    {
-                        flipRightVisual();
-                    }
-                    else if (lastInputDirection is InputDirection.Backward)
-                    {
-                        flipLeftVisual();
-                    }
-                }
-
-                //Debug.Log($"Last Input Direction:{lastInputDirection} Vector: {lastInputDirectionVector}");
-            }
-
-            if (buttonA_Pressed || buttonB_Pressed || buttonX_Pressed || buttonY_Pressed || canMove == false)
-            {
-                return;
-            }
-
-            if (isPhasingThroughPlatform == false && groundFrictionCollider.enabled && isCrouching == false && canMove && isAttacking == false)
-            {
-                turnOffFriction();
-            }
-
-            if (canMove && isAttacking == false)
-            {
-                if (leftJoystickVector.x > 0.9f || leftJoystickVector.x < -0.9f)
-                {
-                    //run
-
-                    if (isRunning == false)
-                    {
-                        isRunning = true;
-                        isWalking = false;
-                        startRunningVisual();
-                        //stopWalkingVisual();
-                        turnOffFriction();
-                    }
-                }
-                else if (leftJoystickVector.x > 0.2f || leftJoystickVector.x < -0.2f || leftJoystickVector.x == 0.2f || leftJoystickVector.x == -0.2f)
-                {
-                    //walk
-
-                    if (isWalking == false)
-                    {
-                        isWalking = true;
-                        isRunning = false;
-                        startWalkingVisual();
-                        stopRunningVisual();
-                        turnOffFriction();
-                    }
-                }
-            }
-        }
-    }*/
-
-
-    /*public void onButtonA(InputAction.CallbackContext context)
-{
-    if (context.started)
-    {
-        if (grabbingWall)
-        {
-            if (facingRight)
-            {
-                wallJump(-1);
-            }
-            else
-            {
-                wallJump(1);
-            }
-
-            bigJumpVisual();
-        }
-        else
-        {
-            if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
-            {
-                bigJump();
-            }
-        }
-    }
-
-    if (context.canceled)
-    {
-        jumpButtonReset = true;
-    }
-}
-
-public void onButtonB(InputAction.CallbackContext context)
-{
-    if (context.canceled)
-    {
-        myMonster.attackCancel(1);
-        buttonB_Pressed = false;
-    }
-
-    if (context.started)
-    {
-        if (myMonster.attackSlotMonsterParts[1] == null) { return; }
-        myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
-        myMonster.attack(1, (int)lastInputDirection);
-        buttonB_Pressed = true;
-    }
-}
-
-public void onButtonX(InputAction.CallbackContext context)
-{
-    if (context.canceled)
-    {
-        myMonster.attackCancel(2);
-        buttonX_Pressed = false;
-    }
-
-    if (context.started)
-    {
-        if (myMonster.attackSlotMonsterParts[2] == null) { return; }
-        myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
-        myMonster.attack(2, (int)lastInputDirection);
-        buttonX_Pressed = true;
-    }
-}
-
-public void onButtonY(InputAction.CallbackContext context)
-{
-    if (context.canceled)
-    {
-        myMonster.attackCancel(3);
-        buttonY_Pressed = false;
-    }
-
-    if (context.started)
-    {
-        if (myMonster.attackSlotMonsterParts[3] == null) { return; }
-        myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
-        myMonster.attack(3, (int)lastInputDirection);
-        buttonY_Pressed = true;
-    }
-}
-*/
-
 }
