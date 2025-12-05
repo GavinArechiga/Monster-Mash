@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Linq;
 
 public class NewPlayerController : MonoBehaviour
 {
@@ -16,60 +16,38 @@ public class NewPlayerController : MonoBehaviour
     public BoxCollider2D groundFrictionCollider;
     public Transform groundCheck;
     public Transform headCheck;
-    public PlayerInput playerInput;
-    public PlayerControls playerControlsMap;
-    [SerializeField] public Rigidbody2D myRigidbody;
+    public Rigidbody2D myRigidbody;
 
     // Input
     public PlayerInputHandler inputHandler = new PlayerInputHandler();
-    private InputActionMap startingActionMap;
-    private InputActionMap UIcontrols;
-    private InputActionMap monsterControls;
     public int playerIndex;
-    public Vector2 lastInputDirectionVector;
-    public float directionThreshold = 0.2f;
-    public enum InputDirection { Forward = 1, Backward = -1, Up = 2, Down = 0 }
-    public InputDirection lastInputDirection = InputDirection.Forward;
-    public Vector2 rightJoystickVector;
-    Vector2 leftJoystickVector;
-    public float leftJoystickValue;
+
 
     // State Machine
     private PlayerState currentState;
 
-    // Movement
-    public float walkSpeed = 5f;
-    public float runSpeed = 25f;
-    public bool canMove = true;
-    public bool isWalking = false;
-    public bool isRunning = false;
-    public bool grounded = false;
-    public bool isCrouching = false;
-    public bool isPhasingThroughPlatform;
-    public bool isFastFalling = false;
-    public bool slowFallBlocked = false;
-    public float slowFallGravityPower = 6;
-    private float gravityPower;
+    // MISC
     public bool monsterControllerActive = false;
-    public bool facingRight;
-    public bool grabbingWall = false;
-    public bool chargingForward = false;
-    public bool landDetectionReady = true;
-    public Collider2D currentPlatformCollider;
-    private bool isDamageLaunching;
-    private bool atPlatformEdge = false;
-    private Vector2 platformEdgeCooridinates;
-    private bool insideFloor = false;
-
-    // Jumping
+    public bool canMove = true;
     public bool canJump = true;
+    public bool isDamageLaunching;
+    public bool facingRight;
     public bool jumpButtonReset = false;
     public int numberOfJumps = 2;
     public int numberOfJumpsLeft = 2;
-    public float LeftStickJumpDelayTime = 0.1f;
-    public float leftStickElapsedJumpTime;
-    private float wallJumpPower = 28f;
-    private float bigJumpPower = 65;
+    public bool isWalking = false;
+    public bool isRunning = false;
+    public bool landDetectionReady = true;
+    public bool atPlatformEdge = false;
+    public bool chargingForward = false;
+    public bool grounded = false;
+    public bool isPhasingThroughPlatform;
+    private Vector2 platformEdgeCooridinates;
+    public Collider2D currentPlatformCollider;
+    public bool insideFloor = false;
+    public float gravityPower;
+    public bool slowFallBlocked = false;
+    public float bigJumpPower = 65;
 
     // Attacks
     public bool isAttacking = false;
@@ -90,11 +68,6 @@ public class NewPlayerController : MonoBehaviour
     public bool canRoll = true;
     public bool isDashing = false;
     public bool canDash = true;
-    public bool grappling = false;
-    public bool grapplingPlayer = false;
-    public bool grapplingWall = false;
-    public NewPlayerController grapplePlayerTarget;
-    public Vector3 wallGrapplePoint;
 
     // Animation
     public List<NewMonsterPart> allParts;
@@ -113,41 +86,11 @@ public class NewPlayerController : MonoBehaviour
 
     private void Awake()
     {
-
-        inputHandler.OnButtonB_Canceled += () =>
-        {
-            myMonster.attackCancel(1);
-        };
-
-        inputHandler.OnButtonX_Canceled += () =>
-        {
-            myMonster.attackCancel(2);
-        };
-
-        inputHandler.OnButtonY_Canceled += () =>
-        {
-            myMonster.attackCancel(3);
-        };
-
-        playerInput = GetComponent<PlayerInput>();
-        playerControlsMap = new PlayerControls();
+        inputHandler = GetComponent<PlayerInputHandler>();
         myAudioSystem = GetComponentInChildren<playerAudioManager>();
         gravityPower = myRigidbody.gravityScale;
-
-        if(playerInput != null)
-        {
-            startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
-            UIcontrols = playerInput.actions.FindActionMap("UI Controls");
-            monsterControls = playerInput.actions.FindActionMap("Monster Controls");
-
-            if (UIcontrols != null)
-            {
-                playerInput.SwitchCurrentActionMap("UI Controls");
-                playerControlsMap.StartingActionMap.Disable();
-                //print("New Action Map: " + playerInput.currentActionMap);
-            }
-        }
     }
+
     private void Start()
     {
         ChangeState(new IdleState(this));
@@ -155,100 +98,38 @@ public class NewPlayerController : MonoBehaviour
         legs = allParts.Where(part => part.PartType == MonsterPartType.Leg).ToList();
     }
 
-    private void OnDestroy()
-    {
-        UnsubscribeActionMap();
-    }
-
     public void PlayerInputSetUp()
     {
-        startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
-        UIcontrols = playerInput.actions.FindActionMap("UI Controls");
-        monsterControls = playerInput.actions.FindActionMap("Monster Controls");
+        inputHandler.startingActionMap = inputHandler.playerInput.actions.FindActionMap("Starting Action Map");
+        inputHandler.UIcontrols = inputHandler.playerInput.actions.FindActionMap("UI Controls");
+        inputHandler.monsterControls = inputHandler.playerInput.actions.FindActionMap("Monster Controls");
 
-        if (UIcontrols != null)
+        if (inputHandler.UIcontrols != null)
         {
-            playerInput.SwitchCurrentActionMap("UI Controls");
-            playerControlsMap.StartingActionMap.Disable();
+            inputHandler.playerInput.SwitchCurrentActionMap("UI Controls");
+            inputHandler.playerControlsMap.StartingActionMap.Disable();
             //print("New Action Map: " + playerInput.currentActionMap);
         }
 
         switchActionMap("Monster Controls");
 
-        SubscribeActionMap();
-    }
-
-    private void SubscribeActionMap()
-    {
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed += inputHandler.OnLeftStick;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled += inputHandler.OnLeftStick;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed += inputHandler.OnRightStick;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled += inputHandler.OnRightStick;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started += inputHandler.OnButtonA;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled += inputHandler.OnButtonA;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started += inputHandler.OnButtonB;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled += inputHandler.OnButtonB;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started += inputHandler.OnButtonX;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled += inputHandler.OnButtonX;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started += inputHandler.OnButtonY;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled += inputHandler.OnButtonY;
-
-        playerInput.actions.FindAction("ShowMenu").Enable();
-        playerInput.actions.FindAction("ShowMenu").performed += ShowRemappingMenu;
-    }
-
-    private void UnsubscribeActionMap()
-    {
-        if (playerInput == null) {  return; }
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").performed -= inputHandler.OnLeftStick;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Left Stick").canceled -= inputHandler.OnLeftStick;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").performed -= inputHandler.OnRightStick;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Right Stick").canceled -= inputHandler.OnRightStick;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").started -= inputHandler.OnButtonA;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("A").canceled -= inputHandler.OnButtonA;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").started -= inputHandler.OnButtonB;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("B").canceled -= inputHandler.OnButtonB;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").started -= inputHandler.OnButtonX;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("X").canceled -= inputHandler.OnButtonX;
-
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").started -= inputHandler.OnButtonY;
-        playerInput.actions.FindActionMap("Monster Controls").FindAction("Y").canceled -= inputHandler.OnButtonY;
-
-        playerInput.actions.FindAction("ShowMenu").Disable();
-        playerInput.actions.FindAction("ShowMenu").performed -= ShowRemappingMenu;
-    }
-
-    private void ShowRemappingMenu(InputAction.CallbackContext ctx)
-    {
-        if (InputRemapper.Instance == null) {  return; }
-
-        InputRemapper.Instance.ShowMenu(playerInput);
+        inputHandler.SubscribeActionMap();
     }
 
     public void switchActionMap(string newActionMap)
     {
         //might cut this first section, its a bit unecessary
-        if (UIcontrols != null)
+        if (inputHandler.UIcontrols != null)
         {
-            if (newActionMap == "UI Controls" && playerInput.currentActionMap == UIcontrols)
+            if (newActionMap == "UI Controls" && inputHandler.playerInput.currentActionMap == inputHandler.UIcontrols)
             {
                 return;
             }
         }
 
-        if (playerInput != null)
+        if (inputHandler.playerInput != null)
         {
-            playerInput.SwitchCurrentActionMap(newActionMap);
+            inputHandler.playerInput.SwitchCurrentActionMap(newActionMap);
         }
 
         if (newActionMap == "Monster Controls")
@@ -280,20 +161,9 @@ public class NewPlayerController : MonoBehaviour
 
         if (inputHandler.ButtonA_Pressed)
         {
-            if (grabbingWall)
-            {
-                if (facingRight)
-                    wallJump(-1);
-                else
-                    wallJump(1);
+            if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
+                bigJump();
 
-                bigJumpVisual();
-            }
-            else
-            {
-                if (canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
-                    bigJump();
-            }
             inputHandler.ButtonA_Pressed = false;
         }
 
@@ -302,8 +172,8 @@ public class NewPlayerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[1] != null)
             {
-                myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
-                myMonster.attack(1, (int)lastInputDirection);
+                myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)inputHandler.lastInputDirection;
+                myMonster.attack(1, (int)inputHandler.lastInputDirection);
             }
             inputHandler.ButtonB_Pressed = false;
         }
@@ -312,8 +182,8 @@ public class NewPlayerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[2] != null)
             {
-                myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
-                myMonster.attack(2, (int)lastInputDirection);
+                myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)inputHandler.lastInputDirection;
+                myMonster.attack(2, (int)inputHandler.lastInputDirection);
             }
             inputHandler.ButtonB_Pressed = false;
         }
@@ -322,8 +192,8 @@ public class NewPlayerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[3] != null)
             {
-                myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
-                myMonster.attack(3, (int)lastInputDirection);
+                myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)inputHandler.lastInputDirection;
+                myMonster.attack(3, (int)inputHandler.lastInputDirection);
             }
             inputHandler.ButtonB_Pressed = false;
         }
@@ -332,24 +202,24 @@ public class NewPlayerController : MonoBehaviour
     {
         if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
         {
-            if (directionVector.x > directionThreshold)
+            if (directionVector.x > inputHandler.directionThreshold)
             {
-                lastInputDirection = InputDirection.Forward;
+                inputHandler.lastInputDirection = PlayerInputHandler.InputDirection.Forward;
             }
-            else if (directionVector.x < -directionThreshold)
+            else if (directionVector.x < -inputHandler.directionThreshold)
             {
-                lastInputDirection = InputDirection.Backward;
+                inputHandler.lastInputDirection = PlayerInputHandler.InputDirection.Backward;
             }
         }
-        else if (Mathf.Abs(directionVector.y) > directionThreshold)
+        else if (Mathf.Abs(directionVector.y) > inputHandler.directionThreshold)
         {
-            if (directionVector.y > directionThreshold)
+            if (directionVector.y > inputHandler.directionThreshold)
             {
-                lastInputDirection = InputDirection.Up;
+                inputHandler.lastInputDirection = PlayerInputHandler.InputDirection.Up;
             }
-            else if (directionVector.y < -directionThreshold)
+            else if (directionVector.y < -inputHandler.directionThreshold)
             {
-                lastInputDirection = InputDirection.Down;
+                inputHandler.lastInputDirection = PlayerInputHandler.InputDirection.Down;
             }
         }
     }
@@ -364,76 +234,114 @@ public class NewPlayerController : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, semiSolidGroundLayer);
     }
 
-    public bool isBelowSemiGround()
+    private bool wallToFloorCheck()
     {
-        return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
+        return Physics2D.Raycast(transform.position, -transform.up, 2f, solidGroundLayer);
     }
 
-    public Collider2D GetClosestPlatform()
+    public void phase()
     {
-        return Physics2D.OverlapCircle(headCheck.position, 1f, semiSolidGroundLayer);
-    }
-
-    public void land()
-    {
-        isDamageLaunching = false;
-        grounded = true;
-        numberOfJumpsLeft = numberOfJumps;
-        StopCoroutine(jumpRecharge());
-        isFastFalling = false;
-        landDetectionReady = true;
-        insideFloor = false;
-
-        if (grabbingWall)
+        if (currentPlatformCollider != null)
         {
-            endWallGrabVisual();
+            Physics2D.IgnoreCollision(bodyCollider, currentPlatformCollider, true);
+            Physics2D.IgnoreCollision(smallBodyCollider, currentPlatformCollider, true);
+            Physics2D.IgnoreCollision(groundFrictionCollider, currentPlatformCollider, true);
+            isPhasingThroughPlatform = true;
         }
-        grabbingWall = false;
-        if (isAttacking == false)
+    }
+
+    public void antiPhase()
+    {
+        if (insideFloor == false)
         {
-            landVisual();
-            canMove = true;
-            myRigidbody.gravityScale = gravityPower;
+            if (currentPlatformCollider != null)
+            {
+                Physics2D.IgnoreCollision(bodyCollider, currentPlatformCollider, false);
+                Physics2D.IgnoreCollision(smallBodyCollider, currentPlatformCollider, false);
+                Physics2D.IgnoreCollision(groundFrictionCollider, currentPlatformCollider, false);
+                isPhasingThroughPlatform = false;
+            }
+        }
+    }
+
+    public IEnumerator jumpRecharge()
+    {
+        canJump = false;
+        yield return new WaitForSeconds(0.2f);
+        canJump = true;
+    }
+
+    private void doubleJumpVisual()
+    {
+        myMonster.doubleJump();
+        playDoubleJumpSound();
+    }
+
+    public void flipLeftVisual()
+    {
+        myMonster.flipLeft();
+        facingRight = false;
+    }
+
+    public void flipRightVisual()
+    {
+        myMonster.flipRight();
+        facingRight = true;
+    }
+
+    public void startRunningVisual()
+    {
+        myMonster.run();
+    }
+
+    public void stopRunningVisual()
+    {
+        myMonster.stopRunning();
+    }
+
+    public void startWalkingVisual()
+    {
+        myMonster.walk();
+    }
+
+    public void stopWalkingVisual()
+    {
+        myMonster.stopWalking();
+    }
+
+    private void startTeeterVisual()
+    {
+        myMonster.enteredPlatformEdge();
+    }
+
+    private void stopTeeterVisual()
+    {
+        myMonster.exitedPlatformEdge();
+    }
+
+    public void turnOnFriction()
+    {
+        if (isRunning || isWalking || isPhasingThroughPlatform)
+        {
+            return;
         }
         else
         {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            turnOnFriction();
-            myRigidbody.gravityScale = gravityPower;
-            return;
-        }
-
-        if ((leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f))
-        {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-
-            if (isWalking && isPhasingThroughPlatform == false && grounded)
-            {
-                isWalking = false;
-                isRunning = false;
-                stopWalkingVisual();
-                startMiscIdleAnimations();
-                turnOnFriction();
-            }
-
-            if (isRunning && isPhasingThroughPlatform == false && grounded)
-            {
-                isRunning = false;
-                isWalking = false;
-                stopRunningVisual();
-                startMiscIdleAnimations();
-            }
-        }
-
-        if ((isRunning || isWalking) && isAttacking == false && canMove)
-        {
-            turnOffFriction();
-        }
-        else if (leftJoystickVector.x < 0.1f && leftJoystickVector.x > -0.1f)
-        {
-            turnOnFriction();
+            groundFrictionCollider.enabled = true;
         }
     }
+
+    public void turnOffFriction()
+    {
+        groundFrictionCollider.enabled = false;
+    }
+
+    private void bigJumpVisual()
+    {
+        myMonster.jump();
+        playJumpSound();
+    }
+
     public void bigJump()
     {
 
@@ -469,19 +377,60 @@ public class NewPlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator jumpRecharge()
+    public void lockPlayerController()
     {
+        //Debug.Log("Player Controller Locked");
+        canMove = false;
         canJump = false;
-        yield return new WaitForSeconds(0.2f);
-        canJump = true;
+        isRunning = false;
+        isWalking = false;
+
+        if (grounded)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+        }
     }
 
+    public void unlockPlayerController()
+    {
+        //Debug.Log("Player Controller Unlocked");
+        canMove = true;
+        canJump = true;
+        isRunning = false;
+        isWalking = false;
+        isAttacking = false;
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+
+
+        if (isDashing == false && isRolling == false)
+        {
+            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            turnOnFriction();
+            landDetectionReady = true;
+        }
+    }
+
+    public void nonStopChargeForward()
+    {
+        chargingForward = true;
+        turnOffFriction();
+    }
+
+    public void endChargeForward()
+    {
+        chargingForward = false;
+        turnOnFriction();
+        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+    }
+
+
+    /*
     public void OnRightStick(InputAction.CallbackContext context)
     {
         rightJoystickVector = context.ReadValue<Vector2>();
 
 
-        if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
+        if (context.performed && isDashing == false && isRolling == false)
         {
             if (facingRight == false && rightJoystickVector.x > 0.1f)
             {
@@ -497,7 +446,7 @@ public class NewPlayerController : MonoBehaviour
             }
         }
 
-        if (context.performed && (canDash || canRoll) && grabbingWall == false)
+        if (context.performed && (canDash || canRoll))
         {
 
             if (isGrounded() || isSemiGrounded())
@@ -552,6 +501,7 @@ public class NewPlayerController : MonoBehaviour
 
         }
     }
+    */
 
     IEnumerator rollTime()
     {
@@ -596,7 +546,6 @@ public class NewPlayerController : MonoBehaviour
     {
         turnOffFriction();
         isDashing = true;
-        grabbingWall = false;
         canMove = false;
         canDash = false;
         canRoll = false;
@@ -619,129 +568,9 @@ public class NewPlayerController : MonoBehaviour
         isWalking = false;
     }
 
-    private bool wallToFloorCheck()
-    {
-        return Physics2D.Raycast(transform.position, -transform.up, 2f, solidGroundLayer);
-    }
-
-    private void wallJump(int direction)
-    {
-        myRigidbody.gravityScale = gravityPower;
-        grabbingWall = false;
-        jumpButtonReset = false;
-        numberOfJumpsLeft = numberOfJumps - 1;
-        myRigidbody.velocity = new Vector2(direction * wallJumpPower, bigJumpPower);
-        StartCoroutine(jumpRecharge());
-        endWallGrabVisual();
-        isDashing = false;
-        isRolling = false;
-        canRoll = true;
-        canDash = true;
-        canMove = true;
-    }
-
-    public void flipLeftVisual()
-    {
-        myMonster.flipLeft();
-        facingRight = false;
-    }
-
-    public void flipRightVisual()
-    {
-        myMonster.flipRight();
-        facingRight = true;
-    }
-
-    public void startMiscIdleAnimations()
-    {
-        canMove = true;
-        myMonster.focusedAttackActive = false;
-
-        if (atPlatformEdge)
-        {
-            myMonster.teeterCheck();
-        }
-        else
-        {
-            myMonster.activeBounce();
-        }
-    }
-
-    public void startRunningVisual()
-    {
-        myMonster.run();
-    }
-
-    public void stopRunningVisual()
-    {
-        myMonster.stopRunning();
-    }
-
-    public void startWalkingVisual()
-    {
-        myMonster.walk();
-    }
-
-    public void stopWalkingVisual()
-    {
-        myMonster.stopWalking();
-    }
-
-    private void startTeeterVisual()
-    {
-        myMonster.enteredPlatformEdge();
-    }
-
-    private void stopTeeterVisual()
-    {
-        myMonster.exitedPlatformEdge();
-    }
-
-    private void bigJumpVisual()
-    {
-        myMonster.jump();
-        playJumpSound();
-    }
-
-    private void doubleJumpVisual()
-    {
-        myMonster.doubleJump();
-        playDoubleJumpSound();
-    }
-
-    public void phaseThroughPlatformVisual()
-    {
-        myMonster.goThroughPlatform();
-    }
-
-    private void landVisual()
-    {
-        myMonster.land();
-    }
-
-    private void lateAttackReleaseVisualCorrections()
-    {
-        myMonster.forceUngrounded();
-    }
-
-    public void startCrouchVisual()
-    {
-        myMonster.crouch();
-    }
-
-    public void endCrouchVisual()
-    {
-        myMonster.stopCrouching();
-    }
-
     private void startDashAttackVisual()
     {
         myMonster.dashAttack();
-    }
-
-    private void endWallGrabVisual()
-    {
-        myMonster.endWallGrab();
     }
 
     private void rollVisual()
@@ -780,140 +609,9 @@ public class NewPlayerController : MonoBehaviour
         myAudioSystem.playDoubleJumpSound();
     }
 
-    public void turnOnFriction()
-    {
-        if (isRunning || isWalking || isPhasingThroughPlatform)
-        {
-            return;
-        }
-        else
-        {
-            groundFrictionCollider.enabled = true;
-        }
-    }
 
-    public void turnOffFriction()
-    {
-        groundFrictionCollider.enabled = false;
-    }
 
-    public void phase()
-    {
-        if (currentPlatformCollider != null)
-        {
-            Physics2D.IgnoreCollision(bodyCollider, currentPlatformCollider, true);
-            Physics2D.IgnoreCollision(smallBodyCollider, currentPlatformCollider, true);
-            Physics2D.IgnoreCollision(groundFrictionCollider, currentPlatformCollider, true);
-            isPhasingThroughPlatform = true;
-        }    
-    }
-
-    public void antiPhase()
-    {
-        if (insideFloor == false)
-        {
-            if (currentPlatformCollider != null)
-            {
-                Physics2D.IgnoreCollision(bodyCollider, currentPlatformCollider, false);
-                Physics2D.IgnoreCollision(smallBodyCollider, currentPlatformCollider, false);
-                Physics2D.IgnoreCollision(groundFrictionCollider, currentPlatformCollider, false);
-                isPhasingThroughPlatform = false;
-            }
-        }
-    }
-
-    public void activateSlowFall()
-    {
-        myRigidbody.gravityScale = slowFallGravityPower;
-    }
-
-    public void lockPlayerController()
-    {
-        //Debug.Log("Player Controller Locked");
-        canMove = false;
-        canJump = false;
-        isRunning = false;
-        isWalking = false;
-
-        if (grounded)
-        {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-        }
-    }
-
-    public void unlockPlayerController()
-    {
-        //Debug.Log("Player Controller Unlocked");
-        canMove = true;
-        canJump = true;
-        isRunning = false;
-        isWalking = false;
-        isAttacking = false;
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-
-        
-        if (isDashing == false && isRolling == false)
-        {
-            myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            turnOnFriction();
-            landDetectionReady = true;
-        }
-    }
-
-    public void nonStopChargeForward()
-    {
-        chargingForward = true;
-        turnOffFriction();
-    }
-
-    public void endChargeForward()
-    {
-        chargingForward = false;
-        turnOnFriction();
-        myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-    }
-
-    // Listens for when an attack calls Trigger Attack Release
-    public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
-    {
-        leftStickIsAttacking = true;
-
-        Vector2 currentMovementModifier = Vector2.zero;
-        switch (lastInputDirection)
-        {
-            case InputDirection.Forward:
-                currentMovementModifier = eventArgs.MovementModifier.Right;
-                break;
-            case InputDirection.Backward:
-                currentMovementModifier = eventArgs.MovementModifier.Left;
-                break;
-            case InputDirection.Up:
-                currentMovementModifier = eventArgs.MovementModifier.Up;
-                break;
-            case InputDirection.Down:
-                currentMovementModifier = eventArgs.MovementModifier.Down;
-                break;
-        }
-
-        StartCoroutine(ApplySmoothedMovementModifier(currentMovementModifier, eventArgs.ClipLength));
-    }
-
-    // smooths out the movement so that it is not instant and it looks better
-    private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
-    {
-        float elapsed = 0f;
-        // Clamp the Y offset to a reasonable value (e.g., 5 units)
-        float maxY = totalOffset.y;
-        float modifierX = totalOffset.x / duration;
-        float modifierY = Mathf.Clamp(totalOffset.y / duration, -maxY, maxY);
-
-        while (elapsed < duration)
-        {
-            myRigidbody.velocity = new Vector2(modifierX, myRigidbody.velocity.y + modifierY);
-            elapsed += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-    }
+   
 
     public IEnumerator DisableJumping(float seconds)
     {
@@ -1089,6 +787,49 @@ public class NewPlayerController : MonoBehaviour
             landDetectionReady = true;
         }
 
+    }
+
+
+    // Listens for when an attack calls Trigger Attack Release
+    public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
+    {
+        leftStickIsAttacking = true;
+
+        Vector2 currentMovementModifier = Vector2.zero;
+        switch (inputHandler.lastInputDirection)
+        {
+            case PlayerInputHandler.InputDirection.Forward:
+                currentMovementModifier = eventArgs.MovementModifier.Right;
+                break;
+            case PlayerInputHandler.InputDirection.Backward:
+                currentMovementModifier = eventArgs.MovementModifier.Left;
+                break;
+            case PlayerInputHandler.InputDirection.Up:
+                currentMovementModifier = eventArgs.MovementModifier.Up;
+                break;
+            case PlayerInputHandler.InputDirection.Down:
+                currentMovementModifier = eventArgs.MovementModifier.Down;
+                break;
+        }
+
+        StartCoroutine(ApplySmoothedMovementModifier(currentMovementModifier, eventArgs.ClipLength));
+    }
+
+    // smooths out the movement so that it is not instant and it looks better
+    private IEnumerator ApplySmoothedMovementModifier(Vector2 totalOffset, float duration)
+    {
+        float elapsed = 0f;
+        // Clamp the Y offset to a reasonable value (e.g., 5 units)
+        float maxY = totalOffset.y;
+        float modifierX = totalOffset.x / duration;
+        float modifierY = Mathf.Clamp(totalOffset.y / duration, -maxY, maxY);
+
+        while (elapsed < duration)
+        {
+            myRigidbody.velocity = new Vector2(modifierX, myRigidbody.velocity.y + modifierY);
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     //damage and effects over time

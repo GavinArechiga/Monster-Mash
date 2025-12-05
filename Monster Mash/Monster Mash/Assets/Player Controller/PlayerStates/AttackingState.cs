@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : PlayerState
+public class AttackingState : PlayerState
 {
-    public IdleState(NewPlayerController controller) : base(controller) { }
+    public AttackingState(NewPlayerController controller) : base(controller) { }
 
     public override void Enter()
     {

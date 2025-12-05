@@ -94,7 +94,7 @@ public class EmoteManager
             defaultEmoteForSlot.emoteInputAction.action == null)
             return;
 
-        InputActionAsset playerActions = attackSystem.myPlayer.playerInput.actions;
+        InputActionAsset playerActions = attackSystem.myPlayer.inputHandler.playerInput.actions;
 
         InputAction inputAction = playerActions.FindAction(defaultEmoteForSlot.emoteInputAction.name);
         if (!inputAction.enabled)

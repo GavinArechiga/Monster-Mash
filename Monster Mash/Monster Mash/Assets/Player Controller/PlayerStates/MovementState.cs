@@ -2,10 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static NewPlayerController;
 
-public class WalkingState : PlayerState
+public class MovementState : PlayerState
 {
-    public WalkingState(NewPlayerController controller) : base(controller) { }
+    public MovementState(NewPlayerController controller) : base(controller) { }
+
+
+    // Movement
+    public float walkSpeed = 5f;
+    public float runSpeed = 25f;
+    public bool isCrouching = false;
+    public bool isFastFalling = false;
+    public float slowFallGravityPower = 6;
+    public float LeftStickJumpDelayTime = 0.1f;
+    public float leftStickElapsedJumpTime;
+    private float wallJumpPower = 28f;
+
 
     public override void Enter()
     {
@@ -23,16 +36,16 @@ public class WalkingState : PlayerState
         Vector2 moveInput = controller.inputHandler.LeftStick;
         float moveValue = moveInput.magnitude;
 
-        if (Mathf.Abs(moveInput.x) > controller.directionThreshold || Mathf.Abs(moveInput.y) > controller.directionThreshold)
+        if (Mathf.Abs(moveInput.x) > controller.inputHandler.directionThreshold || Mathf.Abs(moveInput.y) > controller.inputHandler.directionThreshold)
         {
-            controller.lastInputDirectionVector = moveInput.normalized;
-            controller.UpdateInputDirection(controller.lastInputDirectionVector);
+            controller.inputHandler.lastInputDirectionVector = moveInput.normalized;
+            controller.UpdateInputDirection(controller.inputHandler.lastInputDirectionVector);
 
-            if (!controller.grabbingWall && !controller.isDashing && !controller.isRolling && controller.canMove)
+            if (!controller.isDashing && !controller.isRolling && controller.canMove)
             {
-                if (controller.lastInputDirection == NewPlayerController.InputDirection.Forward)
+                if (controller.inputHandler.lastInputDirection == PlayerInputHandler.InputDirection.Forward)
                     controller.flipRightVisual();
-                else if (controller.lastInputDirection == NewPlayerController.InputDirection.Backward)
+                else if (controller.inputHandler.lastInputDirection == PlayerInputHandler.InputDirection.Backward)
                     controller.flipLeftVisual();
             }
         }
@@ -40,7 +53,7 @@ public class WalkingState : PlayerState
         if (controller.buttonA_Pressed || controller.buttonB_Pressed || controller.buttonX_Pressed || controller.buttonY_Pressed || !controller.canMove)
             return;
 
-        if (!controller.isPhasingThroughPlatform && controller.groundFrictionCollider.enabled && !controller.isCrouching && controller.canMove && !controller.isAttacking)
+        if (!controller.isPhasingThroughPlatform && controller.groundFrictionCollider.enabled && !isCrouching && controller.canMove && !controller.isAttacking)
             controller.turnOffFriction();
 
         if (controller.canMove && !controller.isAttacking)
@@ -74,7 +87,7 @@ public class WalkingState : PlayerState
         {
             if (!controller.isPhasingThroughPlatform && !controller.isGrounded())
             {
-                Collider2D platform = controller.GetClosestPlatform();
+                Collider2D platform = GetClosestPlatform();
                 if (platform != null)
                 {
                     controller.currentPlatformCollider = platform;
@@ -109,20 +122,20 @@ public class WalkingState : PlayerState
             {
                 if (controller.grounded == false)
                 {
-                    controller.land();
+                    land();
                 }
             }
             else if (controller.isSemiGrounded())
             {
                 if (controller.grounded == false && (controller.myRigidbody.velocity.y < 0f || controller.myRigidbody.velocity.y == 0f) && controller.isPhasingThroughPlatform == false && controller.landDetectionReady)
                 {
-                    controller.land();
+                    land();
                 }
             }
-            else if ((controller.myRigidbody.velocity.y < 0f || controller.myRigidbody.velocity.y == 0f) && controller.myRigidbody.gravityScale != controller.slowFallGravityPower && controller.canMove && controller.slowFallBlocked == false)
+            else if ((controller.myRigidbody.velocity.y < 0f || controller.myRigidbody.velocity.y == 0f) && controller.myRigidbody.gravityScale != slowFallGravityPower && controller.canMove && controller.slowFallBlocked == false)
             {
                 //falling
-                controller.activateSlowFall();
+                activateSlowFall();
             }
 
             if (controller.isWalking == false && controller.myMonster.isWalking)
@@ -162,7 +175,7 @@ public class WalkingState : PlayerState
                                 controller.startRunningVisual();
                             }
 
-                            controller.myRigidbody.velocity = new Vector2(1 * controller.runSpeed, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(1 * runSpeed, controller.myRigidbody.velocity.y);
                         }
                         else
                         {
@@ -175,18 +188,18 @@ public class WalkingState : PlayerState
                                 controller.startRunningVisual();
                             }
 
-                            controller.myRigidbody.velocity = new Vector2(-1 * controller.runSpeed, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(-1 * runSpeed, controller.myRigidbody.velocity.y);
                         }
                     }
                     else if ((controller.inputHandler.LeftStick.x > 0.2f || controller.inputHandler.LeftStick.x < -0.2f))
                     {
                         if (controller.inputHandler.LeftStick.x > 0.2f)
                         {
-                            controller.myRigidbody.velocity = new Vector2(1 * controller.walkSpeed, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(1 * walkSpeed, controller.myRigidbody.velocity.y);
                         }
                         else
                         {
-                            controller.myRigidbody.velocity = new Vector2(-1 * controller.walkSpeed, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(-1 * walkSpeed, controller.myRigidbody.velocity.y);
                         }
                     }
                     else if ((controller.inputHandler.LeftStick.x < 0.1f && controller.inputHandler.LeftStick.x > -0.1f))
@@ -198,7 +211,7 @@ public class WalkingState : PlayerState
                             controller.isWalking = false;
                             controller.isRunning = false;
                             controller.stopWalkingVisual();
-                            controller.startMiscIdleAnimations();
+                            startMiscIdleAnimations();
                             controller.turnOnFriction();
                         }
 
@@ -207,7 +220,7 @@ public class WalkingState : PlayerState
                             controller.isRunning = false;
                             controller.isWalking = false;
                             controller.stopRunningVisual();
-                            controller.startMiscIdleAnimations();
+                            startMiscIdleAnimations();
                         }
                     }
                 }
@@ -218,12 +231,12 @@ public class WalkingState : PlayerState
                         if (controller.inputHandler.LeftStick.x > 0.9f)
                         {
                             //right
-                            controller.myRigidbody.velocity = new Vector2(1 * controller.runSpeed / 1.8f, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(1 * runSpeed / 1.8f, controller.myRigidbody.velocity.y);
                         }
                         else
                         {
                             //left
-                            controller.myRigidbody.velocity = new Vector2(-1 * controller.runSpeed / 1.8f, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(-1 * runSpeed / 1.8f, controller.myRigidbody.velocity.y);
                         }
                     }
                     else if (controller.inputHandler.LeftStick.x > 0.2f || controller.inputHandler.LeftStick.x < -0.2f)
@@ -231,12 +244,12 @@ public class WalkingState : PlayerState
                         if (controller.inputHandler.LeftStick.x > 0.2f)
                         {
                             //right
-                            controller.myRigidbody.velocity = new Vector2(1 * controller.walkSpeed / 2, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(1 * walkSpeed / 2, controller.myRigidbody.velocity.y);
                         }
                         else
                         {
                             //left
-                            controller.myRigidbody.velocity = new Vector2(-1 * controller.walkSpeed / 2, controller.myRigidbody.velocity.y);
+                            controller.myRigidbody.velocity = new Vector2(-1 * walkSpeed / 2, controller.myRigidbody.velocity.y);
                         }
                     }
                     else if ((controller.inputHandler.LeftStick.x < 0.1f && controller.inputHandler.LeftStick.x > -0.1f))
@@ -249,7 +262,7 @@ public class WalkingState : PlayerState
                             controller.isRunning = false;
                             controller.stopWalkingVisual();
                             controller.stopRunningVisual();
-                            controller.startMiscIdleAnimations();
+                            startMiscIdleAnimations();
                         }
 
                         if (controller.isRunning && controller.isPhasingThroughPlatform == false)
@@ -258,19 +271,19 @@ public class WalkingState : PlayerState
                             controller.isWalking = false;
                             controller.stopWalkingVisual();
                             controller.stopRunningVisual();
-                            controller.startMiscIdleAnimations();
+                            startMiscIdleAnimations();
                         }
                     }
                 }
 
-                if (controller.isBelowSemiGround() && controller.isGrounded() == false)
+                if (isBelowSemiGround() && controller.isGrounded() == false)
                 {
                     if (controller.isPhasingThroughPlatform == false)
                     {
                         controller.phase();
                         controller.isPhasingThroughPlatform = true;
-                        controller.isCrouching = false;
-                        controller.isFastFalling = false;
+                        isCrouching = false;
+                        isFastFalling = false;
                     }
                 }
 
@@ -284,11 +297,11 @@ public class WalkingState : PlayerState
                             return;
                         }
 
-                        controller.leftStickElapsedJumpTime += Time.deltaTime;
+                        leftStickElapsedJumpTime += Time.deltaTime;
                         if (controller.canJump && controller.numberOfJumpsLeft > 0 && controller.jumpButtonReset)
                         {
                             // Adds a delay so that the movement modifiers have time to activate
-                            if (controller.leftStickElapsedJumpTime >= controller.LeftStickJumpDelayTime)
+                            if (leftStickElapsedJumpTime >= LeftStickJumpDelayTime)
                             {
                                 controller.bigJump();
                             }
@@ -296,9 +309,9 @@ public class WalkingState : PlayerState
                     }
                     else
                     {
-                        if (controller.leftJoystickValue < 0.1f)
+                        if (controller.inputHandler.leftJoystickValue < 0.1f)
                         {
-                            controller.leftStickElapsedJumpTime = 0;
+                            leftStickElapsedJumpTime = 0;
                             controller.leftStickIsAttacking = false;
                         }
                     }
@@ -314,12 +327,12 @@ public class WalkingState : PlayerState
                         if (controller.isGrounded())
                         {
                             //crouch
-                            if (controller.isCrouching == false)
+                            if (isCrouching == false)
                             {
-                                controller.startCrouchVisual();
-                                controller.isCrouching = true;
+                                startCrouchVisual();
+                                isCrouching = true;
                                 controller.isPhasingThroughPlatform = false;
-                                controller.isFastFalling = false;
+                                isFastFalling = false;
 
                                 if ((controller.isRunning || controller.isWalking))
                                 {
@@ -335,7 +348,7 @@ public class WalkingState : PlayerState
 
                                     controller.isRunning = false;
                                     controller.isWalking = false;
-                                    controller.startMiscIdleAnimations();
+                                    startMiscIdleAnimations();
                                 }
                                 else
                                 {
@@ -349,20 +362,20 @@ public class WalkingState : PlayerState
                             if (controller.isPhasingThroughPlatform == false)
                             {
                                 controller.phase();
-                                controller.phaseThroughPlatformVisual();
+                                phaseThroughPlatformVisual();
                                 controller.grounded = false;
-                                controller.isCrouching = false;
-                                controller.isFastFalling = false;
+                                isCrouching = false;
+                                isFastFalling = false;
                                 controller.landDetectionReady = false;
                             }
                         }
                     }
                     else
                     {
-                        if (controller.isCrouching)
+                        if (isCrouching)
                         {
-                            controller.endCrouchVisual();
-                            controller.isCrouching = false;
+                            endCrouchVisual();
+                            isCrouching = false;
                         }
                     }
                 }
@@ -372,11 +385,11 @@ public class WalkingState : PlayerState
             {
                 if (controller.isRolling)
                 {
-                    if (controller.rightJoystickVector.x > 0.2f)
+                    if (controller.inputHandler.rightJoystickVector.x > 0.2f)
                     {
                         controller.myRigidbody.velocity = new Vector2(1 * controller.rollSpeed, controller.myRigidbody.velocity.y);
                     }
-                    else if (controller.rightJoystickVector.x < -0.2f)
+                    else if (controller.inputHandler.rightJoystickVector.x < -0.2f)
                     {
                         controller.myRigidbody.velocity = new Vector2(-1 * controller.rollSpeed, controller.myRigidbody.velocity.y);
                     }
@@ -387,11 +400,11 @@ public class WalkingState : PlayerState
             {
                 if (controller.facingRight)
                 {
-                    controller.myRigidbody.velocity = new Vector2(1 * (controller.runSpeed * 2), controller.myRigidbody.velocity.y);
+                    controller.myRigidbody.velocity = new Vector2(1 * (runSpeed * 2), controller.myRigidbody.velocity.y);
                 }
                 else
                 {
-                    controller.myRigidbody.velocity = new Vector2(-1 * (controller.runSpeed * 2), controller.myRigidbody.velocity.y);
+                    controller.myRigidbody.velocity = new Vector2(-1 * (runSpeed * 2), controller.myRigidbody.velocity.y);
                 }
             }
         }
@@ -400,5 +413,134 @@ public class WalkingState : PlayerState
     public override void Exit()
     {
 
+    }
+
+    public bool isBelowSemiGround()
+    {
+        return Physics2D.OverlapCircle(controller.headCheck.position, 1f, controller.semiSolidGroundLayer);
+    }
+
+    public Collider2D GetClosestPlatform()
+    {
+        return Physics2D.OverlapCircle(controller.headCheck.position, 1f, controller.semiSolidGroundLayer);
+    }
+
+    public void land()
+    {
+        controller.isDamageLaunching = false;
+        controller.grounded = true;
+        controller.numberOfJumpsLeft = controller.numberOfJumps;
+        controller.StopCoroutine(controller.jumpRecharge());
+        isFastFalling = false;
+        controller.landDetectionReady = true;
+        controller.insideFloor = false;
+
+        if (controller.isAttacking == false)
+        {
+            landVisual();
+            controller.canMove = true;
+            controller.myRigidbody.gravityScale = controller.gravityPower;
+        }
+        else
+        {
+            controller.myRigidbody.velocity = new Vector2(0, controller.myRigidbody.velocity.y);
+            controller.turnOnFriction();
+            controller.myRigidbody.gravityScale = controller.gravityPower;
+            return;
+        }
+
+        if ((controller.inputHandler.leftJoystickVector.x < 0.1f && controller.inputHandler.leftJoystickVector.x > -0.1f))
+        {
+            controller.myRigidbody.velocity = new Vector2(0, controller.myRigidbody.velocity.y);
+
+            if (controller.isWalking && controller.isPhasingThroughPlatform == false && controller.grounded)
+            {
+                controller.isWalking = false;
+                controller.isRunning = false;
+                controller.stopWalkingVisual();
+                startMiscIdleAnimations();
+                controller.turnOnFriction();
+            }
+
+            if (controller.isRunning && controller.isPhasingThroughPlatform == false && controller.grounded)
+            {
+                controller.isRunning = false;
+                controller.isWalking = false;
+                controller.stopRunningVisual();
+                startMiscIdleAnimations();
+            }
+        }
+
+        if ((controller.isRunning || controller.isWalking) && controller.isAttacking == false && controller.canMove)
+        {
+            controller.turnOffFriction();
+        }
+        else if (controller.inputHandler.leftJoystickVector.x < 0.1f && controller.inputHandler.leftJoystickVector.x > -0.1f)
+        {
+            controller.turnOnFriction();
+        }
+    }
+
+    private void wallJump(int direction)
+    {
+        controller.myRigidbody.gravityScale = controller.gravityPower;
+        controller.jumpButtonReset = false;
+        controller.numberOfJumpsLeft = controller.numberOfJumps - 1;
+        controller.myRigidbody.velocity = new Vector2(direction * wallJumpPower, controller.bigJumpPower);
+        controller.StartCoroutine(controller.jumpRecharge());
+        controller.isDashing = false;
+        controller.isRolling = false;
+        controller.canRoll = true;
+        controller.canDash = true;
+        controller.canMove = true;
+    }
+
+
+
+
+
+    public void startMiscIdleAnimations()
+    {
+        controller.canMove = true;
+        controller.myMonster.focusedAttackActive = false;
+
+        if (controller.atPlatformEdge)
+        {
+            controller.myMonster.teeterCheck();
+        }
+        else
+        {
+            controller.myMonster.activeBounce();
+        }
+    }
+
+    public void phaseThroughPlatformVisual()
+    {
+        controller.myMonster.goThroughPlatform();
+    }
+
+    private void landVisual()
+    {
+        controller.myMonster.land();
+    }
+
+    private void lateAttackReleaseVisualCorrections()
+    {
+        controller.myMonster.forceUngrounded();
+    }
+
+    public void startCrouchVisual()
+    {
+        controller.myMonster.crouch();
+    }
+
+    public void endCrouchVisual()
+    {
+        controller.myMonster.stopCrouching();
+    }
+
+    public void activateSlowFall()
+    {
+        controller.myRigidbody.gravityScale = slowFallGravityPower;
     }
 }

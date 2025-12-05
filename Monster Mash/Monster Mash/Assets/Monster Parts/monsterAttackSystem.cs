@@ -423,7 +423,7 @@ public class monsterAttackSystem : MonoBehaviour
         SFXManager = FindObjectOfType<SFXManager>();
 
         // set default emotes
-        myPlayer.playerControlsMap.Emotes.Enable();
+        myPlayer.inputHandler.playerControlsMap.Emotes.Enable();
 
         CalculateStartHealth();
         

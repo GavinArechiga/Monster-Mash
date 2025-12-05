@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 7387445060917446183}
   - component: {fileID: 5364141700156790741}
   - component: {fileID: -8793189436877943876}
+  - component: {fileID: 6760175289986982300}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -458,48 +459,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c575b6360d35f84cb21bcb335db8897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIndex: 0
   myMonster: {fileID: 0}
   bodyCollider: {fileID: 8370432823473938550}
   smallBodyCollider: {fileID: 4026068653010968013}
   groundFrictionCollider: {fileID: 7278631783417699045}
   groundCheck: {fileID: 4372180025260498620}
   headCheck: {fileID: 3748981674255885994}
+  myRigidbody: {fileID: 5364141700156790741}
+  inputHandler: {fileID: 0}
+  playerIndex: 0
+  monsterControllerActive: 0
+  canMove: 1
+  canJump: 1
+  isDamageLaunching: 0
+  facingRight: 0
+  jumpButtonReset: 0
+  numberOfJumps: 2
+  numberOfJumpsLeft: 2
+  isWalking: 0
+  isRunning: 0
+  landDetectionReady: 1
+  atPlatformEdge: 0
+  chargingForward: 0
+  grounded: 0
+  isPhasingThroughPlatform: 0
+  currentPlatformCollider: {fileID: 0}
+  insideFloor: 0
+  gravityPower: 0
+  slowFallBlocked: 0
+  bigJumpPower: 65
+  isAttacking: 0
+  leftStickIsAttacking: 0
+  buttonA_Pressed: 0
+  buttonB_Pressed: 0
+  buttonX_Pressed: 0
+  buttonY_Pressed: 0
   solidGroundLayer:
     serializedVersion: 2
     m_Bits: 1024
   semiSolidGroundLayer:
     serializedVersion: 2
     m_Bits: 2048
-  playerInput: {fileID: 0}
-  currentPlatformCollider: {fileID: 0}
-  facingRight: 0
-  isAttacking: 0
-  canMove: 1
-  isWalking: 0
-  isRunning: 0
-  grounded: 0
-  landDetectionReady: 1
-  isPhasingThroughPlatform: 0
-  canJump: 1
-  numberOfJumps: 2
-  numberOfJumpsLeft: 2
-  isGooball: 0
-  isGlider: 0
-  isHunter: 0
-  isTechnoid: 0
+  rollSpeed: 50
   isRolling: 0
   canRoll: 1
   isDashing: 0
   canDash: 1
-  grappling: 0
-  grapplingPlayer: 0
-  grapplingWall: 0
-  grapplePlayerTarget: {fileID: 0}
-  wallGrapplePoint: {x: 0, y: 0, z: 0}
-  chargingForward: 0
-  grabbingWall: 0
-  myRigidbody: {fileID: 5364141700156790741}
+  allParts: []
+  legs: []
   damageToForceCurve:
     serializedVersion: 2
     m_Curve:
@@ -579,8 +586,44 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   yMultiplier: 1.5
-  allParts: []
-  legs: []
+--- !u!114 &6760175289986982300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010151266505952126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc03927f25827843af60a5367ec4824, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myMonster: {fileID: 0}
+  playerInput: {fileID: 0}
+  startingActionMap:
+    m_Name: Starting
+    m_Id: bbbac672-6d5b-4705-a45d-c9c471280ec1
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  UIcontrols:
+    m_Name: U Icontrols
+    m_Id: f416f7b1-f5f7-42db-b227-8c4e744fcf3f
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  monsterControls:
+    m_Name: Monster Controls
+    m_Id: d4f79c06-3414-4fac-a012-340c2fcfde3b
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  lastInputDirectionVector: {x: 0, y: 0}
+  directionThreshold: 0.2
+  lastInputDirection: 1
+  rightJoystickVector: {x: 0, y: 0}
+  leftJoystickVector: {x: 0, y: 0}
+  leftJoystickValue: 0
 --- !u!1 &2252039416887785429
 GameObject:
   m_ObjectHideFlags: 0

@@ -50,7 +50,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
             controller.playerIndex = (transfer.storedPlayerInformation[i].playerIndex + 1);
 
-            controller.playerInput = transfer.storedPlayerInformation[i].playerInput.GetComponent<PlayerInput>();
+            controller.inputHandler.playerInput = transfer.storedPlayerInformation[i].playerInput.GetComponent<PlayerInput>();
 
             spawnedPlayer.transform.parent = players;
 
