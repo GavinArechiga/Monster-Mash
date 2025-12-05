@@ -66,6 +66,11 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        myMonster = GetComponent<NewPlayerController>().myMonster;
+    }
+
     public void OnLeftStick(InputAction.CallbackContext context)
     {
         LeftStick = context.ReadValue<Vector2>();
