@@ -5,9 +5,9 @@ public class SpinningHeavy : HeavyAttack
         DamageRange = DamageRange.Range4;
     }
 
-    public override void triggerAttackRelease()
+    public override void TriggerAttackRelease()
     {
-        base.triggerAttackRelease();
+        base.TriggerAttackRelease();
         monsterPartRef.triggerJabOrSlashCollisionsOn();
         monsterPartRef.myMainSystem.StartCoroutine(monsterPartRef.myMainSystem.SpinTimer());
     }

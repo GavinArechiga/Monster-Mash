@@ -239,8 +239,6 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].AttackSetup();
-
             if (allMonsterParts[i].isGroundedLimb)
             {
                 if (allMonsterParts[i].isRightSidedLimb)
@@ -394,6 +392,7 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].mainTorso = mainTorso;
             allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
+            allMonsterParts[i].AttackSetup();
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
@@ -426,7 +425,6 @@ public class monsterAttackSystem : MonoBehaviour
         myPlayer.playerControlsMap.Emotes.Enable();
 
         CalculateStartHealth();
-        
     }
 
     public void AssignMyPlayer(playerController controller)

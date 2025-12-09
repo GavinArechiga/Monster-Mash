@@ -126,11 +126,11 @@ public class playerController : MonoBehaviour
     // player flip vars
     private enum InputDirection
     {
-        None = -99,
-        Forward = 1,
-        Backward = -1,
-        Up = 2,
-        Down = 0
+        None,
+        Forward,
+        Backward,
+        Up,
+        Down
     }
 
     private Vector2 lastInputDirectionVector;
@@ -1047,6 +1047,22 @@ public class playerController : MonoBehaviour
         }
     }
 
+    private int ConvertInputDirectionToAnimationID(InputDirection inputDirection)
+    {
+        switch (inputDirection)
+        {
+            case InputDirection.Forward:
+            case InputDirection.Backward:
+                return 1;
+            case InputDirection.Up:
+                return 2;
+            case InputDirection.Down:
+                return 0;
+        }
+
+        return 1;
+    }
+
     private bool isGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, solidGroundLayer);
@@ -1646,8 +1662,8 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[1] == null) { return; }
-            myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(1, (int)lastInputDirection);
+            myMonster.attackSlotMonsterParts[1].attackAnimationID = ConvertInputDirectionToAnimationID(lastInputDirection);
+            myMonster.attack(1, ConvertInputDirectionToAnimationID(lastInputDirection));
             //canMove = false;
             buttonB_Pressed = true;
         }
@@ -1670,8 +1686,8 @@ public class playerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[2] == null) { return; }
 
-            myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(2, (int)lastInputDirection);
+            myMonster.attackSlotMonsterParts[2].attackAnimationID = ConvertInputDirectionToAnimationID(lastInputDirection);
+            myMonster.attack(2, ConvertInputDirectionToAnimationID(lastInputDirection));
             //canMove = false;
             buttonX_Pressed = true;
         }
@@ -1694,8 +1710,8 @@ public class playerController : MonoBehaviour
         {
             if (myMonster.attackSlotMonsterParts[3] == null) { return; }
 
-            myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)lastInputDirection;
-            myMonster.attack(3, (int)lastInputDirection);
+            myMonster.attackSlotMonsterParts[3].attackAnimationID = ConvertInputDirectionToAnimationID(lastInputDirection);
+            myMonster.attack(3, ConvertInputDirectionToAnimationID(lastInputDirection));
             //canMove = false;
             buttonY_Pressed = true;
         }
