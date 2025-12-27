@@ -1087,12 +1087,8 @@ MonoBehaviour:
     <Right>k__BackingField: {x: 0, y: 0}
     <Up>k__BackingField: {x: 0, y: 0}
     <Down>k__BackingField: {x: 0, y: 0}
-  projectilePrefab: {fileID: 2719429361632727320, guid: a60c705abae46894495c1c728b257aa4,
-    type: 3}
+  projectileConfig: {fileID: 11400000, guid: 63d940608aed40544b2c351df7ac4cd9, type: 2}
   projectileMuzzle: {fileID: 4652145896338460634}
-  projectileSpeed: 20
-  poolStartSize: 10
-  poolMaxSize: 20
 --- !u!114 &9106401349487023709
 MonoBehaviour:
   m_ObjectHideFlags: 0

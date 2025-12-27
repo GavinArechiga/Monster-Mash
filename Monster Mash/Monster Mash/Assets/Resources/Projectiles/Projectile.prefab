@@ -96,7 +96,7 @@ CapsuleCollider:
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 14.91
-  m_Direction: 1
+  m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3582819326739508892
 GameObject:
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8287216145679714106}
+  <ColiiderRef>k__BackingField: {fileID: 4906900086551535530}
 --- !u!54 &8287216145679714106
 Rigidbody:
   m_ObjectHideFlags: 0
