@@ -4,19 +4,24 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
 {
-    public monsterAttackSystem myMonster;
+    private NewPlayerController playerController;
+    private monsterAttackSystem myMonster;
+
     public PlayerInput playerInput;
     public PlayerControls playerControlsMap;
 
-    public InputActionMap startingActionMap;
-    public InputActionMap UIcontrols;
-    public InputActionMap monsterControls;
-    public Vector2 lastInputDirectionVector;
-    public float directionThreshold = 0.2f;
+    private InputActionMap startingActionMap;
+    private InputActionMap UIcontrols;
+    private InputActionMap monsterControls;
+
     public enum InputDirection { Forward = 1, Backward = -1, Up = 2, Down = 0 }
     public InputDirection lastInputDirection = InputDirection.Forward;
+
     public Vector2 rightJoystickVector;
     public Vector2 leftJoystickVector;
+    public Vector2 lastInputDirectionVector;
+
+    public float directionThreshold = 0.2f;
     public float leftJoystickValue;
 
     public Vector2 LeftStick { get; set; }
@@ -69,6 +74,53 @@ public class PlayerInputHandler : MonoBehaviour
     private void Start()
     {
         myMonster = GetComponent<NewPlayerController>().myMonster;
+        playerController = GetComponent<NewPlayerController>();
+    }
+
+    public void PlayerInputSetUp()
+    {
+        startingActionMap = playerInput.actions.FindActionMap("Starting Action Map");
+        UIcontrols = playerInput.actions.FindActionMap("UI Controls");
+        monsterControls = playerInput.actions.FindActionMap("Monster Controls");
+
+        if (UIcontrols != null)
+        {
+            playerInput.SwitchCurrentActionMap("UI Controls");
+            playerControlsMap.StartingActionMap.Disable();
+            //print("New Action Map: " + playerInput.currentActionMap);
+        }
+
+        switchActionMap("Monster Controls");
+
+        SubscribeActionMap();
+    }
+
+    public void switchActionMap(string newActionMap)
+    {
+        //might cut this first section, its a bit unecessary
+        if (UIcontrols != null)
+        {
+            if (newActionMap == "UI Controls" && playerInput.currentActionMap == UIcontrols)
+            {
+                return;
+            }
+        }
+
+        if (playerInput != null)
+        {
+            playerInput.SwitchCurrentActionMap(newActionMap);
+        }
+
+        if (newActionMap == "Monster Controls")
+        {
+            playerController.myRigidbody.bodyType = RigidbodyType2D.Dynamic;
+            playerController.monsterControllerActive = true;
+        }
+        else
+        {
+            playerController.myRigidbody.bodyType = RigidbodyType2D.Kinematic;
+            playerController.monsterControllerActive = false;
+        }
     }
 
     public void OnLeftStick(InputAction.CallbackContext context)
@@ -182,6 +234,32 @@ public class PlayerInputHandler : MonoBehaviour
 
         playerInput.actions.FindAction("ShowMenu").Disable();
         playerInput.actions.FindAction("ShowMenu").performed -= ShowRemappingMenu;
+    }
+
+    public void UpdateInputDirection(Vector2 directionVector)
+    {
+        if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
+        {
+            if (directionVector.x > directionThreshold)
+            {
+                lastInputDirection = PlayerInputHandler.InputDirection.Forward;
+            }
+            else if (directionVector.x < -directionThreshold)
+            {
+                lastInputDirection = PlayerInputHandler.InputDirection.Backward;
+            }
+        }
+        else if (Mathf.Abs(directionVector.y) > directionThreshold)
+        {
+            if (directionVector.y > directionThreshold)
+            {
+                lastInputDirection = PlayerInputHandler.InputDirection.Up;
+            }
+            else if (directionVector.y < -directionThreshold)
+            {
+                lastInputDirection = PlayerInputHandler.InputDirection.Down;
+            }
+        }
     }
 
     private void ShowRemappingMenu(InputAction.CallbackContext ctx)

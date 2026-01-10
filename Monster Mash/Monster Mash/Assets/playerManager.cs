@@ -154,7 +154,7 @@ public class playerManager : MonoBehaviour
     {
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].switchActionMap(intendedActionMap);
+            players[i].inputHandler.switchActionMap(intendedActionMap);
         }
     }
 

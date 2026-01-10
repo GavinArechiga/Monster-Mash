@@ -13,14 +13,16 @@ public class AttackingState : PlayerState
 
     public override void HandleInput()
     {
-        if (controller.inputHandler.LeftStick.magnitude > 0.2f)
+        /*
+        if (!controller.isAttacking)
         {
-            controller.ChangeState(new MovementState(controller));
+            controller.ChangeState(new IdleState(controller));
         }
+        */
     }
 
     public override void Update()
     {
-
+        
     }
 }
