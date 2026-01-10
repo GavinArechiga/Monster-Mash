@@ -1,43 +1,45 @@
+using UnityEngine;
+using UnityEngine.Pool;
+
+public class ProjectileRefrenceData
+{
+    public int Damage { get;  set; }
+    public playerController PlayerRef {  get;  set; }
+    public Transform ProjectileMuzzle { get;  set; }
+    public NewMonsterPart MonsterPartRef { get; set; }
+}
+
+
 public class ProjectileNeutral : NeutralAttack
 {
+    [SerializeField] protected ProjectileConfigSO projectileConfig;
+    [SerializeField] protected Transform projectileMuzzle;
+    private ProjectileRefrenceData projectileRefrenceData;
+
     public ProjectileNeutral()
     {
         DamageRange = DamageRange.Range2;
     }
 
-    public override void PassDamage()
+    public override void Init(NewMonsterPart monsterPartRef, MonsterPartVisual monsterPartVisualRef)
     {
-        if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
-        monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
-        //monsterPartVisualRef.neutralHitVFXManager.updateDamageOnProjectiles();
+        base.Init(monsterPartRef, monsterPartVisualRef);
+
+        projectileRefrenceData = new ProjectileRefrenceData
+        {
+            Damage = Damage,
+            PlayerRef = monsterPartRef.myMainSystem.myPlayer,
+            ProjectileMuzzle = projectileMuzzle,
+            MonsterPartRef = monsterPartRef
+        };
+
+        projectileConfig.SetupPool(projectileRefrenceData);
     }
 
-    public override void statusEffectAndDamageCalculations()
+    public override void TriggerAttackRelease()
     {
-        if (monsterPartVisualRef.neutralHitVFXManager == null) { return; }
-        monsterPartVisualRef.neutralHitVFXManager.damage = Damage;
-        //monsterPartVisualRef.neutralHitVFXManager.updateDamageOnSpray();
-    }
-
-    /*public override void triggerNeutralAttackVisuals()
-    {
-        if (monsterPartVisualRef.neutralAttackHitVFXArray.Length != 0)
-        {
-            monsterPartVisualRef.neutralHitVFXManager.faceRightDirection(monsterPartRef.facingRight);
-            monsterPartVisualRef.neutralHitVFXManager.unleashSingleProjectile();
-
-            if (monsterPartVisualRef.neutralDefaultSprayVFXManager != null)
-            {
-                monsterPartVisualRef.neutralDefaultSprayVFXManager.unleashAdditionalSprayVisual();
-            }
-        }
-    }*/
-
-    public override void SetupVFX()
-    {
-        if (monsterPartVisualRef.neutralHitVFXHolder != null || monsterPartVisualRef.neutralDefaultSprayVFXHolder != null)
-        {
-            StoredParentSetup();
-        }
+        base.TriggerAttackRelease();
+        NewProjectile projectile = projectileConfig.ObjectPool.Get();
+        projectile.Fire();
     }
 }

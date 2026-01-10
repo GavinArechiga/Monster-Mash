@@ -273,9 +273,6 @@ public class MonsterPartVisual : MonoBehaviour
 
     public void triggerAttackRelease()
     {
-
-        //Debug.Log("Trigger Attack Release called");
-
         if (monsterPartRef.isJointed)
         {
             // not sure about this whole section, it looks important
@@ -363,7 +360,7 @@ public class MonsterPartVisual : MonoBehaviour
                     }
                 }
 
-                monsterPartRef.heavyAttack.triggerAttackRelease();
+                StartCoroutine(TriggerMonsterPartAttack(monsterPartRef.heavyAttack));
             }
             else
             {
@@ -397,20 +394,20 @@ public class MonsterPartVisual : MonoBehaviour
 
                         }
                     }
-                    else if (monsterPartRef.attackAnimationID == -1)
+
+                    if (backwardNeutralMovementCommand == "Backward Strike") //leg kicks, recoil etc.
                     {
-                        if (backwardNeutralMovementCommand == "Backward Strike") //leg kicks, recoil etc.
-                        {
-                            //myMainSystem.smallLeapAttackBackward();
-                        }
-                        else if (backwardNeutralMovementCommand == "Backward Single Spin") //tail spin
-                        {
+                        //myMainSystem.smallLeapAttackBackward();
+                    }
+                    else if (backwardNeutralMovementCommand == "Backward Single Spin") //tail spin
+                    {
 
-                        }
-                        else if (backwardNeutralMovementCommand == "Quick 180") //surprise turn and attack
-                        {
-
-                        }
+                    }
+                    else if (backwardNeutralMovementCommand == "Quick 180") //surprise turn and attack
+                    {
+                        // signal that we need a sync check for this attack
+                        monsterPartRef.myMainSystem.RequestAnimSync();
+                        StartCoroutine(monsterPartRef.myMainSystem.Quick180Turn());
                     }
                     else if (monsterPartRef.attackAnimationID == 0)
                     {
@@ -429,10 +426,16 @@ public class MonsterPartVisual : MonoBehaviour
                     }
 
                 }
-
-                monsterPartRef.neutralAttack.triggerAttackRelease();
+                
+                StartCoroutine(TriggerMonsterPartAttack(monsterPartRef.neutralAttack));
             }
         }
+    }
+
+    private IEnumerator TriggerMonsterPartAttack(BaseAttack attack)
+    {
+        yield return new WaitUntil(() => monsterPartRef.myMainSystem.IsMonsterReadyForAttack());
+        attack.TriggerAttackRelease();
     }
 
     public void triggerAttackToIdle()
