@@ -11,11 +11,14 @@ GameObject:
   - component: {fileID: 877290970029100}
   - component: {fileID: 4051105169474098852}
   - component: {fileID: 24592736647444163}
+  - component: {fileID: -404022630645931752}
+  - component: {fileID: -7762269464652355593}
   - component: {fileID: 3763283894889006868}
   - component: {fileID: 7592331260783269382}
   - component: {fileID: 8682943242648385411}
   - component: {fileID: 5087994062800732112}
   - component: {fileID: -5851687962529353724}
+  - component: {fileID: 3433976635291948436}
   m_Layer: 0
   m_Name: Arm 12
   m_TagString: Connection - Monster Part
@@ -94,8 +97,7 @@ MonoBehaviour:
   squashedStatusEffect: 0
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
-  neutralAttack:
-    rid: 3665106666952589380
+  neutralAttack: {fileID: -404022630645931752}
   neutralCollider: {fileID: 5098604903370854615}
   neutralColliderReference: {fileID: 189735986607271996}
   needsReloadNeutral: 0
@@ -104,8 +106,7 @@ MonoBehaviour:
   isReloadedHeavy: 1
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  heavyAttack:
-    rid: 3665106666952589383
+  heavyAttack: {fileID: -7762269464652355593}
   heavyCollider: {fileID: 2767951250197764579}
   heavyColliderReference: {fileID: 4147776853480878874}
   heavyMuzzle: {fileID: 0}
@@ -144,29 +145,42 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 3665106666952589380
-      type: {class: JabNeutral, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 10
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 1
-    - rid: 3665106666952589383
-      type: {class: JabHeavy, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 50
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 1
+--- !u!114 &-404022630645931752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877290970029103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f788ec62914d5b146a2e58ddeb109402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 50
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
+--- !u!114 &-7762269464652355593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877290970029103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: decb8cad490427147acdcae97059784a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 90
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
 --- !u!114 &3763283894889006868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,7 +286,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.05
+  m_Radius: 0.1
   m_Center: {x: 0.07, y: 0, z: 0}
 --- !u!82 &5087994062800732112
 AudioSource:
@@ -391,6 +405,23 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &3433976635291948436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877290970029103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae2aec29747c2f44ada2f72c6796745, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flippedMaterial: {fileID: 0}
+  rend: {fileID: 0}
+  partFlip: 
+  flipColliders: []
+  flipParticle: []
 --- !u!1 &200811085674684452
 GameObject:
   m_ObjectHideFlags: 0

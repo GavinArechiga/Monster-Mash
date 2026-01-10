@@ -1,13 +1,10 @@
-using System;
-
-[Serializable]
 public class BoomerangHeavy : HeavyAttack
 {
     public BoomerangHeavy()
     {
-        Attack = HeavyAttackType.Boomerang;
         DamageRange = DamageRange.Range3;
     }
+
     public override void SetupVFX()
     {
         if (monsterPartVisualRef.heavyHitVFXHolder != null || monsterPartVisualRef.heavyDefaultSprayVFXHolder != null)

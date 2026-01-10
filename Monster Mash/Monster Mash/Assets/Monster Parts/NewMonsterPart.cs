@@ -26,15 +26,7 @@ public class NewMonsterPart : MonoBehaviour
     //also because there is a pretty big oversight right now for "right" sided limbs that may end up being repositioned or rotated to act as a "left" sided limb
     //public enum WhichPart{ isArm, isLeg, isTail, isWing, isHead, isEye, isMouth, isTorso, isHorn, isDecor};
     //public WhichPart thisPart;
-   
-#if UNITY_EDITOR
-    void OnValidate()
-    {
-        neutralAttack ??= new NeutralAttack();
 
-        heavyAttack ??= new HeavyAttack();
-    }
-#endif
    [Header("Monster Part Questionaire")]
 
     public MonsterPartType PartType;
@@ -53,8 +45,8 @@ public class NewMonsterPart : MonoBehaviour
     public bool slowedStatusEffect;
     public bool grabbedStatusEffect;
 
-   [Header("Neutral Attack Questionaire")]
-   [SerializeReference] public NeutralAttack neutralAttack = new NeutralAttack();
+    [Header("Neutral Attack Questionaire")]
+    public NeutralAttack neutralAttack;
 
     public Collider neutralCollider;
     public monsterPartReference neutralColliderReference;
@@ -69,7 +61,7 @@ public class NewMonsterPart : MonoBehaviour
 
     [Header("Heavy Attack Questionaire")]
 
-    [SerializeReference] public HeavyAttack heavyAttack = new HeavyAttack();
+    public HeavyAttack heavyAttack;
     //
     public Collider heavyCollider;
     public monsterPartReference heavyColliderReference;
@@ -475,7 +467,7 @@ public class NewMonsterPart : MonoBehaviour
             }
             else
             {
-                if (heavyAttack.Attack == HeavyAttack.HeavyAttackType.None) { return; }
+                if (heavyAttack == null) { return; }
 
                 attackMarkedHeavy = true;
                 myAnimator.SetBool("Attack Marked Heavy", true);

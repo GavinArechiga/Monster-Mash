@@ -25,7 +25,7 @@ public class TriggerAttackReleaseEventArgs : EventArgs
 }
 
 
-public abstract class BaseAttack
+public abstract class BaseAttack: MonoBehaviour
 {
     public DamageRange DamageRange { get; protected set; } = DamageRange.Range0;
     /// <summary>
@@ -52,7 +52,7 @@ public abstract class BaseAttack
 
     }
 
-    public virtual void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    public virtual void triggerAttackRelease()
     {
         // Get the attack animation length so that the movement is timed to the animation
         float clipLength = monsterPartRef.myAnimator.GetCurrentAnimatorStateInfo(0).length;
@@ -70,7 +70,7 @@ public abstract class BaseAttack
 
     public virtual void TriggerAttack()
     {
-
+        
     }
 
     /// <summary>

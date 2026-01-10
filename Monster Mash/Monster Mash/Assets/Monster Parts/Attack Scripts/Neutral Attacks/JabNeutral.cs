@@ -1,13 +1,9 @@
-using System;
-
-[Serializable]
 public class JabNeutral : NeutralAttack
 {
 
-    public JabNeutral()
-    {
-        Attack = AttackType.Jab;
-        DamageRange = DamageRange.Range2;
+    public JabNeutral() 
+    { 
+        DamageRange = DamageRange.Range2; 
     }
 
     public override void PassDamage()
@@ -19,7 +15,6 @@ public class JabNeutral : NeutralAttack
         {
             monsterPartRef.heavyColliderReference.markedHeavy = false;
         }
-
     }
 
     public override void statusEffectAndDamageCalculations()
@@ -28,9 +23,9 @@ public class JabNeutral : NeutralAttack
         monsterPartRef.neutralColliderReference.damage = Damage;
     }
 
-    public override void triggerAttackRelease(NewMonsterPart monsterPartRef)
+    public override void triggerAttackRelease()
     {
-        base.triggerAttackRelease(monsterPartRef);
+        base.triggerAttackRelease();
         monsterPartRef.triggerJabOrSlashCollisionsOn();
     }
 

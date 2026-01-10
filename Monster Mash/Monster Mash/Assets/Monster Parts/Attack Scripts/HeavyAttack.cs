@@ -10,52 +10,6 @@ public class HeavyAttack : BaseAttack
     private float heavyChargeElapsed;
     private int startingDamage;
 
-    public enum HeavyAttackType
-    {
-        None,
-        Jab,
-        Slash,
-        Spray,
-        Projectile,
-        Beam,
-        Reel,
-        Grapple,
-        Boomerang,
-        HomingMissile,
-        Anvil,
-        BowlingBall,
-        Gaseous,
-        PowerBoosting,
-        Shield,
-        Reflecting,
-        Eating,
-        Suction,
-        AOE,
-        Charging,
-        SelfExploding,
-        Spinning,
-    }
-    // a property drawer relies on this var using string lookup. Please do not change the var name or the property drawer will stop working
-    public HeavyAttackType Attack;
-
-    // factory pattern to assign the subclass
-    public HeavyAttack GetAttack()
-    {
-        return Attack switch
-        {
-            HeavyAttackType.Jab => new JabHeavy(),
-            HeavyAttackType.Slash => new SlashHeavy(),
-            HeavyAttackType.Spray => new SprayHeavy(),
-            HeavyAttackType.Projectile => new ProjectileHeavy(),
-            HeavyAttackType.Beam => new BeamHeavy(),
-            HeavyAttackType.Reel => new ReelHeavy(),
-            HeavyAttackType.Grapple => new GrappleHeavy(),
-            HeavyAttackType.Boomerang => new BoomerangHeavy(),
-            HeavyAttackType.Spinning => new SpinningHeavy(),
-            _ => new HeavyAttack ()
-        };
-    }
-
     public virtual void endRemainingVFX()
     {
 

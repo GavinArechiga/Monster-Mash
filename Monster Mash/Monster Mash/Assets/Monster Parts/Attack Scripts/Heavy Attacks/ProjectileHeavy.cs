@@ -1,13 +1,10 @@
-using System;
-
-[Serializable]
 public class ProjectileHeavy : HeavyAttack
 {
     public ProjectileHeavy()
     {
-        Attack = HeavyAttackType.Projectile;
         DamageRange = DamageRange.Range4;
     }
+
     public override void SetupVFX()
     {
         if (monsterPartVisualRef.heavyHitVFXHolder != null || monsterPartVisualRef.heavyDefaultSprayVFXHolder != null)
