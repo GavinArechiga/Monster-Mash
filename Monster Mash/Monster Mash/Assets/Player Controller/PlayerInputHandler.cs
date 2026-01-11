@@ -14,14 +14,26 @@ public class PlayerInputHandler : MonoBehaviour
     private InputActionMap UIcontrols;
     private InputActionMap monsterControls;
 
-    public enum InputDirection { Forward = 1, Backward = -1, Up = 2, Down = 0 }
-    public InputDirection lastInputDirection = InputDirection.Forward;
+    // player flip vars
+    public enum InputDirection
+    {
+        None,
+        Forward,
+        Backward,
+        Up,
+        Down
+    }
+
+    public Vector2 lastInputDirectionVector;
+    public float directionThreshold = 0.2f;
+    public InputDirection LastInputDirection { get; set; } = InputDirection.Backward;
+    private InputDirection pendingInputDirection;
+    private float directionTimer = 0f;
+    private float flipDelay = 0.03f;
 
     public Vector2 rightJoystickVector;
     public Vector2 leftJoystickVector;
-    public Vector2 lastInputDirectionVector;
-
-    public float directionThreshold = 0.2f;
+    
     public float leftJoystickValue;
 
     public Vector2 LeftStick { get; set; }
@@ -123,9 +135,39 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
-    public void OnLeftStick(InputAction.CallbackContext context)
+public void OnLeftStick(InputAction.CallbackContext context)
     {
         LeftStick = context.ReadValue<Vector2>();
+        leftJoystickValue = context.ReadValue<Vector2>().magnitude;
+
+        if (context.canceled)
+        {
+            if (playerController.currentState is MovementState movementState)
+            {
+                movementState.jumpButtonReset = true;
+            }
+
+            LastInputDirection = playerController.facingRight ? InputDirection.Forward : InputDirection.Backward;
+            return;
+        }
+
+        if (context.performed)
+        {
+            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
+            {
+                lastInputDirectionVector = leftJoystickVector;
+                UpdateInputDirection(lastInputDirectionVector);
+                
+                if (LastInputDirection is InputDirection.Forward)
+                {
+                    playerController.flipRightVisual();
+                }
+                else if (LastInputDirection is InputDirection.Backward)
+                {
+                    playerController.flipLeftVisual();
+                }
+            }
+        }
     }
 
     public void OnRightStick(InputAction.CallbackContext context)
@@ -238,28 +280,80 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void UpdateInputDirection(Vector2 directionVector)
     {
+        InputDirection detectedInputDirection = InputDirection.None;
+
+        // is the detected input more horizontal then vertical?
         if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
         {
+            // if it is more horziontal is it positive or negative and is greater then the deadzone
             if (directionVector.x > directionThreshold)
             {
-                lastInputDirection = PlayerInputHandler.InputDirection.Forward;
+                detectedInputDirection = InputDirection.Forward;
             }
             else if (directionVector.x < -directionThreshold)
             {
-                lastInputDirection = PlayerInputHandler.InputDirection.Backward;
+                detectedInputDirection = InputDirection.Backward;
             }
         }
+        // is the dtected input more vertical then horizontal?
         else if (Mathf.Abs(directionVector.y) > directionThreshold)
         {
+            //if it is more vertical is it positive or negative and is greater then the deadzone
             if (directionVector.y > directionThreshold)
             {
-                lastInputDirection = PlayerInputHandler.InputDirection.Up;
+                detectedInputDirection = InputDirection.Up;
             }
             else if (directionVector.y < -directionThreshold)
             {
-                lastInputDirection = PlayerInputHandler.InputDirection.Down;
+                detectedInputDirection = InputDirection.Down;
             }
         }
+
+        CheckIfDirectionCommittedTo(detectedInputDirection);
+    }
+
+    // Checks if the change in input direction is being committed to(held down) and not an acidental flick.
+    private void CheckIfDirectionCommittedTo(InputDirection detectedInputDirection)
+    {
+        // did the direction change?
+        if (detectedInputDirection != LastInputDirection && detectedInputDirection != InputDirection.None)
+        {
+            // player changed direction before it was fully committed. Most likely an acidental flick. Resets timer
+            if (pendingInputDirection != detectedInputDirection)
+            {
+                pendingInputDirection = detectedInputDirection;
+                directionTimer = 0f;
+            }
+
+            directionTimer += Time.deltaTime;
+            // player fully committed to the change in input. Update the direction
+            if (directionTimer >= flipDelay)
+            {
+                LastInputDirection = pendingInputDirection;
+            }
+        }
+        // The direction has not changed. Reset timmer if it is still running
+        else
+        {
+            directionTimer = 0f;
+            pendingInputDirection = InputDirection.None;
+        }
+    }
+
+    public int ConvertInputDirectionToAnimationID(InputDirection inputDirection)
+    {
+        switch (inputDirection)
+        {
+            case InputDirection.Forward:
+            case InputDirection.Backward:
+                return 1;
+            case InputDirection.Up:
+                return 2;
+            case InputDirection.Down:
+                return 0;
+        }
+
+        return 1;
     }
 
     private void ShowRemappingMenu(InputAction.CallbackContext ctx)

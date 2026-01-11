@@ -27,9 +27,8 @@ public class MovementState : PlayerState
     private bool canRoll = true;
     private bool canDash = true;
 
-    private bool jumpButtonReset = false;
+    public bool jumpButtonReset = false;
     private bool slowFallBlocked = false;
-
 
     public override void Enter()
     {
@@ -46,6 +45,10 @@ public class MovementState : PlayerState
 
         #region Attack Logic
 
+        PlayerInputHandler.InputDirection lastInputDirection = controller.inputHandler.LastInputDirection; 
+        PlayerInputHandler inputHandler = controller.inputHandler;
+
+        
         if (controller.inputHandler.ButtonA_Pressed)
         {
             if (controller.canJump && numberOfJumpsLeft > 0 && jumpButtonReset)
@@ -58,8 +61,9 @@ public class MovementState : PlayerState
         {
             if (controller.myMonster.attackSlotMonsterParts[1] != null)
             {
-                controller.myMonster.attackSlotMonsterParts[1].attackAnimationID = (int)controller.inputHandler.lastInputDirection;
-                controller.myMonster.attack(1, (int)controller.inputHandler.lastInputDirection);
+                controller.myMonster.attackSlotMonsterParts[1].attackAnimationID = 
+                    controller.inputHandler.ConvertInputDirectionToAnimationID(lastInputDirection);
+                controller.myMonster.attack(1, inputHandler.ConvertInputDirectionToAnimationID(lastInputDirection));
             }
             controller.inputHandler.ButtonB_Pressed = false;
         }
@@ -68,8 +72,9 @@ public class MovementState : PlayerState
         {
             if (controller.myMonster.attackSlotMonsterParts[2] != null)
             {
-                controller.myMonster.attackSlotMonsterParts[2].attackAnimationID = (int)controller.inputHandler.lastInputDirection;
-                controller.myMonster.attack(2, (int)controller.inputHandler.lastInputDirection);
+                controller.myMonster.attackSlotMonsterParts[2].attackAnimationID = 
+                    controller.inputHandler.ConvertInputDirectionToAnimationID(lastInputDirection);
+                controller.myMonster.attack(2, inputHandler.ConvertInputDirectionToAnimationID(lastInputDirection));
             }
             controller.inputHandler.ButtonB_Pressed = false;
         }
@@ -78,8 +83,9 @@ public class MovementState : PlayerState
         {
             if (controller.myMonster.attackSlotMonsterParts[3] != null)
             {
-                controller.myMonster.attackSlotMonsterParts[3].attackAnimationID = (int)controller.inputHandler.lastInputDirection;
-                controller.myMonster.attack(3, (int)controller.inputHandler.lastInputDirection);
+                controller.myMonster.attackSlotMonsterParts[3].attackAnimationID = 
+                    controller.inputHandler.ConvertInputDirectionToAnimationID(lastInputDirection);
+                controller.myMonster.attack(3, inputHandler.ConvertInputDirectionToAnimationID(lastInputDirection));
             }
             controller.inputHandler.ButtonB_Pressed = false;
         }
@@ -96,9 +102,9 @@ public class MovementState : PlayerState
 
             if (!controller.isDashing && !controller.isRolling && controller.canMove)
             {
-                if (controller.inputHandler.lastInputDirection == PlayerInputHandler.InputDirection.Forward)
+                if (controller.inputHandler.LastInputDirection == PlayerInputHandler.InputDirection.Forward)
                     controller.flipRightVisual();
-                else if (controller.inputHandler.lastInputDirection == PlayerInputHandler.InputDirection.Backward)
+                else if (controller.inputHandler.LastInputDirection == PlayerInputHandler.InputDirection.Backward)
                     controller.flipLeftVisual();
             }
         }
@@ -502,7 +508,7 @@ public class MovementState : PlayerState
             return;
         }
 
-        if ((controller.inputHandler.leftJoystickVector.x < 0.1f && controller.inputHandler.leftJoystickVector.x > -0.1f))
+        if ((controller.inputHandler.LeftStick.x < 0.1f && controller.inputHandler.leftJoystickVector.x > -0.1f))
         {
             controller.myRigidbody.velocity = new Vector2(0, controller.myRigidbody.velocity.y);
 
@@ -528,7 +534,7 @@ public class MovementState : PlayerState
         {
             controller.turnOffFriction();
         }
-        else if (controller.inputHandler.leftJoystickVector.x < 0.1f && controller.inputHandler.leftJoystickVector.x > -0.1f)
+        else if (controller.inputHandler.LeftStick.x < 0.1f && controller.inputHandler.leftJoystickVector.x > -0.1f)
         {
             controller.turnOnFriction();
         }

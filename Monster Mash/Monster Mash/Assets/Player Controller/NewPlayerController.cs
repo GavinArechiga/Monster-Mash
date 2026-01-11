@@ -22,7 +22,7 @@ public class NewPlayerController : MonoBehaviour
     public int playerIndex;
 
     // State Machine
-    private PlayerState currentState;
+    public PlayerState currentState;
 
     // MISC
     public bool monsterControllerActive = false;
@@ -408,7 +408,7 @@ public class NewPlayerController : MonoBehaviour
         leftStickIsAttacking = true;
 
         Vector2 currentMovementModifier = Vector2.zero;
-        switch (inputHandler.lastInputDirection)
+        switch (inputHandler.LastInputDirection)
         {
             case PlayerInputHandler.InputDirection.Forward:
                 currentMovementModifier = eventArgs.MovementModifier.Right;

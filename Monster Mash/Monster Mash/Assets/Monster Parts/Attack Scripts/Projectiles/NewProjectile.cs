@@ -12,14 +12,14 @@ public class NewProjectile : MonoBehaviour
     public int Damage { set => damage = value; }
     public float LifeTime { set => lifeTime = value; }
     public bool IsReleased {  set => isReleased = value; }
-    public playerController PlayerRef { set => playerRef = value; }
+    public NewPlayerController PlayerRef { set => playerRef = value; }
 
     protected IObjectPool<NewProjectile> objectPool;
     protected float speed;
     protected int damage;
     protected float lifeTime;
     protected bool isReleased;
-    protected playerController playerRef;
+    protected NewPlayerController playerRef;
     protected Coroutine delayedDeactivateCoroutine;
 
     public virtual void Fire()

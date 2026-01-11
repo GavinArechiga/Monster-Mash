@@ -4,7 +4,7 @@ using UnityEngine.Pool;
 public class ProjectileRefrenceData
 {
     public int Damage { get;  set; }
-    public playerController PlayerRef {  get;  set; }
+    public NewPlayerController PlayerRef {  get;  set; }
     public Transform ProjectileMuzzle { get;  set; }
     public NewMonsterPart MonsterPartRef { get; set; }
 }

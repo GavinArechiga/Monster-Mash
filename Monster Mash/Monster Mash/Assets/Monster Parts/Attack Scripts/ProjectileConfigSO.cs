@@ -18,7 +18,7 @@ public class ProjectileConfigSO : ScriptableObject
     public IObjectPool<NewProjectile> ObjectPool { get; private set; }
 
     protected int damage;
-    protected playerController playerRef;
+    protected NewPlayerController playerRef;
     private Transform projectileMuzzle;
     private NewMonsterPart partRef;
     
@@ -94,21 +94,21 @@ public class ProjectileConfigSO : ScriptableObject
         Vector3 up = new (-90, 0, 0);
         Vector3 down = new (90, 0, 0);
 
-        switch (playerRef.LastInputDirection)
+        switch (playerRef.inputHandler.LastInputDirection)
         {
-            case playerController.InputDirection.Forward:
+            case PlayerInputHandler.InputDirection.Forward:
                 rotation = Quaternion.Euler(forward);
                 capsule.direction = 0;
                 break;
-            case playerController.InputDirection.Backward:
+            case PlayerInputHandler.InputDirection.Backward:
                 rotation = Quaternion.Euler(backward);
                 capsule.direction = 0;
                 break;
-            case playerController.InputDirection.Up:
+            case PlayerInputHandler.InputDirection.Up:
                 rotation = Quaternion.Euler(up);
                 capsule.direction = 1;
                 break;
-            case playerController.InputDirection.Down:
+            case PlayerInputHandler.InputDirection.Down:
                 rotation = Quaternion.Euler(down);
                 capsule.direction = 1;
                 break;
