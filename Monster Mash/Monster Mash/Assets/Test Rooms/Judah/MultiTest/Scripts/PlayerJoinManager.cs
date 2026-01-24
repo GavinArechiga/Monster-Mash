@@ -6,14 +6,14 @@ using UnityEngine.InputSystem;
 public class PlayerJoinManager : MonoBehaviour
 {
     [Header("Player Prefab & Roles")]
-    public Player playerPrefab;           // Assign your Player prefab
+    public GameObject playerPrefab;           // Assign your Player prefab
+    private Player myPlayer;
     public Transform[] spawnPoints;       // Where players appear (character select)
     public int maxPlayers = 4;
 
-    private List<Player> players = new List<Player>();
+    [SerializeField] private List<Player> players = new List<Player>();
 
-    // Phase flag: allow additional players to join
-    private bool allowAdditionalPlayers = false;
+    public PlayerInputManager inputManager;
 
     void Start()
     {
@@ -22,73 +22,49 @@ public class PlayerJoinManager : MonoBehaviour
         {
             Debug.LogError("No spawn points assigned!");
             return;
-        }
+        }/*
 
-        Player player1 = Instantiate(playerPrefab, spawnPoints[0].position, Quaternion.identity);
+        GameObject player1 = Instantiate(playerPrefab, spawnPoints[0].position, Quaternion.identity);
+        myPlayer = player1.GetComponent<Player>();
 
         // Assign first connected gamepad if available
         if (Gamepad.all.Count > 0)
         {
-            player1.playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.all[0]);
+            myPlayer.playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.all[0]);
         }
 
         // Assign UIController role
-        player1.SwitchRole(player1.uiControllerPrefab, "UI");
+        myPlayer.SwitchRole(myPlayer.uiRolePrefab, "UI");
 
-        players.Add(player1);
+        players.Add(myPlayer);*/
     }
 
-    void Update()
+    private void Awake()
     {
-        if (!allowAdditionalPlayers) return;
-
-        // Loop through all connected gamepads
-        foreach (var gamepad in Gamepad.all)
-        {
-            // Check if any button was pressed this frame
-            if (gamepad.allControls.Exists(c => c.wasPressedThisFrame))
-            {
-                TryAddPlayer(gamepad);
-            }
-        }
+        inputManager.onPlayerJoined += OnPlayerJoined;
     }
-
-    void TryAddPlayer(Gamepad gamepad)
+    private void OnPlayerJoined(PlayerInput newPlayer)
     {
-        // Ignore if max players reached
-        if (players.Count >= maxPlayers) return;
-
-        // Ignore if this gamepad is already controlling a player
-        foreach (var p in players)
-        {
-            if (p.playerInput.devices.Count > 0 && p.playerInput.devices[0] == gamepad)
-                return;
-        }
-
-        // Spawn new player at the next spawn point
-        int index = players.Count;
-        if (index >= spawnPoints.Length)
-        {
-            Debug.LogWarning("No more spawn points available for additional players");
-            return;
-        }
-
-        Player newPlayer = Instantiate(playerPrefab, spawnPoints[index].position, Quaternion.identity);
-
-        // Assign this specific gamepad to the new player
-        newPlayer.playerInput.SwitchCurrentControlScheme("Gamepad", gamepad);
-
-        // Assign UIController role
-        newPlayer.SwitchRole(newPlayer.uiControllerPrefab, "UI");
-
-        players.Add(newPlayer);
         Debug.Log($"Player {players.Count} joined!");
-    }
+        // Assign this specific gamepad to the new player
 
-    // Call this when entering Character Select screen
-    public void EnableAdditionalPlayers()
+        Player newPlayerScript = newPlayer.GetComponent<Player>();
+
+        // Assign UIController role
+        newPlayerScript.SwitchRole(newPlayerScript.uiRolePrefab, "UI");
+
+        players.Add(newPlayerScript);
+    }
+    public void AllowPlayerJoining(bool allow) //I want the first player to be joined manually but on the character select screen, i need the rest of the players to join
     {
-        allowAdditionalPlayers = true;
+        if (allow)
+        {
+            inputManager.joinBehavior = PlayerJoinBehavior.JoinPlayersWhenButtonIsPressed;
+        }
+        else
+        {
+            inputManager.joinBehavior = PlayerJoinBehavior.JoinPlayersManually;
+        }
     }
 
     // Optional helper: get the current player list

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameplayController : ControllerRole
+public class GameplayRole : ControllerRole
 {
     public override void OnActivate()
     {

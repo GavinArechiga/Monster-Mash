@@ -25,7 +25,7 @@ public class PLayerMoveTemp : MonoBehaviour
         moveInput = input.Get<Vector2>();
     }
 
-    public void OnClick(InputAction.CallbackContext context)
+    public void OnClick()
     {
         if (clickerMode)
         {

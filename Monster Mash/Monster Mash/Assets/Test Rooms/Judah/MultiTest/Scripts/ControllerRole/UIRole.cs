@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UIController : ControllerRole
+public class UIRole : ControllerRole
 {
     public override void OnActivate()
     {
@@ -10,5 +10,15 @@ public class UIController : ControllerRole
     public override void OnDeactivate()
     {
         Debug.Log("UI role deactivated!");
+    }
+
+    public void OnMove()
+    {
+
+    }
+
+    public void OnClick()
+    {
+
     }
 }
