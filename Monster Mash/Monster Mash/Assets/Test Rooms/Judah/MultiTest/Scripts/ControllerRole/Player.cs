@@ -32,13 +32,8 @@ public class Player : MonoBehaviour
     }
 
     //Input Forwarding to children/roles
-    private void OnMove(InputValue value)
+    public void OnNavigate()
     {
-        currentRole?.SendMessage("OnMove", value, SendMessageOptions.DontRequireReceiver);
-    }
-
-    private void OnClick()
-    {
-        currentRole?.SendMessage("OnClick", SendMessageOptions.DontRequireReceiver);
+        currentRole?.SendMessage("OnNavigate", SendMessageOptions.DontRequireReceiver);
     }
 }

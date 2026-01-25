@@ -34,7 +34,7 @@
             "id": "5048c7e4-4da2-4086-a8b6-29fc634afb3b",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "Navigate",
                     "type": "Value",
                     "id": "2db92f46-afe2-4991-8f07-f10c0a5311a3",
                     "expectedControlType": "Vector2",
@@ -43,9 +43,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Click",
+                    "name": "Submit",
                     "type": "Button",
                     "id": "82d2b5d9-9195-428f-b660-38feb8199513",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "7f8b46e3-941c-46d3-84db-75f4e8269adf",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -60,7 +69,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Move",
+                    "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -71,7 +80,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Click",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "43cce2fe-6e9b-4417-ba7d-15537bfb85e8",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
