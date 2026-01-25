@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3394038947550605583}
   - component: {fileID: -8066616305714301204}
   m_Layer: 0
-  m_Name: Player Prefab
+  m_Name: PlayerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
   currentRole: {fileID: 0}
   roleSocket: {fileID: 1563735375061449645}
   playerInput: {fileID: 3394038947550605583}
-  gameplayerRolePrefab: {fileID: 5228295895326385424, guid: 91dacca390bf98c4b84ce6cb8767bc65,
+  combatRolePrefab: {fileID: 5824897759677643788, guid: 91dacca390bf98c4b84ce6cb8767bc65,
     type: 3}
   uiRolePrefab: {fileID: -8681509317564553118, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
     type: 3}

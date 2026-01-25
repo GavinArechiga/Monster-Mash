@@ -56,6 +56,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Stages/14. Beastdome/Beastdome.unity
     guid: 7951396ae2e7f06428cc3661d22da9eb
+  - enabled: 1
+    path: Assets/Test Rooms/Judah/MultiTest/Scenes/CombatMulti.unity
+    guid: d561846097fc6d846a1904a8e58e4c5c
+  - enabled: 1
+    path: Assets/Test Rooms/Judah/MultiTest/Scenes/MainMenuMulti.unity
+    guid: 2b90c38465a41c04c9b0854119cced77
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4aac50c1861c91e4e92485c9846f0c18,
       type: 2}
