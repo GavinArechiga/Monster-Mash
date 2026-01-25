@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public ControllerRole currentRole;
     [SerializeField] private Transform roleSocket;
     public PlayerInput playerInput;
-    public ControllerRole gameplayerRolePrefab;
+    public ControllerRole gameplayRolePrefab;
     public ControllerRole uiRolePrefab;
 
     private void Awake()

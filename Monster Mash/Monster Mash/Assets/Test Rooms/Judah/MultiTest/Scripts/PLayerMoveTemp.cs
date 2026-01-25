@@ -20,12 +20,12 @@ public class PLayerMoveTemp : MonoBehaviour
         GetComponent<SpriteRenderer>().color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
     }
 
-    public void OnMove(InputValue input)
+    public void Move(InputValue input) //Input actions called from UIRole/GameplayRole
     {
         moveInput = input.Get<Vector2>();
     }
 
-    public void OnClick()
+    public void Click()
     {
         if (clickerMode)
         {
