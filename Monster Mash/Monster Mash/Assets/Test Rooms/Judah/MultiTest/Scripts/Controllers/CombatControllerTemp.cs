@@ -17,9 +17,9 @@ public class CombatControllerTemp : MonoBehaviour
         transform.Translate(move * moveSpeed * Time.deltaTime, Space.World);
     }
 
-    public void OnMove(Vector2 input)
+    public void OnMove(InputValue value)
     {
-        moveInput = input;
+        moveInput = value.Get<Vector2>();
     }
 
     public string GetActionMap()

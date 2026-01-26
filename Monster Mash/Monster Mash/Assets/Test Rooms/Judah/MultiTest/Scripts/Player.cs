@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     }
 
     //Input Forwarding to children/roles
-    private void ForwardInputAction(string method, object value = null)
+    /*private void ForwardInputAction(string method, object value = null)
     {
         if (currentController == null) return;
 
@@ -62,5 +62,5 @@ public class Player : MonoBehaviour
         ForwardInputAction("OnMove", input.Get<Vector2>());
     }
 
-    #endregion
+    #endregion*/
 }
