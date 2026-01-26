@@ -9,6 +9,8 @@ public class PlayerSceneManager : MonoBehaviour
     private PlayerInputManager inputManager;
     private void OnEnable()
     {
+        inputManager = GetComponent<PlayerInputManager>();
+
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -48,10 +50,30 @@ public class PlayerSceneManager : MonoBehaviour
             players[i].SwitchRole(myInfo.controllerForThisScene);
         }
 
-        if (sceneName == "CharacterSelect")//player 1 is already in by default, but players 2-4 should probably only join on the character select screen
+        if (sceneName == "CharacterSelect" || myInfo.allowJoining)//player 1 is already in by default, but players 2-4 should probably only join on the character select screen
         {
             AllowPlayerJoining(true);
         }
         //I can add more specific cases depending on our needs ex if (sceneName == poopScene) {players.GoPoopMode();}
+    }
+
+    public void SetupNewPlayer(PlayerInput newInput) //called from PlayerJoinManager, best for when players are being added at different times
+    {
+        Player newPlayer = newInput.GetComponent<Player>();
+
+        PlayerJoinManager manager = GetComponent<PlayerJoinManager>();
+        List<Player> players = manager.GetPlayers();
+
+        SceneInfo myInfo = FindObjectOfType<SceneInfo>();
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i] == newPlayer)
+            {
+                newPlayer.transform.position = myInfo.spawnPoints[i].position;
+            }
+        }
+
+        newPlayer.SwitchRole(myInfo.controllerForThisScene);
     }
 }

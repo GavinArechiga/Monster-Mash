@@ -16,6 +16,8 @@ public class PlayerJoinManager : MonoBehaviour
 
     private bool firstPlayerHasJoined = false;
 
+    private PlayerSceneManager sceneManager;
+
     void Start()
     {
         if (spawnPoints.Length == 0)
@@ -29,6 +31,8 @@ public class PlayerJoinManager : MonoBehaviour
         {
             SpawnFirstPlayer();
         }
+
+        sceneManager = GetComponent<PlayerSceneManager>();
     }
     private void Awake() //ensure only 1 instance of this between scenes or I AM COOKED
     {
@@ -46,7 +50,8 @@ public class PlayerJoinManager : MonoBehaviour
     {
         if (firstPlayerHasJoined)
         {
-            Debug.Log($"Player {players.Count} joined!");
+            Debug.Log($"Player {players.Count + 1} joined!");
+            DontDestroyOnLoad(newPlayer.gameObject);
             // Assign this specific gamepad to the new player
 
             Player newPlayerScript = newPlayer.GetComponent<Player>();
@@ -55,6 +60,8 @@ public class PlayerJoinManager : MonoBehaviour
             newPlayerScript.SwitchRole(newPlayerScript.uiControllerPrefab);
 
             players.Add(newPlayerScript);
+
+            sceneManager.SetupNewPlayer(newPlayer);
         }
     }
     private void SpawnFirstPlayer()
