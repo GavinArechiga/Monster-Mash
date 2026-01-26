@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class UIControllerTemp : MonoBehaviour
 {
@@ -12,18 +13,24 @@ public class UIControllerTemp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PlayerInput playerInput = GetComponentInParent<PlayerInput>();
+        playerInput.SwitchCurrentActionMap("UI");
+
         if (EventSystem.current != null)
         {
             EventSystem.current.SetSelectedGameObject(FindObjectOfType<FirstSelectedUI>().gameObject);
         }
     }
-
-    public void Navigate()
-    {
-
-    }
     public void Click()
     {
         Debug.Log("I PUSHED THE BUTTON HAHAHA");
     }
+
+    #region input actions called from Player script
+    public void OnNavigate()
+    {
+
+    }
+
+    #endregion
 }
