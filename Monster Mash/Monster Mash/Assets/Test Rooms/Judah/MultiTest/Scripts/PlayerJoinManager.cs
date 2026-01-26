@@ -47,6 +47,7 @@ public class PlayerJoinManager : MonoBehaviour
         if (firstPlayerHasJoined)
         {
             Debug.Log($"Player {players.Count} joined!");
+            DontDestroyOnLoad(newPlayer.gameObject);
             // Assign this specific gamepad to the new player
 
             Player newPlayerScript = newPlayer.GetComponent<Player>();

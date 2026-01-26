@@ -9,6 +9,7 @@ public class PlayerSceneManager : MonoBehaviour
     private PlayerInputManager inputManager;
     private void OnEnable()
     {
+        inputManager = GetComponent<PlayerInputManager>();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -26,6 +27,7 @@ public class PlayerSceneManager : MonoBehaviour
         if (allow)
         {
             inputManager.joinBehavior = PlayerJoinBehavior.JoinPlayersWhenButtonIsPressed;
+            Debug.Log("join success");
         }
         else
         {
@@ -36,6 +38,7 @@ public class PlayerSceneManager : MonoBehaviour
     //handles players moved between scenes, turns off and on player joining, sets correct role/action map for each scene
     private void SetupPlayersForScene(string sceneName)
     {
+        Debug.Log("is my scene manager doing anytihng?");
         PlayerJoinManager manager = GetComponent<PlayerJoinManager>();
         List<Player> players = manager.GetPlayers();
 
@@ -48,8 +51,9 @@ public class PlayerSceneManager : MonoBehaviour
             players[i].SwitchRole(myInfo.controllerForThisScene);
         }
 
-        if (sceneName == "CharacterSelect")//player 1 is already in by default, but players 2-4 should probably only join on the character select screen
+        if (sceneName == "CharacterSelect" || myInfo.allowJoining)//player 1 is already in by default, but players 2-4 should probably only join on the character select screen
         {
+            Debug.Log("yes allow joining bool works");
             AllowPlayerJoining(true);
         }
         //I can add more specific cases depending on our needs ex if (sceneName == poopScene) {players.GoPoopMode();}
