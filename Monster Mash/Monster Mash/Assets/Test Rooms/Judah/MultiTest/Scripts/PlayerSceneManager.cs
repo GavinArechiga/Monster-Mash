@@ -45,7 +45,7 @@ public class PlayerSceneManager : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             players[i].transform.position = myInfo.spawnPoints[i].position;
-            players[i].SwitchRole(myInfo.roleForThisScene);
+            players[i].SwitchRole(myInfo.controllerForThisScene);
         }
 
         if (sceneName == "CharacterSelect")//player 1 is already in by default, but players 2-4 should probably only join on the character select screen

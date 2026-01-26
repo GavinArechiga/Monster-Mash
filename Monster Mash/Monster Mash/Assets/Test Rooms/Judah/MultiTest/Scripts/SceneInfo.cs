@@ -9,7 +9,7 @@ public class SceneInfo : MonoBehaviour
 
     public Transform[] spawnPoints; //where each player loads in
 
-    public ControllerRole roleForThisScene; //which action map should the players start in for this scene?
+    public GameObject controllerForThisScene; //which action map should the players start in for this scene?
 
     //can be called from UIButtons or maybe something else as needed
     //for now, if in main screen we can use these

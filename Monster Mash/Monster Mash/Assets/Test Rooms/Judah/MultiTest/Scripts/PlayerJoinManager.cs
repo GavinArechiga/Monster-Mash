@@ -52,7 +52,7 @@ public class PlayerJoinManager : MonoBehaviour
             Player newPlayerScript = newPlayer.GetComponent<Player>();
 
             // Assign UIController role
-            newPlayerScript.SwitchRole(newPlayerScript.uiRolePrefab);
+            newPlayerScript.SwitchRole(newPlayerScript.uiControllerPrefab);
 
             players.Add(newPlayerScript);
         }
@@ -67,7 +67,7 @@ public class PlayerJoinManager : MonoBehaviour
         Debug.Log("Player 1 in the hoooooouse!");
 
         // Assign UIController role, i can switch this as needed to a different "first" controller
-        myPlayer.SwitchRole(myPlayer.uiRolePrefab);
+        myPlayer.SwitchRole(myPlayer.uiControllerPrefab);
 
         players.Add(myPlayer);
 

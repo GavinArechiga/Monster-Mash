@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 586f755d22d78804ca84fa77dcad0f86,
     type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 1
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -92,10 +92,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b448b2250309242b3fda5360f1b9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentRole: {fileID: 0}
-  roleSocket: {fileID: 1563735375061449645}
+  currentController: {fileID: 0}
+  spawn: {fileID: 1563735375061449645}
   playerInput: {fileID: 3394038947550605583}
-  combatRolePrefab: {fileID: 5824897759677643788, guid: 91dacca390bf98c4b84ce6cb8767bc65,
+  combatControllerPrefab: {fileID: 5824897759677644786, guid: 91dacca390bf98c4b84ce6cb8767bc65,
     type: 3}
-  uiRolePrefab: {fileID: -8681509317564553118, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
+  uiControllerPrefab: {fileID: 8722378828708286347, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
     type: 3}
