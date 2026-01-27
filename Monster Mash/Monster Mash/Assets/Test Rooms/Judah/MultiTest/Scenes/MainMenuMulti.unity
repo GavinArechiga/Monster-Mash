@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 395595497}
   - component: {fileID: 395595498}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: SceneInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cc17a911267f0449a605f402804d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowJoining: 1
+  allowJoining: 0
   spawnPoints:
   - {fileID: 829760521}
   - {fileID: 604084007}
