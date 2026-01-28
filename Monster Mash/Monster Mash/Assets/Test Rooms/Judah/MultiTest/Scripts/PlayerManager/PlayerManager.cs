@@ -48,4 +48,9 @@ public class PlayerManager : MonoBehaviour
     {
         players.Remove(player);
     }
+
+    public void SubscribePlayerJoin() //this used to happen internally in PlayerJoinManager but its OnEnable was missing timing with this script's Awake :(
+    {
+        inputManager.onPlayerJoined += Join.OnPlayerJoined;
+    }
 }

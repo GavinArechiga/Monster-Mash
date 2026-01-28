@@ -18,13 +18,13 @@ public class PlayerControllerManager : MonoBehaviour
         manager = GetComponent<PlayerManager>();
     }
 
-    public void SwitchOneController(PlayerInput playerInput, GameObject newController, bool destroyOldControllers) //pass in one player and switch its action map
+    public void SwitchOneController(PlayerInput playerInput, GameObject newController) //pass in one player and switch its action map
     {
         Player player = playerInput.GetComponent<Player>();
 
-        player.SwitchController(newController, destroyOldControllers);
+        player.SwitchController(newController);
     }
-    public void SwitchAllControllers(GameObject controllerPrefab, bool destroyOldControllers) //change action maps for all current players in game
+    public void SwitchAllControllers(GameObject controllerPrefab) //change action maps for all current players in game
     {
         List<PlayerInput> playerInputs = manager.GetPlayers();
 
@@ -32,7 +32,29 @@ public class PlayerControllerManager : MonoBehaviour
         {
             Player player = playerInputs[i].GetComponent<Player>();
 
-            player.SwitchController(controllerPrefab, destroyOldControllers);
+            player.SwitchController(controllerPrefab);
+        }
+    }
+
+    public void DestroyAllControllers()
+    {
+        List<PlayerInput> playerinputs = manager.GetPlayers();
+
+        for (int i = 0; i < playerinputs.Count; i++)
+        {
+            Player player = playerinputs[i].GetComponent<Player>();
+            player.DestroyAllControllers();
+        }
+    }
+    public void DestroyAllControllersOfType<T>() where T : IPlayerController
+    {
+        List<PlayerInput> playerInputs = manager.GetPlayers();
+
+        for (int i = 0; i < playerInputs.Count; i++)
+        {
+            Player player = playerInputs[i].GetComponent<Player>();
+
+            player.DestroyControllerOfType<T>();
         }
     }
 }

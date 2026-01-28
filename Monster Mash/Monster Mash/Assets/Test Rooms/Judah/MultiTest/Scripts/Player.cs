@@ -14,22 +14,39 @@ public class Player : MonoBehaviour
     //called from PlayerControllerManager to switch action maps.
     //new action maps are paired with an instantiated controller prefab designed
     //for the action map needs. the actual SwitchActionMap function is called from the controller script attached to each of these instantiated prefabs
-    public void SwitchController(GameObject controllerPrefab, bool destroyCurrentController)
+    public void SwitchController(GameObject controllerPrefab)
     {
         if (currentControllers.Count > 0)
         {
-            if (destroyCurrentController)
-            {
-                DestroyAllControllers();
-            }
+            var controllerType = controllerPrefab.GetComponent<IPlayerController>().GetType();
+            var existingController = currentControllers.Find(c => c.GetComponent(controllerType) != null);
 
-            DestroyDuplicates(controllerPrefab);
+            if (existingController != null)
+            {
+                existingController.GetComponent<IPlayerController>().ActivateController();
+
+                DeactivateAllExcept(existingController);
+                return;
+            }
         }
 
         GameObject currentController = Instantiate(controllerPrefab, spawn);
         currentControllers.Add(currentController);
+        DeactivateAllExcept(currentController);
     }
-    private void DestroyAllControllers()
+
+    public void DestroyControllerOfType<T>() where T : IPlayerController
+    {
+        for (int i = currentControllers.Count - 1; i >= 0; i--)
+        {
+            if (currentControllers[i].GetComponent<T>() != null)
+            {
+                Destroy(currentControllers[i]);
+                currentControllers.RemoveAt(i);
+            }
+        }
+    }
+    public void DestroyAllControllers()
     {
         for (int i = currentControllers.Count - 1; i >= 0; i--) //loop backwards for List stuff
         {
@@ -38,14 +55,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void DestroyDuplicates(GameObject controllerPrefab)
+    private void DeactivateAllExcept(GameObject activeController)
     {
-        for (int i = currentControllers.Count - 1; i >= 0; i--)
+        for (int i = 0; i < currentControllers.Count; i++)
         {
-            if (currentControllers[i] == controllerPrefab)
+            if (currentControllers[i] != activeController)
             {
-                Destroy(currentControllers[i]);
-                currentControllers.RemoveAt(i);
+                currentControllers[i].GetComponent<IPlayerController>().DeactivateController();
             }
         }
     }
