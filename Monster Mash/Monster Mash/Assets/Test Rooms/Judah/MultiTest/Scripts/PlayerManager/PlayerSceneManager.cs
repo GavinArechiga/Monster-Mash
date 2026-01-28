@@ -9,7 +9,7 @@ public class PlayerSceneManager : MonoBehaviour
 
     private PlayerManager manager;
     
-    private SceneInfo sceneInfo; //one and only one of this script should be made for each scene. it holds variables which we can set in the inspector
+    public SceneInfo sceneInfo { get; private set; } //one and only one of this script should be made for each scene. it holds variables which we can set in the inspector
     private void Awake()
     {
         manager = GetComponent<PlayerManager>();
@@ -24,7 +24,8 @@ public class PlayerSceneManager : MonoBehaviour
     {
         List<PlayerInput> players = manager.GetPlayers();
 
-        manager.Controller.SwitchAllControllers(sceneInfo.controllerForThisScene, true);
+        manager.Controller.DestroyAllControllers();
+        manager.Controller.SwitchAllControllers(sceneInfo.controllerForThisScene);
 
         for (int i = 0; i < players.Count; i++)
         {
@@ -56,7 +57,7 @@ public class PlayerSceneManager : MonoBehaviour
             }
         }
 
-        newPlayer.SwitchController(sceneInfo.controllerForThisScene, true);
+        newPlayer.SwitchController(sceneInfo.controllerForThisScene);
     }
 
     #region event subscribing

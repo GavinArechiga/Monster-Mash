@@ -20,22 +20,18 @@ public class PlayerJoinManager : MonoBehaviour
         {
             SpawnFirstPlayer();
         }
+
+        manager.SubscribePlayerJoin();
     }
     private void Awake()
     {
         manager = GetComponent<PlayerManager>();
     }
-
-    private void OnEnable()
-    {
-        manager.inputManager.onPlayerJoined += OnPlayerJoined;
-    }
-
     private void OnDisable()
     {
         manager.inputManager.onPlayerJoined -= OnPlayerJoined;
     }
-    private void OnPlayerJoined(PlayerInput newPlayer) //instantiates new player and sends it off to get the correct action map and world space positioning
+    public void OnPlayerJoined(PlayerInput newPlayer) //instantiates new player and sends it off to get the correct action map and world space positioning
     {
         if (firstPlayerHasJoined)
         {
