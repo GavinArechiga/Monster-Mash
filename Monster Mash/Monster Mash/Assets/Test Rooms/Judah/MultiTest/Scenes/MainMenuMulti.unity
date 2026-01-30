@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 395595497}
   - component: {fileID: 395595498}
   m_Layer: 0
-  m_Name: SceneInfo
+  m_Name: MenuManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,7 +250,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &395595498
 MonoBehaviour:
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cc17a911267f0449a605f402804d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowJoining: 0
+  allowJoining: 1
   spawnPoints:
   - {fileID: 829760521}
   - {fileID: 604084007}
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Um 3rd Button
+  m_text: Settings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -598,7 +598,7 @@ RectTransform:
   - {fileID: 1057537041}
   - {fileID: 1977075356}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -663,7 +663,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start Combat
+  m_text: Monster Part Gacha
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -753,7 +753,7 @@ GameObject:
   - component: {fileID: 1057537043}
   - component: {fileID: 1057537042}
   m_Layer: 5
-  m_Name: StartCombat
+  m_Name: Monster Part Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -778,7 +778,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 43.05}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 205.21, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1057537042
 MonoBehaviour:
@@ -825,8 +825,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 395595498}
-        m_TargetAssemblyTypeName: SceneInfo, Assembly-CSharp
-        m_MethodName: LoadNextScene
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: StartGacha
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -919,7 +919,7 @@ GameObject:
   - component: {fileID: 1509511507}
   - component: {fileID: 1509511510}
   m_Layer: 5
-  m_Name: HappyBirthday
+  m_Name: Arcade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -990,10 +990,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5492413894729433583, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
-          type: 3}
-        m_TargetAssemblyTypeName: UIControllerTemp, Assembly-CSharp
-        m_MethodName: Click
+      - m_Target: {fileID: 395595498}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: StartCombat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1285,7 +1284,7 @@ Transform:
   - {fileID: 1111672346}
   - {fileID: 451455161}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1597164591
 GameObject:
@@ -1345,7 +1344,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Happy Birthday
+  m_text: Arcade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1435,7 +1434,7 @@ GameObject:
   - component: {fileID: 1977075358}
   - component: {fileID: 1977075357}
   m_Layer: 5
-  m_Name: Um3rdButton
+  m_Name: Settings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1506,13 +1505,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 395595498}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: StartMainSettings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1602,7 +1601,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2130755223
 MonoBehaviour:
@@ -1638,92 +1637,3 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!1001 &424373798420942221
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[0]
-      value: 
-      objectReference: {fileID: 829760521}
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[1]
-      value: 
-      objectReference: {fileID: 604084007}
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[2]
-      value: 
-      objectReference: {fileID: 1111672346}
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[3]
-      value: 
-      objectReference: {fileID: 451455161}
-    - target: {fileID: 424373798547200616, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.028919853
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.8406024
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.55950177
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200618, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9de7345f69b5e81428b104af8dceadf0, type: 3}

@@ -24,11 +24,6 @@ public class UIControllerTemp : MonoBehaviour, IPlayerController
     {
         playerInput = GetComponentInParent<PlayerInput>();
         playerInput.SwitchCurrentActionMap("UI");
-
-        if (EventSystem.current != null)
-        {
-            EventSystem.current.SetSelectedGameObject(FindObjectOfType<FirstSelectedUI>().gameObject);
-        }
     }
 
     public void ActivateController()

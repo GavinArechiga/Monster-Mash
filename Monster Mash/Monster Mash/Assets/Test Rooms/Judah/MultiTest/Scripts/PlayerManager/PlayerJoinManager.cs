@@ -50,9 +50,9 @@ public class PlayerJoinManager : MonoBehaviour
 
         PlayerInput playerInput = newPlayer.GetComponent<PlayerInput>();
 
-        manager.Scene.SetupNewPlayer(playerInput);
-
         manager.AddPlayer(playerInput);
+
+        manager.Scene.SetupNewPlayer(playerInput);
 
         firstPlayerHasJoined = true;
     }

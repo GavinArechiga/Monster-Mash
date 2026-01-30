@@ -9,14 +9,14 @@ public class PlayerSceneManager : MonoBehaviour
 
     private PlayerManager manager;
     
-    public SceneInfo sceneInfo { get; private set; } //one and only one of this script should be made for each scene. it holds variables which we can set in the inspector
+    public MenuManager sceneInfo { get; private set; } //one and only one of this script should be made for each scene. it holds variables which we can set in the inspector
     private void Awake()
     {
         manager = GetComponent<PlayerManager>();
     }
     private void SetSceneInfo() //called OnSceneLoad, it is subscribed below
     {
-        sceneInfo = FindObjectOfType<SceneInfo>();
+        sceneInfo = FindObjectOfType<MenuManager>();
     }
 
     //handles players moved between scenes, turns off and on player joining, sets correct role/action map for each scene

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneInfo : MonoBehaviour
+public class MenuManager : MonoBehaviour
 {
     //new instance of this script in each scene, PlayerSceneManager pulls vars from here. can add more as scene need complexity grows
 
@@ -17,5 +17,29 @@ public class SceneInfo : MonoBehaviour
     public void LoadNextScene()
     {
         SceneManager.LoadScene(nextScene);
+    }
+
+    public void StartMainMenu()
+    {
+        SceneManager.LoadScene("MainMenuMulti");
+    }
+    public void StartArcade()
+    {
+        SceneManager.LoadScene("Arcade");
+    }
+
+    public void StartGacha()
+    {
+        SceneManager.LoadScene("Gacha");
+    }
+
+    public void StartMainSettings()
+    {
+        SceneManager.LoadScene("MainSettings");
+    }
+
+    public void StartCombat()
+    {
+        SceneManager.LoadScene("CombatMulti");
     }
 }
