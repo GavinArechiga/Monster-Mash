@@ -47,7 +47,6 @@ public class playerController : MonoBehaviour
     public bool canMove = true;
     public bool isWalking = false;
     public bool isRunning = false;
-    private int directionModifier = -1;
     //
     public bool grounded = false;
     private bool atPlatformEdge = false;
@@ -123,8 +122,23 @@ public class playerController : MonoBehaviour
 
     [SerializeField]
     private Rigidbody2D myRigidbody;
-    private int inputModifier = 1;
-    private Vector2Int lastInputDirection;
+    
+    // player flip vars
+    public enum InputDirection
+    {
+        None,
+        Forward,
+        Backward,
+        Up,
+        Down
+    }
+
+    private Vector2 lastInputDirectionVector;
+    float directionThreshold = 0.2f;
+    public InputDirection LastInputDirection { get; private set; } = InputDirection.Backward;
+    private InputDirection pendingInputDirection;
+    private float directionTimer = 0f;
+    private float flipDelay = 0.03f;
 
     [Header("Damage Launching")]
     [SerializeField] private AnimationCurve damageToForceCurve;
@@ -291,7 +305,6 @@ public class playerController : MonoBehaviour
         //This section moves the x axis of the player
         //For moving the y axis of the player, check out the jumping category of the movement section
         //chances are we'll be moving most of this movement to a seperate script so that we can enable or disable with ease and not have all this running all the time
-        UpdateInputDirection();
         if (monsterControllerActive)
         {
 
@@ -904,69 +917,28 @@ public class playerController : MonoBehaviour
         if (context.canceled)
         {
             jumpButtonReset = true;
-            inputModifier = 1;
+            LastInputDirection = facingRight ? InputDirection.Forward : InputDirection.Backward;
+            return;
         }
-
-        /*
-        if (context.performed && grabbingWall == false && isDashing == false && isRolling == false)
-        {
-            if (facingRight == false && leftJoystickVector.x > 0.1f)
-            {
-                //face right
-                facingRight = true;
-                directionModifier = 1;
-                flipRightVisual();
-            }
-            else if (facingRight && leftJoystickVector.x < -0.1f)
-            {
-                //face left
-                facingRight = false;
-                directionModifier = -1;
-                flipLeftVisual();
-            }
-        }
-        */
-
-        /*if (!isAttacking && !willAttack)
-        {
-            canMove = true;
-        }*/
-
 
         if (context.performed)
         {
-            if ((leftJoystickVector.x > 0.9f && facingRight) || (leftJoystickVector.x < -0.9f && facingRight == false))
+            if (Mathf.Abs(leftJoystickVector.x) > directionThreshold || Mathf.Abs(leftJoystickVector.y) > directionThreshold)
             {
-                inputModifier = 1; //they'll be attacking forward
-            }
-            else if (leftJoystickVector.y > 0.2f)
-            {
-                inputModifier = 2;
-            }
-            else if (leftJoystickVector.y < -0.2f)
-            {
-                inputModifier = 0;
-            }
-            else if ((leftJoystickVector.x > 0.9f && facingRight == false) || (leftJoystickVector.x < -0.9f && facingRight))
-            {
-                inputModifier = -1;
-            }
+                lastInputDirectionVector = leftJoystickVector;
+                UpdateInputDirection(lastInputDirectionVector);
+                
 
-            if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
-            {
-                if (facingRight == false && leftJoystickVector.x > 0.1f)
+                if (grabbingWall == false && isDashing == false && isRolling == false && canMove)
                 {
-                    //face right
-                    facingRight = true;
-                    directionModifier = 1;
-                    flipRightVisual();
-                }
-                else if (facingRight && leftJoystickVector.x < -0.1f)
-                {
-                    //face left
-                    facingRight = false;
-                    directionModifier = -1;
-                    flipLeftVisual();
+                    if (LastInputDirection is InputDirection.Forward)
+                    {
+                        flipRightVisual();
+                    }
+                    else if (LastInputDirection is InputDirection.Backward)
+                    {
+                        flipLeftVisual();
+                    }
                 }
             }
 
@@ -1012,6 +984,85 @@ public class playerController : MonoBehaviour
         }
     }
 
+
+    private void UpdateInputDirection(Vector2 directionVector)
+    {
+        InputDirection detectedInputDirection = InputDirection.None;
+
+        // is the detected input more horizontal then vertical?
+        if (Mathf.Abs(directionVector.x) > Mathf.Abs(directionVector.y))
+        {
+            // if it is more horziontal is it positive or negative and is greater then the deadzone
+            if (directionVector.x > directionThreshold)
+            {
+                detectedInputDirection = InputDirection.Forward;
+            }
+            else if (directionVector.x < -directionThreshold)
+            {
+                detectedInputDirection = InputDirection.Backward;
+            }
+        }
+        // is the dtected input more vertical then horizontal?
+        else if (Mathf.Abs(directionVector.y) > directionThreshold)
+        {
+            //if it is more vertical is it positive or negative and is greater then the deadzone
+            if (directionVector.y > directionThreshold)
+            {
+                detectedInputDirection = InputDirection.Up;
+            }
+            else if (directionVector.y < -directionThreshold)
+            {
+                detectedInputDirection = InputDirection.Down;
+            }
+        }
+
+        CheckIfDirectionCommittedTo(detectedInputDirection);
+    }
+
+    // Checks if the change in input direction is being committed to(held down) and not an acidental flick.
+    private void CheckIfDirectionCommittedTo(InputDirection detectedInputDirection)
+    {
+        // did the direction change?
+        if (detectedInputDirection != LastInputDirection && detectedInputDirection != InputDirection.None)
+        {
+            // player changed direction before it was fully committed. Most likely an acidental flick. Resets timer
+            if (pendingInputDirection != detectedInputDirection)
+            {
+                pendingInputDirection = detectedInputDirection;
+                directionTimer = 0f;
+            }
+
+            directionTimer += Time.deltaTime;
+            // player fully committed to the change in input. Update the direction
+            if (directionTimer >= flipDelay)
+            {
+                LastInputDirection = pendingInputDirection;
+            }
+        }
+        // The direction has not changed. Reset timmer if it is still running
+        else
+        {
+            directionTimer = 0f;
+            pendingInputDirection = InputDirection.None;
+        }
+    }
+
+    private int ConvertInputDirectionToAnimationID(InputDirection inputDirection)
+    {
+        switch (inputDirection)
+        {
+            case InputDirection.Forward:
+            case InputDirection.Backward:
+                return 1;
+            case InputDirection.Up:
+                return 2;
+            case InputDirection.Down:
+                return 0;
+        }
+
+        return 1;
+    }
+
     private bool isGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.5f, solidGroundLayer);
@@ -1052,16 +1103,6 @@ public class playerController : MonoBehaviour
         //canDash = true;
         insideFloor = false;
         //canRoll = true;
-
-        if (facingRight)
-        {
-            lastInputDirection = new Vector2Int(1, 0);
-        }
-        else
-        {
-            lastInputDirection = new Vector2Int(-1, 0);
-        }
-
 
         if (grabbingWall)
         {
@@ -1621,8 +1662,8 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[1] == null) { return; }
-            myMonster.attackSlotMonsterParts[1].attackAnimationID = inputModifier;
-            myMonster.attack(1, inputModifier);
+            myMonster.attackSlotMonsterParts[1].attackAnimationID = ConvertInputDirectionToAnimationID(LastInputDirection);
+            myMonster.attack(1, ConvertInputDirectionToAnimationID(LastInputDirection));
             //canMove = false;
             buttonB_Pressed = true;
         }
@@ -1644,8 +1685,9 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[2] == null) { return; }
-            myMonster.attackSlotMonsterParts[2].attackAnimationID = inputModifier;
-            myMonster.attack(2, inputModifier);
+
+            myMonster.attackSlotMonsterParts[2].attackAnimationID = ConvertInputDirectionToAnimationID(LastInputDirection);
+            myMonster.attack(2, ConvertInputDirectionToAnimationID(LastInputDirection));
             //canMove = false;
             buttonX_Pressed = true;
         }
@@ -1667,8 +1709,9 @@ public class playerController : MonoBehaviour
         if (context.started)
         {
             if (myMonster.attackSlotMonsterParts[3] == null) { return; }
-            myMonster.attackSlotMonsterParts[3].attackAnimationID = inputModifier;
-            myMonster.attack(3, inputModifier);
+
+            myMonster.attackSlotMonsterParts[3].attackAnimationID = ConvertInputDirectionToAnimationID(LastInputDirection);
+            myMonster.attack(3, ConvertInputDirectionToAnimationID(LastInputDirection));
             //canMove = false;
             buttonY_Pressed = true;
         }
@@ -1681,11 +1724,13 @@ public class playerController : MonoBehaviour
     private void flipLeftVisual()
     {
         myMonster.flipLeft();
+        facingRight = false;
     }
 
     private void flipRightVisual()
     {
         myMonster.flipRight();
+        facingRight = true;
     }
 
     /*
@@ -1941,16 +1986,8 @@ public class playerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
         }
 
-        //temp code
-        if (grounded)
-        {
-            turnOffFriction();
-            myRigidbody.velocity = new Vector2(1 * -directionModifier, myRigidbody.velocity.y);
-        }
-        else
-        {
-            myRigidbody.velocity = new Vector2(20 * -directionModifier, myRigidbody.velocity.y);
-        }
+        myRigidbody.velocity = Vector2.zero;
+        myRigidbody.angularVelocity = 0;
     }
 
     public void damageUnlockPlayerController()
@@ -2233,13 +2270,13 @@ public class playerController : MonoBehaviour
             {
                 turnOnFriction();
                 myRigidbody.velocity = new Vector2(0, 0);
-                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
             }
             else
             {
                 heavyActivated();
                 myRigidbody.velocity = new Vector2(0, 0);
-                myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
+                //myRigidbody.velocity = new Vector2(90 * directionModifier, myRigidbody.velocity.y);
                 StartCoroutine(leapAttackForwardControl());
             }
         }
@@ -2260,40 +2297,28 @@ public class playerController : MonoBehaviour
         */
     }
 
-    private void UpdateInputDirection()
-    {
-        float deadZone = 0.2f;
-        Vector2 input = leftJoystickVector.normalized;
-        if (leftJoystickValue >= deadZone)
-        {
-           
-
-            if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-            {
-                lastInputDirection = new Vector2Int(input.x > 0 ? 1 : -1, 0);
-            }
-            else if (Mathf.Abs(input.y) > 0)
-            {
-                lastInputDirection = new Vector2Int(0, input.y > 0 ? 1 : -1);
-            }
-        }
-    }
-
     // Listens for when an attack calls Trigger Attack Release
     public void ApplyMovementModifier(object sender, TriggerAttackReleaseEventArgs eventArgs)
     {
         leftStickIsAttacking = true;
 
-        var currentMovementModifier = lastInputDirection switch
+        Vector2 currentMovementModifier = Vector2.zero;
+        switch (LastInputDirection)
         {
-            var dir when dir == Vector2Int.left => eventArgs.MovementModifier.Left,
-            var dir when dir == Vector2Int.right => eventArgs.MovementModifier.Right,
-            var dir when dir == Vector2Int.up => eventArgs.MovementModifier.Up,
-            var dir when dir == Vector2Int.down => eventArgs.MovementModifier.Down,
-            _ => Vector2.zero,
-        };
+            case InputDirection.Forward:
+                currentMovementModifier = eventArgs.MovementModifier.Right;
+                break;
+            case InputDirection.Backward:
+                currentMovementModifier = eventArgs.MovementModifier.Left;
+                break;
+            case InputDirection.Up:
+                currentMovementModifier = eventArgs.MovementModifier.Up;
+                break;
+            case InputDirection.Down:
+                currentMovementModifier = eventArgs.MovementModifier.Down;
+                break;
+        }
 
-        // using the animation clip length so that the movement duration matches the animation
         StartCoroutine(ApplySmoothedMovementModifier(currentMovementModifier, eventArgs.ClipLength));
     }
 
@@ -2330,7 +2355,7 @@ public class playerController : MonoBehaviour
     {
         if (isFacingEdge() || atPlatformEdge == false)
         {
-            myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
+            //myRigidbody.velocity = new Vector2(45 * -directionModifier, myRigidbody.velocity.y);
         }
 
         /*
@@ -2411,10 +2436,8 @@ public class playerController : MonoBehaviour
 
     public IEnumerator DisableJumping(float seconds)
     {
-        Debug.Log("Started Attack");
         lockPlayerController(); 
         yield return new WaitForSeconds(seconds);
-        Debug.Log("Ended Attack");
         unlockPlayerController(); 
     }
 
@@ -2488,15 +2511,11 @@ public class playerController : MonoBehaviour
             if (facingRight == false)
             {
                 //face right
-                facingRight = true;
-                directionModifier = 1;
                 flipRightVisual();
             }
             else if (facingRight)
             {
                 //face left
-                facingRight = false;
-                directionModifier = -1;
                 flipLeftVisual();
             }
         }

@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/BuildAScare.unity
     guid: 4ed84e6e5f942384e9c8d9a8e431347b
   - enabled: 0
@@ -26,10 +26,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Stages/5. Old Greenhouse/The Old Greenhouse.unity
     guid: bfeb7733c04cd6e4882fdfcef4352c08
-  - enabled: 0
+  - enabled: 1
     path: Assets/Test Rooms/Nick/Nick Workshop.unity
     guid: 616f1e5f6f4c4ef45bf9569b77de4fcb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Test Rooms/David/David Workshop.unity
     guid: 0d00c20503761a94da1ed81b01c69737
   - enabled: 1
@@ -56,6 +56,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Stages/14. Beastdome/Beastdome.unity
     guid: 7951396ae2e7f06428cc3661d22da9eb
+  - enabled: 1
+    path: Assets/Test Rooms/Judah/MultiTest/Scenes/CombatMulti.unity
+    guid: d561846097fc6d846a1904a8e58e4c5c
+  - enabled: 1
+    path: Assets/Test Rooms/Judah/MultiTest/Scenes/MainMenuMulti.unity
+    guid: 2b90c38465a41c04c9b0854119cced77
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4aac50c1861c91e4e92485c9846f0c18,
       type: 2}

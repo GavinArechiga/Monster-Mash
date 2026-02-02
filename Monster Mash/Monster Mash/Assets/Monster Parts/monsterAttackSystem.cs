@@ -119,6 +119,13 @@ public class monsterAttackSystem : MonoBehaviour
     public SFXManager SFXManager;
     public GameObject floorCheck;
 
+    /// <summary>
+    /// flag for when the monster anim is in a state suitable for attack. 
+    /// This is useful for attacks that need to be synced with the monster anim for example tail projectile attacks.
+    /// The default value is true so that normal attacks are not affected
+    /// </summary>
+    private bool monsterAnimReadyForAttack = true;
+
     // Emotes
     [Header("Emotes")]
     public EmoteManager emoteManager;
@@ -239,8 +246,6 @@ public class monsterAttackSystem : MonoBehaviour
 
         for (int i = 0; i < allMonsterParts.Length; i++)
         {
-            allMonsterParts[i].AttackSetup();
-
             if (allMonsterParts[i].isGroundedLimb)
             {
                 if (allMonsterParts[i].isRightSidedLimb)
@@ -394,6 +399,7 @@ public class monsterAttackSystem : MonoBehaviour
             allMonsterParts[i].myMainSystem = this;
             allMonsterParts[i].mainTorso = mainTorso;
             allMonsterParts[i].referencesToIgnore = listOfInternalReferences;
+            allMonsterParts[i].AttackSetup();
             allMonsterParts[i].triggerAnimationSetUp();
             allMonsterParts[i].triggerAnimationOffsets();
             allMonsterParts[i].triggerCollisionLogic(); //collision logic must come after animation set up because animation set up includes projectile set up 
@@ -426,7 +432,6 @@ public class monsterAttackSystem : MonoBehaviour
         myPlayer.playerControlsMap.Emotes.Enable();
 
         CalculateStartHealth();
-        
     }
 
     public void AssignMyPlayer(playerController controller)
@@ -1048,6 +1053,41 @@ public class monsterAttackSystem : MonoBehaviour
         leapingAttackVisual.Play();
     }
 
+    public IEnumerator Quick180Turn()
+    {
+        const float delay = 0.5f;
+
+        switch(myPlayer.facingRight)
+        {
+            case true:
+                myAnimator.Play("Quick180 - Left");
+                yield return new WaitForSeconds(delay);
+                myAnimator.Play("Quick180 - Right");
+                break;
+            case false:
+                myAnimator.Play("Quick180 - Right");
+                yield return new WaitForSeconds(delay);
+                myAnimator.Play("Quick180 - Left");
+                break;
+        }
+    }
+
+    // called from animation event. Tells the monster part when to attack. Used when attacks need to be synced to the monster anim
+    public void SetMonsterAnimReadyForAttack()
+    {
+        monsterAnimReadyForAttack = true;
+    }
+
+    public void RequestAnimSync()
+    {
+        monsterAnimReadyForAttack = false;
+    }
+
+    public bool IsMonsterReadyForAttack()
+    {
+        return monsterAnimReadyForAttack;
+    }
+
     #endregion
 
     #region Player Controller Reactions i.e. Leaping with attacks
@@ -1174,34 +1214,12 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipLeft()
     {
-        if (damageLocked)
+        if (damageLocked || !facingRight)
         {
             return;
         }
-        myAnimator.ResetTrigger("Flip to Left");
 
-        /*
-        if (focusedAttackActive == false)
-        {
-            myAnimator.SetFloat("Flipping Speed", 1.5f);
-            facingRight = false;
-            myAnimator.SetBool("Facing Right", facingRight);
-            myAnimator.SetTrigger("Flip to Left");
-            dashSplat.transform.localEulerAngles = leftDashSplatRotation;
-            if (wallSplat != null)
-            {
-                wallSplat.transform.localEulerAngles = leftDashSplatRotation;
-            }
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].facingRight = false;
-            }
-            forceEndEmote();
-            forceStopCrouch();
-            getOutOfLaunch();
-        }
-        */
-
+        myAnimator.ForceResetTriggers();
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         facingRight = false;
         myAnimator.SetBool("Facing Right", facingRight);
@@ -1222,35 +1240,12 @@ public class monsterAttackSystem : MonoBehaviour
 
     public void flipRight()
     {
-        if (damageLocked)
+        if (damageLocked || facingRight)
         {
             return;
         }
 
-        myAnimator.ResetTrigger("Flip to Right");
-
-        /*
-        if (focusedAttackActive == false)
-        {
-            myAnimator.SetFloat("Flipping Speed", 1.5f);
-            facingRight = true;
-            myAnimator.SetBool("Facing Right", facingRight);
-            myAnimator.SetTrigger("Flip to Right");
-            dashSplat.transform.localEulerAngles = rightDashSplatRotation;
-            if (wallSplat != null)
-            {
-                wallSplat.transform.localEulerAngles = rightDashSplatRotation;
-            }
-            for (int i = 0; i < allMonsterParts.Length; i++)
-            {
-                allMonsterParts[i].facingRight = true;
-            }
-            forceEndEmote();
-            forceStopCrouch();
-            getOutOfLaunch();
-        }
-        */
-
+        myAnimator.ForceResetTriggers();
         myAnimator.SetFloat("Flipping Speed", 1.5f);
         facingRight = true;
         myAnimator.SetBool("Facing Right", facingRight);

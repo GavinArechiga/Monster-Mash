@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab20298f47abfc4a9ba39411d2a94ff, type: 3}
+  m_Name: Arm9ProjectileConfig
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 2719429361632727320, guid: a60c705abae46894495c1c728b257aa4,
+    type: 3}
+  projectileSpeed: 20
+  projectileLifetime: 10
+  poolStartSize: 10
+  poolMaxSize: 100
+  preWarm: 1

@@ -41,18 +41,6 @@ public class monsterPartReference : MonoBehaviour
     public bool slowedStatusEffect;
     public bool grabbedStatusEffect;
 
-    // Runs in late update so that we rotate after the animation system finishes rotating the bone to avoid fighting which would cause very jittery movement
-    private void LateUpdate()
-    {
-        if (isHitbox)
-        {
-            if (partReference == null) { return; }
-            float rotationSpeed = 700f;
-            // Smooths out the rotation to lessen jitter even more
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, partReference.transform.rotation, Time.deltaTime * rotationSpeed);
-        }
-    }
-
     public void resetAttackHistory()
     {
         attackHistory.Clear();

@@ -6,10 +6,12 @@ public class BASPartButton : MonoBehaviour
 {
     public string monsterPartReference;
 
+    Animator anim;
+
     public bool isTorso;
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -26,6 +28,15 @@ public class BASPartButton : MonoBehaviour
         BuildAScareManager.instance.SpawnPart(isTorso, prefabRef);
     }    
 
+    public void PlayJostleAnim()
+    {
+        anim.SetLayerWeight(1, 1);
+        anim.SetTrigger("Jostle");
+    }
+    public void JostleAnimDone()
+    {
+        anim.SetLayerWeight(1, 0);
+    }
     public void CheckIndex()
     {
         //grid.CheckScrollPage(gameObject);

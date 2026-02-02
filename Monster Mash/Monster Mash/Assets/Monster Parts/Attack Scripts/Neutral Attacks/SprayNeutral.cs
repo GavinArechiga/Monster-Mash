@@ -1,13 +1,11 @@
 using System;
-
-[Serializable]
 public class SprayNeutral : NeutralAttack
 {
     public SprayNeutral()
     {
-        Attack = AttackType.Spray;
         DamageRange = DamageRange.Range3;
     }
+
     public override void PassDamage()
     {
         monsterPartVisualRef.neutralHitVFXManager.damage = Damage;

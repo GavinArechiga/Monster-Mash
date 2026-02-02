@@ -1851,7 +1851,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: cbcfd0ad1872fa74e975f39c7bbb0798, type: 2}
+  m_Motion: {fileID: 7400000, guid: 730c18075abc1dc43b642578b34667e0, type: 2}
   m_Tag: 
   m_SpeedParameter: Speed Modifier
   m_MirrorParameter: 
@@ -2892,7 +2892,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ea526fd0c50eb944992bfeadde5e4116, type: 2}
+  m_Motion: {fileID: 7400000, guid: e593e699c7db48148bd0957968cd308d, type: 2}
   m_Tag: 
   m_SpeedParameter: Speed Modifier
   m_MirrorParameter: 
@@ -3886,7 +3886,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
   - m_Name: Grounded Limb
     m_Type: 4

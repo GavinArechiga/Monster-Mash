@@ -13,8 +13,34 @@ public class MonsterPartSetupUtility : EditorWindow
 {
     private GameObject monsterPartPrefab;
     private MonsterPartType monsterPartType;
-    private NeutralAttack.AttackType neutralAttackType;
-    private HeavyAttack.HeavyAttackType heavyAttackType;
+
+    private enum NeutralAttackType
+    {
+        None,
+        Jab,
+        Slash,
+        Projectile,
+        Boomerang,
+        Spray
+    }
+
+    private enum HeavyAttackType
+    {
+        None,
+        Jab,
+        Slash,
+        Projectile,
+        Boomerang,
+        Spray,
+        Beam,
+        Grapple,
+        Reel,
+        Spinning
+    }
+
+    private NeutralAttackType neutralAttackType;
+    private HeavyAttackType heavyAttackType;
+
     private string newAnimControllerPath = "";
     private string newMonsterPartAnimationPath = "";
     private AnimatorController newAnimationController;
@@ -52,8 +78,8 @@ public class MonsterPartSetupUtility : EditorWindow
     );
 
         monsterPartType = (MonsterPartType)EditorGUILayout.EnumPopup("Monster Part Type", monsterPartType, GUILayout.Width(fieldWidth));
-        neutralAttackType = (NeutralAttack.AttackType)EditorGUILayout.EnumPopup("Neutral Attack Type", neutralAttackType, GUILayout.Width(fieldWidth));
-        heavyAttackType = (HeavyAttack.HeavyAttackType)EditorGUILayout.EnumPopup("Heavy Attack Type", heavyAttackType, GUILayout.Width(fieldWidth));
+        neutralAttackType = (NeutralAttackType)EditorGUILayout.EnumPopup("Neutral Attack Type", neutralAttackType, GUILayout.Width(fieldWidth));
+        heavyAttackType = (HeavyAttackType)EditorGUILayout.EnumPopup("Heavy Attack Type", heavyAttackType, GUILayout.Width(fieldWidth));
 
         GUILayout.Space(10);
 
@@ -351,10 +377,21 @@ public class MonsterPartSetupUtility : EditorWindow
             monsterPartPrefab.AddComponent<PartFlipped>();
         }
 
+       Type neutralClassType = AttackEnumToClassRef(neutralAttackType);
+       Type heavyClassType = AttackEnumToClassRef(heavyAttackType);
+
+        if (!monsterPartPrefab.TryGetComponent(neutralClassType, out _))
+        {
+            newMonsterPartScript.neutralAttack = (NeutralAttack)monsterPartPrefab.AddComponent(neutralClassType);
+        }
+
+        if (!monsterPartPrefab.TryGetComponent(heavyClassType, out _))
+        {
+            newMonsterPartScript.heavyAttack = (HeavyAttack)monsterPartPrefab.AddComponent(heavyClassType);
+        }
+
         monsterPartPrefab.tag = "Connection - Monster Part";
         newMonsterPartScript.PartType = monsterPartType;
-        newMonsterPartScript.neutralAttack.Attack = neutralAttackType;
-        newMonsterPartScript.heavyAttack.Attack = heavyAttackType;
 
 
         string partTypeName = monsterPartType.ToString();
@@ -417,22 +454,22 @@ public class MonsterPartSetupUtility : EditorWindow
         {
             switch ((neutralAttackType, heavyAttackType))
             {
-                case (NeutralAttack.AttackType.Jab, HeavyAttack.HeavyAttackType.Jab):
+                case (NeutralAttackType.Jab, HeavyAttackType.Jab):
                     monsterPartReference.isJabOrSlash = true;
                     break;
-                case (NeutralAttack.AttackType.Slash, HeavyAttack.HeavyAttackType.Slash):
+                case (NeutralAttackType.Slash, HeavyAttackType.Slash):
                     monsterPartReference.isJabOrSlash = true;
                     break;
-                case (NeutralAttack.AttackType.Projectile, HeavyAttack.HeavyAttackType.Projectile):
+                case (NeutralAttackType.Projectile, HeavyAttackType.Projectile):
                     monsterPartReference.isProjectile = true;
                     break;
-                case (NeutralAttack.AttackType.Boomerang, HeavyAttack.HeavyAttackType.Boomerang):
+                case (NeutralAttackType.Boomerang, HeavyAttackType.Boomerang):
                     monsterPartReference.isBoomerang = true;
                     break;
-                case (_, HeavyAttack.HeavyAttackType.Reel):
+                case (_, HeavyAttackType.Reel):
                     monsterPartReference.isReel = true;
                     break;
-                case (_, HeavyAttack.HeavyAttackType.Grapple):
+                case (_, HeavyAttackType.Grapple):
                     monsterPartReference.isGrapple = true;
                     break;
             }
@@ -500,7 +537,7 @@ public class MonsterPartSetupUtility : EditorWindow
 
         if (monsterPartType != MonsterPartType.Torso && monsterPartType != MonsterPartType.Head)
         {
-            if (neutralAttackType == NeutralAttack.AttackType.None || heavyAttackType == HeavyAttack.HeavyAttackType.None)
+            if (neutralAttackType == NeutralAttackType.None || heavyAttackType == HeavyAttackType.None)
             {
                 if (EditorUtility.DisplayDialog("Neutral or Heavy Attack Type Not Assigned",
                     "The neutral or heavy attack is not assigned. This is required for the setup utility to work unless the part is a head or torso.", "Okay"))
@@ -512,6 +549,37 @@ public class MonsterPartSetupUtility : EditorWindow
 
         return false;
     }
+
+    private Type AttackEnumToClassRef(NeutralAttackType neutralAttackType)
+    {
+        return neutralAttackType switch
+        {
+            NeutralAttackType.Jab => typeof(JabNeutral),
+            NeutralAttackType.Slash => typeof(SlashNeutral),
+            NeutralAttackType.Projectile => typeof(ProjectileNeutral),
+            NeutralAttackType.Boomerang => typeof(BoomerangNeutral),
+            NeutralAttackType.Spray => typeof(SprayNeutral),
+            _ => typeof(NeutralAttack),
+        };
+    }
+
+    private Type AttackEnumToClassRef(HeavyAttackType neutralAttackType)
+    {
+        return heavyAttackType switch
+        {
+            HeavyAttackType.Jab => typeof(JabHeavy),
+            HeavyAttackType.Slash => typeof(SlashHeavy),
+            HeavyAttackType.Projectile => typeof(ProjectileHeavy),
+            HeavyAttackType.Boomerang => typeof(BoomerangHeavy),
+            HeavyAttackType.Spray => typeof(SprayHeavy),
+            HeavyAttackType.Beam => typeof(BeamHeavy),
+            HeavyAttackType.Grapple => typeof(GrappleHeavy),
+            HeavyAttackType.Reel => typeof(ReelHeavy),
+            HeavyAttackType.Spinning => typeof(SpinningHeavy),
+            _ => typeof(HeavyAttack),
+        };
+    }
+
     #endregion
 }
 

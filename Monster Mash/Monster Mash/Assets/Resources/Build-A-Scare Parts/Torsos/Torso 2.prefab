@@ -161,7 +161,7 @@ Transform:
   - {fileID: 1125805048816857344}
   - {fileID: 8568112918325465883}
   m_Father: {fileID: 5942129194898037802}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &813946175262452706
 GameObject:
@@ -696,8 +696,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1125805048816857344}
   - component: {fileID: 5469775279515666991}
-  - component: {fileID: 5550239580838475825}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: shirt_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,20 +776,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000708038, y: 0.009132513, z: -0.00012190081}
     m_Extent: {x: 0.0052415924, y: 0.008385356, z: 0.0072737765}
   m_DirtyAABB: 0
---- !u!64 &5550239580838475825
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4330884652262506865}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3671112631119650016, guid: c8f39a17df967ff48bde66b0b16c0ec0, type: 3}
 --- !u!1 &4331212046851702557
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,14 +1095,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5634627324927654286}
-  m_LocalRotation: {x: -0.000000012370233, y: -0.9946015, z: 0.10376899, w: -0.000000118565765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.00031, y: 0.00001, z: -0.00312}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1082601379171258279}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &4277850712192974242
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1331,6 +1316,75 @@ Transform:
   m_Father: {fileID: 1670618508653328129}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6184032819884833135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 974440369323595926}
+  - component: {fileID: 1442341008119591494}
+  - component: {fileID: 8112586476617726193}
+  m_Layer: 0
+  m_Name: AttackHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &974440369323595926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184032819884833135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5942129194898037802}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1442341008119591494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184032819884833135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 775350f4aeaa45e4ca130a3b0e8bca10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 0
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
+--- !u!114 &8112586476617726193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184032819884833135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60afccfa524f2a54f9eb7b50916dc5fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 0
+  movementModifier:
+    <Left>k__BackingField: {x: 0, y: 0}
+    <Right>k__BackingField: {x: 0, y: 0}
+    <Up>k__BackingField: {x: 0, y: 0}
+    <Down>k__BackingField: {x: 0, y: 0}
 --- !u!1 &6430436209026156176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,7 +1399,6 @@ GameObject:
   - component: {fileID: 7788212659140940120}
   - component: {fileID: 876195578544997325}
   - component: {fileID: 7763864000314557646}
-  - component: {fileID: 8283456361743711714}
   m_Layer: 0
   m_Name: Torso 2
   m_TagString: Untagged
@@ -1365,6 +1418,7 @@ Transform:
   m_LocalScale: {x: 1.139664, y: 1.139664, z: 1.139664}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 974440369323595926}
   - {fileID: 700184197731920354}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -1424,8 +1478,7 @@ MonoBehaviour:
   squashedStatusEffect: 0
   slowedStatusEffect: 0
   grabbedStatusEffect: 0
-  neutralAttack:
-    rid: 1127518610339136102
+  neutralAttack: {fileID: 1442341008119591494}
   neutralCollider: {fileID: 0}
   neutralColliderReference: {fileID: 0}
   needsReloadNeutral: 0
@@ -1434,8 +1487,7 @@ MonoBehaviour:
   isReloadedHeavy: 1
   jabOrSlashLanded: 0
   neutralAttackHitAudioLibrary: []
-  heavyAttack:
-    rid: 1127518610339136103
+  heavyAttack: {fileID: 8112586476617726193}
   heavyCollider: {fileID: 0}
   heavyColliderReference: {fileID: 0}
   heavyMuzzle: {fileID: 0}
@@ -1474,29 +1526,6 @@ MonoBehaviour:
   reelAttackLanded: 0
   myIdleVFX: []
   referencesToIgnore: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 1127518610339136102
-      type: {class: NeutralAttack, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 0
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
-    - rid: 1127518610339136103
-      type: {class: HeavyAttack, ns: , asm: Assembly-CSharp}
-      data:
-        <Damage>k__BackingField: 0
-        movementModifier:
-          <Left>k__BackingField: {x: 0, y: 0}
-          <Right>k__BackingField: {x: 0, y: 0}
-          <Up>k__BackingField: {x: 0, y: 0}
-          <Down>k__BackingField: {x: 0, y: 0}
-        Attack: 0
 --- !u!114 &7788212659140940120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1612,30 +1641,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &8283456361743711714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6430436209026156176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c464bf34c1fd63648877a9e3369017b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  limbPoints:
-  - {fileID: 8814821492953871013}
-  - {fileID: 5465800031698391967}
-  - {fileID: 4056457683573214965}
-  - {fileID: 1256894086945287566}
-  - {fileID: 1220829879436322733}
-  - {fileID: 871392527565309560}
-  - {fileID: 8635182669953364821}
-  - {fileID: 6551583622842628295}
-  - {fileID: 6597005784059334170}
-  - {fileID: 1498161122570230261}
-  - {fileID: 8152508213909440219}
 --- !u!1 &6492372196700508632
 GameObject:
   m_ObjectHideFlags: 0
