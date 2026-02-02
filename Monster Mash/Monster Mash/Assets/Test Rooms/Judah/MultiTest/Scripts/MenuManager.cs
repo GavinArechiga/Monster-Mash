@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     //new instance of this script in each scene, PlayerSceneManager pulls vars from here. can add more as scene need complexity grows
+    //each scene with a menu nav should have a script on this same gameObject, referencing LoadScene() thru GetComponent<>
 
     public bool allowJoining = false;//assuming player 1 is present, allows more players to join. players 2, 3 and 4
 
@@ -11,35 +12,8 @@ public class MenuManager : MonoBehaviour
 
     public GameObject controllerForThisScene; //which action map should the players start in for this scene?
 
-    //can be called from UIButtons or maybe something else as needed
-    //for now, if in main screen we can use these
-    [SerializeField] private string nextScene;
-    public void LoadNextScene()
+    public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(nextScene);
-    }
-
-    public void StartMainMenu()
-    {
-        SceneManager.LoadScene("MainMenuMulti");
-    }
-    public void StartArcade()
-    {
-        SceneManager.LoadScene("Arcade");
-    }
-
-    public void StartGacha()
-    {
-        SceneManager.LoadScene("Gacha");
-    }
-
-    public void StartMainSettings()
-    {
-        SceneManager.LoadScene("MainSettings");
-    }
-
-    public void StartCombat()
-    {
-        SceneManager.LoadScene("CombatMulti");
+        SceneManager.LoadScene(sceneName);
     }
 }

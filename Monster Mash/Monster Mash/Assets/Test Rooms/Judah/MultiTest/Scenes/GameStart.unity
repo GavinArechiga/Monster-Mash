@@ -334,19 +334,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 545174891}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1088361799}
-        m_TargetAssemblyTypeName: UnityEngine.Component, UnityEngine
-        m_MethodName: SendMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &545174891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1088361800}
   - component: {fileID: 1088361799}
+  - component: {fileID: 1088361801}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -591,7 +580,6 @@ MonoBehaviour:
   - {fileID: 532659249}
   controllerForThisScene: {fileID: 8722378828708286347, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
     type: 3}
-  nextScene: MainMenuMulti
 --- !u!4 &1088361800
 Transform:
   m_ObjectHideFlags: 0
@@ -607,6 +595,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1088361801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088361798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b24ba8d106a56441af08df80d62f904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1261708390
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,8 +1396,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1088361799}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+      - m_Target: {fileID: 1088361801}
+        m_TargetAssemblyTypeName: GameStartMenu, Assembly-CSharp
         m_MethodName: StartMainMenu
         m_Mode: 1
         m_Arguments:
