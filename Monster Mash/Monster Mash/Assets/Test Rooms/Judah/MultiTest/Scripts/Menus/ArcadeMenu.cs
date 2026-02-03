@@ -10,7 +10,7 @@ public class ArcadeMenu : MonoBehaviour
         manager = GetComponent<MenuManager>();
     }
 
-    public void StartMainMenu()
+    public void StartMainMenu(int i)
     {
         manager.LoadScene("MainMenu");
     }
