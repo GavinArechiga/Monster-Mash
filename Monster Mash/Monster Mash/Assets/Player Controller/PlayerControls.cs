@@ -780,7 +780,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""3cdc195f-374b-492e-b773-50b25549cc67"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap(duration=0.3),Hold(duration=0.31)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -789,7 +789,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""0a25f797-3bf3-4573-b7e0-963dc732dc10"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap(duration=0.3),Hold(duration=0.31)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -798,7 +798,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""a7810095-ed16-4c5c-a33d-f05b0488cf7d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap(duration=0.3),Hold(duration=0.31)"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -919,7 +919,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""AllGamepads"",
                     ""action"": ""A"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -930,7 +930,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""AllGamepads"",
                     ""action"": ""B"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -941,7 +941,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""AllGamepads"",
                     ""action"": ""X"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -952,7 +952,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""AllGamepads"",
                     ""action"": ""Y"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

@@ -13,14 +13,52 @@ public class CombatButtonActionCommand : ICombatActionCommand
 {
     private AttackButtons _attackButton;
 
-    public CombatButtonActionCommand(AttackButtons attackButton)
+    private CombatMonster _combatMonster;
+
+    public CombatButtonActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
         _attackButton = attackButton;
+        _combatMonster = combatMonster;
     }
 
     public void ExecuteAction()
     {
         //Take in Player Button and Execute Corresponding Attack
+        _combatMonster.MonsterPartAttack(_attackButton);
+    }
+}
+
+public class HeavyStartActionCommand : ICombatActionCommand
+{
+    private AttackButtons _attackButton;
+
+    private CombatMonster _combatMonster;
+
+    public HeavyStartActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
+    {
+        _attackButton = attackButton;
+        _combatMonster = combatMonster;
+    }
+    public void ExecuteAction()
+    {
+        _combatMonster.HeavyAttackCharge(_attackButton);
+    }
+}
+
+public class HeavyReleaseActionCommand : ICombatActionCommand
+{
+    private AttackButtons _attackButton;
+
+    private CombatMonster _combatMonster;
+
+    public HeavyReleaseActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
+    {
+        _attackButton = attackButton;
+        _combatMonster = combatMonster;
+    }
+    public void ExecuteAction()
+    {
+        _combatMonster.HeavyAttackRelease(_attackButton);
     }
 }
 

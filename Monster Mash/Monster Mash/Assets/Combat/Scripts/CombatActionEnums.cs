@@ -2,7 +2,7 @@ public enum AttackButtons
 {
     BttnEast,
     BttnWest,
-    BeenNorth,
+    BttnNorth,
     RBumber,
     LBumper,
     RTrigger,
