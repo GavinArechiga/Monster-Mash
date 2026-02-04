@@ -10,7 +10,6 @@ public class PlayerJoinManager : MonoBehaviour
     private PlayerManager manager;
 
     public GameObject playerPrefab;           // Assign Player prefab
-    public Transform[] spawnPoints;       // Where players appear
     public int maxPlayers = 4; //this is a 4 player game 
 
     private bool firstPlayerHasJoined = false; //player 1 is handled differently and spawned in manually. if needed, we can change this but it made menu nav easier
@@ -45,7 +44,7 @@ public class PlayerJoinManager : MonoBehaviour
     }
     private void SpawnFirstPlayer() //manually spawn PLAYER UNO. Makes player 1 god of the menu navigation
     {
-        GameObject newPlayer = Instantiate(playerPrefab, spawnPoints[0].position, Quaternion.identity);
+        GameObject newPlayer = Instantiate(playerPrefab);
         DontDestroyOnLoad(newPlayer);
 
         PlayerInput playerInput = newPlayer.GetComponent<PlayerInput>();
