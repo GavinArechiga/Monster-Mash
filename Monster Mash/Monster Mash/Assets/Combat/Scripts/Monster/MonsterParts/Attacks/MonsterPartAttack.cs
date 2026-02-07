@@ -4,7 +4,5 @@ using UnityEngine;
 
 public class MonsterPartAttack : MonoBehaviour
 {
-    public bool isHeavy;
-
     public int damage;
 }

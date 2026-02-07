@@ -7,14 +7,14 @@ using UnityEngine.InputSystem;
 public class CombatActionController : MonoBehaviour
 {
     private PlayerInput _playerInput;
-    private CombatActionInvoker _actionInvoker;
+    private CombatInputBuffer _inputBuffer;
 
     private CombatMonster _combatMonster;
    
-    public void Initialize(PlayerInput playerInput, CombatActionInvoker actionInvoker, CombatMonster combatMonster)
+    public void Initialize(PlayerInput playerInput, CombatInputBuffer inputBuffer ,CombatMonster combatMonster)
     {
         _playerInput = playerInput;
-        _actionInvoker = actionInvoker;
+        _inputBuffer = inputBuffer;
         _combatMonster = combatMonster;
         SubscribeActions();
     }
@@ -99,6 +99,7 @@ public class CombatActionController : MonoBehaviour
 
     void ExecuteActionCommand(ICombatActionCommand command)
     {
-        _actionInvoker.ExecuteCommand(command);
+        //_actionInvoker.ExecuteCommand(command);
+        _inputBuffer.BufferCombatInput(command);
     }
 }

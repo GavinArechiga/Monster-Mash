@@ -1,15 +1,24 @@
 
+public class BaseActionCommand
+{
+    public int actionPriority;
+}
+
 //These are the Concrete Command implementations of the ICombatActionCommand Interface
 //The Commands for Attacking and Taunting impliment a enum that corresponds to the button that was pressed
-public class SouthButtonActionCommand : ICombatActionCommand
+public class SouthButtonActionCommand : BaseActionCommand, ICombatActionCommand
 {
+    public SouthButtonActionCommand()
+    {
+        actionPriority = 1;
+    }
     public void ExecuteAction()
     {
         // Player Jump
     }
 }
 
-public class CombatButtonActionCommand : ICombatActionCommand
+public class CombatButtonActionCommand : BaseActionCommand, ICombatActionCommand
 {
     private AttackButtons _attackButton;
 
@@ -17,6 +26,7 @@ public class CombatButtonActionCommand : ICombatActionCommand
 
     public CombatButtonActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
+        actionPriority = 2;
         _attackButton = attackButton;
         _combatMonster = combatMonster;
     }
@@ -28,7 +38,7 @@ public class CombatButtonActionCommand : ICombatActionCommand
     }
 }
 
-public class HeavyStartActionCommand : ICombatActionCommand
+public class HeavyStartActionCommand : BaseActionCommand, ICombatActionCommand
 {
     private AttackButtons _attackButton;
 
@@ -36,6 +46,7 @@ public class HeavyStartActionCommand : ICombatActionCommand
 
     public HeavyStartActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
+        actionPriority = 3;
         _attackButton = attackButton;
         _combatMonster = combatMonster;
     }
@@ -45,7 +56,7 @@ public class HeavyStartActionCommand : ICombatActionCommand
     }
 }
 
-public class HeavyReleaseActionCommand : ICombatActionCommand
+public class HeavyReleaseActionCommand : BaseActionCommand, ICombatActionCommand
 {
     private AttackButtons _attackButton;
 
@@ -53,6 +64,7 @@ public class HeavyReleaseActionCommand : ICombatActionCommand
 
     public HeavyReleaseActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
+        actionPriority = 3;
         _attackButton = attackButton;
         _combatMonster = combatMonster;
     }
@@ -62,12 +74,13 @@ public class HeavyReleaseActionCommand : ICombatActionCommand
     }
 }
 
-public class TauntButtonActionCommand : ICombatActionCommand
+public class TauntButtonActionCommand : BaseActionCommand, ICombatActionCommand
 {
     private TauntButtons _tauntButton;
 
     public TauntButtonActionCommand(TauntButtons tauntButton)
     {
+        actionPriority = 0;
         _tauntButton = tauntButton;
     }
     public void ExecuteAction()

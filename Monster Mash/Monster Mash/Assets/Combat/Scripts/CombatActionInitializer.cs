@@ -10,19 +10,27 @@ public class CombatActionInitializer : MonoBehaviour
     [SerializeField]
     private CombatActionController combatActionController;
 
-    //Later On We can replace this
-    [SerializeField]
-    PlayerInput playerInput;
 
-    [SerializeField]
-    CombatMonster combatMonster;
+    CombatInputBuffer _combatInputBuffer;
+
+    
+    PlayerInput _playerInput;
+
+    CombatMonster _combatMonster;
 
     private CombatActionInvoker actionInvoker;
-
-    private void Awake()
+    private PlayerCombatManager _combatManager;
+    public void InitializeCombat(PlayerInput playerInput, PlayerCombatManager combatManager, 
+        CombatInputBuffer combatInputBuffer, 
+        CombatMonster combatMonster)
     {
+        _playerInput = playerInput;
+        _combatManager = combatManager;
+        _combatInputBuffer = combatInputBuffer;
+        _combatMonster = combatMonster;
+
         InitializeActionInvoker();
-        InitializeCombat();
+        InitializeCombatScripts();
     }
 
     void InitializeActionInvoker()
@@ -30,8 +38,9 @@ public class CombatActionInitializer : MonoBehaviour
         actionInvoker = new CombatActionInvoker();
     }
 
-    void InitializeCombat()
+    void InitializeCombatScripts()
     {
-        combatActionController.Initialize(playerInput, actionInvoker, combatMonster);
+        _combatInputBuffer.InitializeCombatBuffer(actionInvoker, _combatMonster ,_combatManager);
+        combatActionController.Initialize(_playerInput, _combatInputBuffer, _combatMonster);
     }
 }
