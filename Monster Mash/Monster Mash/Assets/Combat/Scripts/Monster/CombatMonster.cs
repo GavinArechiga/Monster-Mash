@@ -4,14 +4,24 @@ using UnityEngine;
 
 public class CombatMonster : MonoBehaviour
 {
+    PlayerCombatManager _playerCombatManager;
     [SerializeField] List<AttackButtons> pressedButton;
     [SerializeField] List<CombatMonsterPart> monsterPart;
 
     Dictionary<AttackButtons, CombatMonsterPart> monsterData;
 
-    private void Awake()
+    AttackButtons _currentAttack = AttackButtons.None;
+    float _maxChargeTime;
+    float heavyMultiplier = 1;
+    float timer = 0;
+    bool isCharging;
+
+    public void InitializeMonster(PlayerCombatManager playerCombatManager)
     {
+        _playerCombatManager = playerCombatManager;
         InitializeMonsterParts();
+
+        _playerCombatManager.SetPlayerState(PlayerState.Idle);
     }
 
     void InitializeMonsterParts()
@@ -21,6 +31,8 @@ public class CombatMonster : MonoBehaviour
         for (int i = 0; i < pressedButton.Count; i++)
         {
             monsterData.Add(pressedButton[i], monsterPart[i]);
+
+            monsterPart[i].InitializeMonsterPart(_playerCombatManager);
         }
     }
 
@@ -29,7 +41,14 @@ public class CombatMonster : MonoBehaviour
 
         if (monsterData.ContainsKey(attack))
         {
-            monsterData[attack].NeutralAttack();
+            if(!monsterData[attack].CheckedDisabled())
+            {
+                monsterData[attack].NeutralAttack();
+
+                _currentAttack = attack;
+
+                _playerCombatManager.SetPlayerState(PlayerState.Attacking);
+            }
         }
 
         else
@@ -43,7 +62,14 @@ public class CombatMonster : MonoBehaviour
     {
         if (monsterData.ContainsKey(attack))
         {
-            print("Charging!!!");
+            if(!monsterData[attack].CheckedDisabled())
+            {
+                print("Charging!!!");
+
+                StartChargeTimer(attack);
+
+                _playerCombatManager.SetPlayerState(PlayerState.Charging);
+            }
         }
 
         else
@@ -56,7 +82,17 @@ public class CombatMonster : MonoBehaviour
     {
         if (monsterData.ContainsKey(attack))
         {
-            monsterData[attack].HeavyAttack();
+            if (!monsterData[attack].CheckedDisabled())
+            {
+                if (isCharging)
+                {
+                    StopChargeTimer();
+
+                    monsterData[attack].HeavyAttackRelease(heavyMultiplier);
+
+                    _playerCombatManager.SetPlayerState(PlayerState.Attacking);
+                }
+            }
         }
 
         else
@@ -64,4 +100,86 @@ public class CombatMonster : MonoBehaviour
             print("Part Not Found");
         }
     }
+
+    public AnimatorClipInfo[] ReturnAttackAnimationClip()
+    {
+        if(monsterData.ContainsKey(_currentAttack))
+        {
+            return monsterData[_currentAttack].ReturnCurrentAnimationClip();
+        }
+
+        else
+        {
+            return new AnimatorClipInfo[1];
+        }
+    }
+
+    public AnimatorStateInfo ReturnAnimatorStateInfo()
+    {
+        if(monsterData.ContainsKey(_currentAttack))
+        {
+            return monsterData[_currentAttack].ReturnAnimatorStateInfo();
+        }
+
+        else
+        {
+            return new AnimatorStateInfo();
+        }
+    }
+
+    #region Heavy Charge Logic
+
+    void StartChargeTimer(AttackButtons attack)
+    {
+        isCharging = true;
+
+        _currentAttack = attack;
+
+        _maxChargeTime = monsterData[attack].maxChargeTime;
+
+        heavyMultiplier = 1;
+
+        monsterData[attack].HeavyAttackStart();
+
+        StartCoroutine(ChargeTimer());
+    }
+
+    IEnumerator ChargeTimer()
+    {
+        timer = 0;
+
+        while(timer <= _maxChargeTime && isCharging)
+        {
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        if(isCharging)
+        {
+            HeavyAttackRelease(_currentAttack);
+        }
+    }
+
+    void StopChargeTimer()
+    {
+        CalculateHeavyMultiplier();
+
+        isCharging = false;
+
+        _maxChargeTime = 0;
+    }
+
+    void CalculateHeavyMultiplier()
+    {
+        timer = Mathf.Clamp(timer, 0, _maxChargeTime);
+
+        heavyMultiplier = (1 + (timer / _maxChargeTime));
+
+        heavyMultiplier = (Mathf.Floor(heavyMultiplier*10)/10);
+
+        heavyMultiplier = Mathf.Clamp(heavyMultiplier, 0, 2);
+    }
+
+    #endregion
 }

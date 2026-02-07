@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class JabAttack : MonsterPartAttack, IMonsterAttack
 {
-    public void ExecuteAttack()
+    public void ExecuteNeutralAttack(Animator partAnim)
     {
-        print("JAB JAB JAB! " + damage + " " + isHeavy);
+        partAnim.SetTrigger(MonsterPartAnimTrigger.n_Attk.ToString());
+        print("NEUTRAL JAB JAB JAB! " + (damage));
+    }
+    public void ExecuteHeavyAttack(float multiplier, Animator partAnim)
+    {
+        partAnim.SetTrigger(MonsterPartAnimTrigger.release.ToString());
+        print("HEAVY JAB JAB JAB! " + (damage * multiplier));
     }
 }

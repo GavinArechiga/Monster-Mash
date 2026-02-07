@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IMonsterAttack
 {
-    void ExecuteAttack();
+
+    void ExecuteNeutralAttack(Animator partAnim);
+    void ExecuteHeavyAttack(float multiplier, Animator partAnim);
 }

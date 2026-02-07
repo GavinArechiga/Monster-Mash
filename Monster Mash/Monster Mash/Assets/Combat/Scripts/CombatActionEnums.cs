@@ -6,7 +6,8 @@ public enum AttackButtons
     RBumber,
     LBumper,
     RTrigger,
-    LTrigger
+    LTrigger,
+    None
 }
 
 public enum TauntButtons
@@ -15,4 +16,14 @@ public enum TauntButtons
     Down,
     Left,
     Right
+}
+
+public enum PlayerState
+{
+    Idle,
+    Moving,
+    Attacking,
+    Charging,
+    Hit,
+    Disabled
 }

@@ -9,3 +9,16 @@ public enum MonsterPartLimb
     Tail,
     Decor
 }
+
+public enum MonsterPartAnimTrigger
+{
+    n_Attk,
+    h_Attk,
+    release
+}
+
+public enum MonsterPartAnimStateTags
+{
+    attack,
+    hit
+}
