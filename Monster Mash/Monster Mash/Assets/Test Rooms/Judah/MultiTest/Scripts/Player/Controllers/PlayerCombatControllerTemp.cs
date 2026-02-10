@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class CombatControllerTemp : MonoBehaviour, IPlayerController
+public class PlayerCombatControllerTemp : MonoBehaviour, IPlayerController
 {
     [SerializeField] private float moveSpeed = 5f;
     private Vector2 moveInput;

@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
             var controllerType = controllerPrefab.GetComponent<IPlayerController>().GetType();
             var existingController = currentControllers.Find(c => c.GetComponent(controllerType) != null);
 
-            if (existingController != null)
+            if (existingController != null)//if an existing prefab is passed in, it is setactive so there cant be duplicates
             {
                 existingController.GetComponent<IPlayerController>().ActivateController();
 

@@ -1,7 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuManager : MonoBehaviour
+public class SceneController : MonoBehaviour
 {
     public bool allowJoining = false;//assuming player 1 is present, allows more players to join. players 2, 3 and 4
 

@@ -2,13 +2,22 @@
     "name": "TestControls",
     "maps": [
         {
-            "name": "Start",
+            "name": "Cutscene",
             "id": "675b051c-67de-436f-af6a-21c0a479e5c1",
             "actions": [
                 {
-                    "name": "Start",
+                    "name": "Any",
                     "type": "Button",
                     "id": "e77a4c2b-790b-4e64-bd62-c5ac24cd6eae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skip",
+                    "type": "Button",
+                    "id": "1146cc92-40ff-42c9-be1b-2f99b5c32cc0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -23,7 +32,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Start",
+                    "action": "Any",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "35d6690c-0dbe-44fc-b346-4164d4d43197",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

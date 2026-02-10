@@ -50,7 +50,7 @@ public class PauseManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        manager.Controller.DestroyAllControllersOfType<UIControllerTemp>(); //destroys only UI controllers, assuming all players have a combat controller
+        manager.Controller.DestroyAllControllersOfType<PlayerUIController>(); //destroys only UI controllers, assuming all players have a combat controller
                                                                             //if this scales poorly, just make a new Action Map just for pause menu and then it'll work again.
         manager.Controller.SwitchAllControllers(manager.Scene.sceneInfo.controllerForThisScene);
     }

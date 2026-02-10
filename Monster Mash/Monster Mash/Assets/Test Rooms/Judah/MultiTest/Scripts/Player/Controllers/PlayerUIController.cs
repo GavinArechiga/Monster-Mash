@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class UIControllerTemp : MonoBehaviour, IPlayerController
+public class PlayerUIController : MonoBehaviour, IPlayerController
 {
     PlayerInput playerInput;
 

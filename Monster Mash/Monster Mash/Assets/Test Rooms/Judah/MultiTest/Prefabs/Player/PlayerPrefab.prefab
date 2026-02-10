@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 586f755d22d78804ca84fa77dcad0f86,
     type: 3}
-  m_NotificationBehavior: 1
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -75,9 +75,25 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 5d69e301-7a89-4889-9296-eb9244e6294f
     m_ActionName: Combat/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1146cc92-40ff-42c9-be1b-2f99b5c32cc0
+    m_ActionName: Cutscene/Skip[/XInputControllerWindows/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7f8b46e3-941c-46d3-84db-75f4e8269adf
+    m_ActionName: UI/Cancel[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5141da10-f199-4fe4-891e-6ac31e4f2d9d
+    m_ActionName: UI/Pause[/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1a2dae5e-4a7c-45cf-b79f-b9138ebd9720
+    m_ActionName: Combat/Pause[/XInputControllerWindows/start]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Gamepad
-  m_DefaultActionMap: Start
+  m_DefaultActionMap: Cutscene
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &-8066616305714301204
@@ -92,10 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b448b2250309242b3fda5360f1b9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentController: {fileID: 0}
   spawn: {fileID: 1563735375061449645}
-  playerInput: {fileID: 3394038947550605583}
-  combatControllerPrefab: {fileID: 5824897759677644786, guid: 91dacca390bf98c4b84ce6cb8767bc65,
-    type: 3}
-  uiControllerPrefab: {fileID: 8722378828708286347, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
-    type: 3}

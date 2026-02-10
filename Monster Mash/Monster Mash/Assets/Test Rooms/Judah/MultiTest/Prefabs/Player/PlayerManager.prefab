@@ -107,11 +107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8722378828708286347, guid: 811e0b89d284950478d2f75c45ab10b4,
     type: 3}
-  spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   maxPlayers: 4
 --- !u!114 &4606871972402784617
 MonoBehaviour:
@@ -140,4 +135,6 @@ MonoBehaviour:
   uiController: {fileID: 8722378828708286347, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
     type: 3}
   combatController: {fileID: 5824897759677644786, guid: 91dacca390bf98c4b84ce6cb8767bc65,
+    type: 3}
+  cutsceneController: {fileID: 47607940771883431, guid: 701fd9b551ad3574698a08600a83189f,
     type: 3}

@@ -10,6 +10,7 @@ public class PlayerControllerManager : MonoBehaviour
     //all actionMap controller prefabs are listed below, as of now there are only 2//////////////
     public GameObject uiController;
     public GameObject combatController;
+    public GameObject cutsceneController;
     ///////////////////////////
 
     private PlayerManager manager;
