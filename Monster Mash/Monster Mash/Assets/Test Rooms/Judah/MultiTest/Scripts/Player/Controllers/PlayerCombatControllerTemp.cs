@@ -8,18 +8,6 @@ public class PlayerCombatControllerTemp : MonoBehaviour, IPlayerController
     PlayerInput playerInput;
 
     private bool isActive = true;
-
-    private void Awake()
-    {
-        isActive = true;
-    }
-    private void Start()
-    {
-        playerInput = GetComponentInParent<PlayerInput>();
-        playerInput.SwitchCurrentActionMap("Combat");
-
-        Debug.Log(playerInput.currentActionMap);
-    }
     void Update()
     {
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
@@ -30,26 +18,35 @@ public class PlayerCombatControllerTemp : MonoBehaviour, IPlayerController
         return "Combat";
     }
 
+    #region (De)ActivateController
     public void ActivateController()
     {
+        playerInput = GetComponentInParent<PlayerInput>();
         playerInput.SwitchCurrentActionMap("Combat");
         isActive = true;
+
+        playerInput.actions["Move"].performed += OnMove;
+        playerInput.actions["Pause"].performed += OnPause;
     }
 
     public void DeactivateController()
     {
         isActive = false;
-    }
 
-    #region input actions called from PlayerInput
-    public void OnMove(InputValue value)
+        playerInput.actions["Move"].performed -= OnMove;
+        playerInput.actions["Pause"].performed -= OnPause;
+    }
+    #endregion
+
+    #region input actions
+    public void OnMove(InputAction.CallbackContext context)
     {
         if (!isActive) return;
 
-        moveInput = value.Get<Vector2>();
+        moveInput = context.ReadValue<Vector2>();
     }
 
-    public void OnPause()
+    public void OnPause(InputAction.CallbackContext context)
     {
         if (!isActive) return;
 

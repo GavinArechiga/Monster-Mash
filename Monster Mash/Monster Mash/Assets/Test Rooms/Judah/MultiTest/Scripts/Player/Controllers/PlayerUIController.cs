@@ -14,40 +14,33 @@ public class PlayerUIController : MonoBehaviour, IPlayerController
 
     private bool isActive = true;
 
-    private void Awake()
-    {
-        isActive = true;
-    }
-
-    // Start is called before the first frame update
-    void Start()
+    #region (De)ActivateController
+    public void ActivateController()
     {
         playerInput = GetComponentInParent<PlayerInput>();
         playerInput.SwitchCurrentActionMap("UI");
-    }
-
-    public void ActivateController()
-    {
-        playerInput.SwitchCurrentActionMap("UI");
         isActive = true;
+
+        playerInput.actions["Pause"].performed += OnPause;
+        playerInput.actions["Navigate"].performed += OnNavigate;
     }
 
     public void DeactivateController()
     {
         isActive = false;
-    }
-    public void Click()
-    {
-        Debug.Log("I PUSHED THE BUTTON HAHAHA");
-    }
 
-    #region input actions called from PlayerInput
-    public void OnNavigate()
+        playerInput.actions["Pause"].performed -= OnPause;
+        playerInput.actions["Navigate"].performed -= OnNavigate;
+    }
+    #endregion
+
+    #region input actions
+    public void OnNavigate(InputAction.CallbackContext context)
     {
         if (!isActive) return;
     }
 
-    public void OnPause()
+    public void OnPause(InputAction.CallbackContext context)
     {
         if (!isActive) return;
 

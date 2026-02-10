@@ -6,7 +6,7 @@
             "id": "675b051c-67de-436f-af6a-21c0a479e5c1",
             "actions": [
                 {
-                    "name": "Any",
+                    "name": "AnyButton",
                     "type": "Button",
                     "id": "e77a4c2b-790b-4e64-bd62-c5ac24cd6eae",
                     "expectedControlType": "Button",
@@ -31,8 +31,8 @@
                     "path": "<Gamepad>/*",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Any",
+                    "groups": "Gamepad",
+                    "action": "AnyButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -42,7 +42,7 @@
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "Skip",
                     "isComposite": false,
                     "isPartOfComposite": false

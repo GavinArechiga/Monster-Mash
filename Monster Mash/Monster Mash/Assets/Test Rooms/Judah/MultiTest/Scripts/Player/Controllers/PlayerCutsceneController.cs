@@ -17,11 +17,6 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
     // Start is called before the first frame update
     void Start()
     {
-        playerInput = GetComponentInParent<PlayerInput>();
-        playerInput.SwitchCurrentActionMap("Cutscene");
-
-        Debug.Log(playerInput.currentActionMap);
-
         manager = FindObjectOfType<CutsceneManager>();
 
         skipText = GameObject.Find("SkipText").GetComponent<TMP_Text>();
@@ -32,27 +27,6 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
         skipText.gameObject.SetActive(false);
     }
 
-    public void OnAny(/*InputAction.CallbackContext context*/)
-    {
-        if (!hasShownPrompt)
-        {
-            //var gamepad = context.control.device as Gamepad;
-            //string button = gamepad.buttonNorth.displayName;
-
-            string button = "button";
-
-            StartSkipText(button);
-        }
-    }
-
-    private void OnSkip()
-    {
-        if (hasShownPrompt)
-        {
-            manager.LoadScene();
-        }
-    }
-
     private void StartSkipText(string button)
     {
         hasShownPrompt = true;
@@ -61,19 +35,45 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
         skipText.gameObject.SetActive(true);
     }
 
-    private void Skip()
-    {
-
-    }
-
+    #region (De)Activate Controller
     public void ActivateController()
     {
+        playerInput = GetComponentInParent<PlayerInput>();
         playerInput.SwitchCurrentActionMap("Cutscene");
         isActive = true;
+
+        playerInput.actions["AnyButton"].performed += OnAnyButton;
+        playerInput.actions["Skip"].performed += OnSkip;
     }
 
     public void DeactivateController()
     {
         isActive = false;
+
+        playerInput.actions["AnyButton"].performed -= OnAnyButton;
+        playerInput.actions["Skip"].performed -= OnSkip;
     }
+    #endregion
+
+    #region Input Actions
+    public void OnAnyButton(InputAction.CallbackContext context)
+    {
+        if (!hasShownPrompt)
+        {
+            var gamepad = context.control.device as Gamepad;
+            string button = gamepad.buttonNorth.displayName;
+
+            StartSkipText(button);
+        }
+    }
+
+    private void OnSkip(InputAction.CallbackContext context)
+    {
+        if (hasShownPrompt)
+        {
+            manager.LoadScene();
+        }
+    }
+
+    #endregion
 }

@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         GameObject currentController = Instantiate(controllerPrefab, spawn);
         currentControllers.Add(currentController);
         DeactivateAllExcept(currentController);
+        IP_Activate(currentController);
     }
 
     public void DestroyControllerOfType<T>() where T : IPlayerController
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour
         {
             if (currentControllers[i].GetComponent<T>() != null)
             {
+                IP_Deactivate(currentControllers[i]);
                 Destroy(currentControllers[i]);
                 currentControllers.RemoveAt(i);
             }
@@ -50,6 +52,7 @@ public class Player : MonoBehaviour
     {
         for (int i = currentControllers.Count - 1; i >= 0; i--) //loop backwards for List stuff
         {
+            IP_Deactivate(currentControllers[i]);
             Destroy(currentControllers[i]);
             currentControllers.RemoveAt(i);
         }
@@ -61,8 +64,19 @@ public class Player : MonoBehaviour
         {
             if (currentControllers[i] != activeController)
             {
-                currentControllers[i].GetComponent<IPlayerController>().DeactivateController();
+                IP_Deactivate(currentControllers[i]);
             }
         }
+    }
+
+    //Activate and Deactivate Controller responsible for all action subscription inside controller scripts
+    private void IP_Deactivate(GameObject iPlayer)
+    {
+        iPlayer.GetComponent<IPlayerController>().DeactivateController();
+    }
+
+    private void IP_Activate(GameObject iPlayer)
+    {
+        iPlayer.GetComponent<IPlayerController>().ActivateController();
     }
 }
