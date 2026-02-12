@@ -71,13 +71,27 @@ public class CombatInputBuffer : MonoBehaviour
         {
             //Release Buffer Code
 
-            ICombatActionCommand bufferedAction = bufferInputs.Pop();
+            ICombatActionCommand[] bufferArray = bufferInputs.ToArray();
+
+            foreach(ICombatActionCommand stackAction in bufferArray)
+            {
+                BaseActionCommand actionBase = stackAction as BaseActionCommand;
+
+                if(actionBase.GetActionPriority() == highestActionPriority)
+                {
+                    print("Executing");
+
+                    ExecuteActionCommand(stackAction);
+
+                    CheckForHeavyReleaseBuffer(stackAction, bufferArray);
+
+                    break;
+                }
+            }
 
             bufferInputs.Clear();
 
             highestActionPriority = 0;
-
-            ExecuteActionCommand(bufferedAction);
         }
 
         else
@@ -89,6 +103,16 @@ public class CombatInputBuffer : MonoBehaviour
 
     void DetermineAttackBuffer(ICombatActionCommand command)
     {
+        if(command is BaseAttackCommand)
+        {
+            BaseAttackCommand attackProperties = command as BaseAttackCommand;
+
+            if(!_combatMonster.CheckPartEnabledStatus(attackProperties.GetAttackButton()))
+            {
+                return;
+            }
+        }
+
         AnimatorClipInfo[] attackAnim = _combatMonster.ReturnAttackAnimationClip();
 
         AnimatorStateInfo animState = _combatMonster.ReturnAnimatorStateInfo();
@@ -114,14 +138,12 @@ public class CombatInputBuffer : MonoBehaviour
         {
             BaseActionCommand actionCommand = (BaseActionCommand)command;
 
-            if(actionCommand.actionPriority > highestActionPriority)
+            if(actionCommand.GetActionPriority() > highestActionPriority)
             {
-                highestActionPriority = actionCommand.actionPriority;
+                highestActionPriority = actionCommand.GetActionPriority();
             }
 
             bufferInputs.Push(command);
-
-            print(bufferInputs.Count);
         }
     }
 
@@ -135,6 +157,22 @@ public class CombatInputBuffer : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    void CheckForHeavyReleaseBuffer(ICombatActionCommand command, ICombatActionCommand[] inputs)
+    {
+        if(command is HeavyStartActionCommand)
+        {
+            foreach(ICombatActionCommand bufferCommand in inputs)
+            {
+                if(bufferCommand is HeavyReleaseActionCommand)
+                {
+                    ExecuteActionCommand(bufferCommand);
+
+                    break;
+                }
+            }
         }
     }
 

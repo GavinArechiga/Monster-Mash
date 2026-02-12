@@ -1,5 +1,6 @@
 public enum AttackButtons
 {
+    None,
     BttnEast,
     BttnWest,
     BttnNorth,
@@ -7,11 +8,11 @@ public enum AttackButtons
     LBumper,
     RTrigger,
     LTrigger,
-    None
 }
 
 public enum TauntButtons
 {
+    None,
     Up,
     Down,
     Left,
@@ -20,10 +21,10 @@ public enum TauntButtons
 
 public enum PlayerState
 {
+    Disabled,
     Idle,
     Moving,
     Attacking,
     Charging,
     Hit,
-    Disabled
 }

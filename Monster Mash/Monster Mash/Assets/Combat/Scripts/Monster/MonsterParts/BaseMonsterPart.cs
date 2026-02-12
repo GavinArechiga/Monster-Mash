@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BaseMonsterPart : MonoBehaviour
 {
-    [SerializeField] MonsterPartLimb partLimbType;
-    void Start()
-    {
-        
-    }
+    [SerializeField] protected MonsterPartLimb partLimbType;
 
-    // Update is called once per frame
-    void Update()
+    //Temp Should Probably Move Part Animation Control To Its Own Script
+    //Though it may be best practice to use this Combat Monster Part Script as the Initializer for the animator
+    [SerializeField] protected Animator partAnim;
+
+    public virtual void InitializeMonsterPart()
     {
-        
+        //Some Decor Pieces Might Use This for Something
     }
 }

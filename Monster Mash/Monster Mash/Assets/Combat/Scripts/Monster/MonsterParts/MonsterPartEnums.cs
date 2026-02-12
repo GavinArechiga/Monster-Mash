@@ -1,5 +1,7 @@
 public enum MonsterPartLimb
 {
+    None,
+    Torso,
     Head,
     Arm,
     Leg,

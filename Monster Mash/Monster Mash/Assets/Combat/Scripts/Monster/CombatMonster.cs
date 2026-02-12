@@ -6,11 +6,17 @@ public class CombatMonster : MonoBehaviour
 {
     PlayerCombatManager _playerCombatManager;
     [SerializeField] List<AttackButtons> pressedButton;
-    [SerializeField] List<CombatMonsterPart> monsterPart;
 
-    Dictionary<AttackButtons, CombatMonsterPart> monsterData;
+    //Keeping a Separated Collection for the Parts Used in Combat means we can easily access them for taking damage and being knocked off
+    //with out having to deal with parsing through the other parts
+    List<CombatMonsterPart> attackingMonsterParts;
 
-    AttackButtons _currentAttack = AttackButtons.None;
+    //this will be temproarlily serialized and will be filled out by a different script when combat is Initialized
+    [SerializeField] List<MonsterDataStorage> monsterData;
+
+    Dictionary<AttackButtons, CombatMonsterPart> monsterAttackData;
+
+    AttackButtons _currentAttack;
     float _maxChargeTime;
     float heavyMultiplier = 1;
     float timer = 0;
@@ -21,29 +27,49 @@ public class CombatMonster : MonoBehaviour
         _playerCombatManager = playerCombatManager;
         InitializeMonsterParts();
 
+        //Connect Monster Parts
+
         _playerCombatManager.SetPlayerState(PlayerState.Idle);
     }
 
     void InitializeMonsterParts()
     {
-        monsterData = new Dictionary<AttackButtons, CombatMonsterPart>();
+        monsterAttackData = new Dictionary<AttackButtons, CombatMonsterPart>();
+
+        attackingMonsterParts = new List<CombatMonsterPart>();
+
+        foreach(MonsterDataStorage partData in monsterData)
+        {
+            if(partData._assignedButton != AttackButtons.None)
+            {
+                monsterAttackData.Add(partData._assignedButton, partData._monsterPart as CombatMonsterPart);
+
+                attackingMonsterParts.Add(partData._monsterPart as CombatMonsterPart);
+            }
+
+            partData._monsterPart.InitializeMonsterPart();
+        }
+
+        /*
 
         for (int i = 0; i < pressedButton.Count; i++)
         {
-            monsterData.Add(pressedButton[i], monsterPart[i]);
+            monsterAttackData.Add(pressedButton[i], monsterParts[i]);
 
-            monsterPart[i].InitializeMonsterPart(_playerCombatManager);
+            monsterParts[i].InitializeMonsterPart();
         }
+
+        */
     }
 
     public void MonsterPartAttack(AttackButtons attack)
     {
 
-        if (monsterData.ContainsKey(attack))
+        if (monsterAttackData.ContainsKey(attack))
         {
-            if(!monsterData[attack].CheckedDisabled())
+            if(!monsterAttackData[attack].CheckedDisabled())
             {
-                monsterData[attack].NeutralAttack();
+                monsterAttackData[attack].NeutralAttack();
 
                 _currentAttack = attack;
 
@@ -60,9 +86,9 @@ public class CombatMonster : MonoBehaviour
 
     public void HeavyAttackCharge(AttackButtons attack)
     {
-        if (monsterData.ContainsKey(attack))
+        if (monsterAttackData.ContainsKey(attack))
         {
-            if(!monsterData[attack].CheckedDisabled())
+            if(!monsterAttackData[attack].CheckedDisabled())
             {
                 print("Charging!!!");
 
@@ -80,15 +106,15 @@ public class CombatMonster : MonoBehaviour
 
     public void HeavyAttackRelease(AttackButtons attack)
     {
-        if (monsterData.ContainsKey(attack))
+        if (monsterAttackData.ContainsKey(attack))
         {
-            if (!monsterData[attack].CheckedDisabled())
+            if (!monsterAttackData[attack].CheckedDisabled())
             {
                 if (isCharging)
                 {
                     StopChargeTimer();
 
-                    monsterData[attack].HeavyAttackRelease(heavyMultiplier);
+                    monsterAttackData[attack].HeavyAttackRelease(heavyMultiplier);
 
                     _playerCombatManager.SetPlayerState(PlayerState.Attacking);
                 }
@@ -101,11 +127,32 @@ public class CombatMonster : MonoBehaviour
         }
     }
 
+    public bool CheckPartEnabledStatus(AttackButtons attack)
+    {
+        if(monsterAttackData.ContainsKey(attack))
+        {
+            if(!monsterAttackData[attack].CheckedDisabled())
+            {
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
     public AnimatorClipInfo[] ReturnAttackAnimationClip()
     {
-        if(monsterData.ContainsKey(_currentAttack))
+        if(monsterAttackData.ContainsKey(_currentAttack))
         {
-            return monsterData[_currentAttack].ReturnCurrentAnimationClip();
+            return monsterAttackData[_currentAttack].ReturnCurrentAnimationClip();
         }
 
         else
@@ -116,15 +163,27 @@ public class CombatMonster : MonoBehaviour
 
     public AnimatorStateInfo ReturnAnimatorStateInfo()
     {
-        if(monsterData.ContainsKey(_currentAttack))
+        if(monsterAttackData.ContainsKey(_currentAttack))
         {
-            return monsterData[_currentAttack].ReturnAnimatorStateInfo();
+            return monsterAttackData[_currentAttack].ReturnAnimatorStateInfo();
         }
 
         else
         {
             return new AnimatorStateInfo();
         }
+    }
+
+    public  List<MonsterPartAttackBehaviours> ReturnAttackBehaviours()
+    {
+        List < MonsterPartAttackBehaviours > allPartAttacks = new List<MonsterPartAttackBehaviours>();
+
+        foreach(CombatMonsterPart part in attackingMonsterParts)
+        {
+            allPartAttacks.Add(new MonsterPartAttackBehaviours(part.ReturnAttackBehaviours()));
+        }
+
+        return allPartAttacks;
     }
 
     #region Heavy Charge Logic
@@ -135,11 +194,11 @@ public class CombatMonster : MonoBehaviour
 
         _currentAttack = attack;
 
-        _maxChargeTime = monsterData[attack].maxChargeTime;
+        _maxChargeTime = monsterAttackData[attack].maxChargeTime;
 
         heavyMultiplier = 1;
 
-        monsterData[attack].HeavyAttackStart();
+        monsterAttackData[attack].HeavyAttackStart();
 
         StartCoroutine(ChargeTimer());
     }
