@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CombatMonsterPart : BaseMonsterPart
 {
-    PlayerCombatManager _playerCombatManager;
 
     [SerializeField] MonsterPartAttack neutralPartAttack;
 
@@ -16,18 +15,13 @@ public class CombatMonsterPart : BaseMonsterPart
 
     public float maxChargeTime;
 
-    //Temp Should Probably Move Part Animation Control To Its Own Script
-    //Though it may be best practice to use this Combat Monster Part Script as the Initializer for the animator
-    [SerializeField] Animator partAnim;
-
     float maxHP;
 
     float currentHP;
 
     bool isDisabled = false;
-    public void InitializeMonsterPart(PlayerCombatManager playerCombatManager)
+    public override void InitializeMonsterPart()
     {
-        _playerCombatManager = playerCombatManager;
         neutralAttack = neutralPartAttack.GetComponent<IMonsterAttack>();
         heavyAttack = heavyPartAttack.GetComponent<IMonsterAttack>();
 
@@ -64,5 +58,10 @@ public class CombatMonsterPart : BaseMonsterPart
     public AnimatorStateInfo ReturnAnimatorStateInfo()
     {
         return partAnim.GetCurrentAnimatorStateInfo(0);
+    }
+
+    public PartAttackBehaviour[] ReturnAttackBehaviours()
+    {
+        return partAnim.GetBehaviours<PartAttackBehaviour>();
     }
 }

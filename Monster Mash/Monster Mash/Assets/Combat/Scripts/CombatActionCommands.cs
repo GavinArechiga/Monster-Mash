@@ -1,11 +1,28 @@
 
 public class BaseActionCommand
 {
-    public int actionPriority;
+    protected int actionPriority { get; set; }
+
+    public int GetActionPriority()
+    {
+        return actionPriority;
+    }
+}
+
+public class BaseAttackCommand : BaseActionCommand
+{
+    protected AttackButtons _attackButton { get; set; }
+
+    protected CombatMonster _combatMonster { get; set; }
+
+    public AttackButtons GetAttackButton()
+    {
+        return _attackButton;
+    }
 }
 
 //These are the Concrete Command implementations of the ICombatActionCommand Interface
-//The Commands for Attacking and Taunting impliment a enum that corresponds to the button that was pressed
+//The Commands for Attacking and Taunting impliment an enum that corresponds to the button that was pressed
 public class SouthButtonActionCommand : BaseActionCommand, ICombatActionCommand
 {
     public SouthButtonActionCommand()
@@ -18,12 +35,8 @@ public class SouthButtonActionCommand : BaseActionCommand, ICombatActionCommand
     }
 }
 
-public class CombatButtonActionCommand : BaseActionCommand, ICombatActionCommand
+public class CombatButtonActionCommand : BaseAttackCommand, ICombatActionCommand
 {
-    private AttackButtons _attackButton;
-
-    private CombatMonster _combatMonster;
-
     public CombatButtonActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
         actionPriority = 2;
@@ -38,12 +51,8 @@ public class CombatButtonActionCommand : BaseActionCommand, ICombatActionCommand
     }
 }
 
-public class HeavyStartActionCommand : BaseActionCommand, ICombatActionCommand
+public class HeavyStartActionCommand : BaseAttackCommand, ICombatActionCommand
 {
-    private AttackButtons _attackButton;
-
-    private CombatMonster _combatMonster;
-
     public HeavyStartActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
         actionPriority = 3;
@@ -56,15 +65,11 @@ public class HeavyStartActionCommand : BaseActionCommand, ICombatActionCommand
     }
 }
 
-public class HeavyReleaseActionCommand : BaseActionCommand, ICombatActionCommand
+public class HeavyReleaseActionCommand : BaseAttackCommand, ICombatActionCommand
 {
-    private AttackButtons _attackButton;
-
-    private CombatMonster _combatMonster;
-
     public HeavyReleaseActionCommand(AttackButtons attackButton, CombatMonster combatMonster)
     {
-        actionPriority = 3;
+        actionPriority = -1;
         _attackButton = attackButton;
         _combatMonster = combatMonster;
     }
