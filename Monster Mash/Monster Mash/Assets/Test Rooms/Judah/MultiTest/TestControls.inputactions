@@ -20,7 +20,7 @@
                     "id": "1146cc92-40ff-42c9-be1b-2f99b5c32cc0",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 }
             ],
@@ -180,6 +180,114 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "MainMenu",
+            "id": "df17c78e-f9f4-4e51-8918-6fdd70a379bd",
+            "actions": [
+                {
+                    "name": "RightStick",
+                    "type": "Value",
+                    "id": "feba9f0f-4899-4a29-ae68-a662a992d9b1",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "DPadRight",
+                    "type": "Button",
+                    "id": "22c37d02-b153-4916-b820-71bf61ac5b4a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DPadLeft",
+                    "type": "Button",
+                    "id": "462bedea-8385-4930-b533-a124fae61c66",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DPadUp",
+                    "type": "Button",
+                    "id": "e3898dc2-6399-4655-b3dc-be4a69862df3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DPadDown",
+                    "type": "Button",
+                    "id": "829da7c9-e43c-4f6a-a523-9fd411298219",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d6798b44-a29a-47d7-b2d5-3ea12f5d3ca6",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7da16d50-bb90-40b8-865c-f6273e1262a7",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DPadRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ed5eefc-96bd-4c39-8aed-7a9bc0f23e8c",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DPadLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71e15c9c-7d77-453e-9ff5-e59de3ceead3",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DPadUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbb528e2-0ce0-489b-a033-7b0551f2ec72",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DPadDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

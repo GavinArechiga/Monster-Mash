@@ -14,6 +14,8 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
 
     private bool isActive;
 
+    private LoadRing ring; //loading visual
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,8 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
             Debug.LogWarning("SkipText not found, it should be a TMP_Text on the canvas");
         }
         skipText.gameObject.SetActive(false);
+
+        ring = FindObjectOfType<LoadRing>();
     }
 
     private void StartSkipText(string button)
@@ -44,6 +48,9 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
 
         playerInput.actions["AnyButton"].performed += OnAnyButton;
         playerInput.actions["Skip"].performed += OnSkip;
+
+        playerInput.actions["Skip"].started += StartVisual;
+        playerInput.actions["Skip"].canceled += StopVisual;
     }
 
     public void DeactivateController()
@@ -56,7 +63,7 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
     #endregion
 
     #region Input Actions
-    public void OnAnyButton(InputAction.CallbackContext context)
+    private void OnAnyButton(InputAction.CallbackContext context)
     {
         if (!hasShownPrompt)
         {
@@ -73,6 +80,16 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
         {
             manager.LoadScene();
         }
+    }
+
+    private void StartVisual(InputAction.CallbackContext context)
+    {
+        if (ring) ring.StartTimer();
+    }
+
+    private void StopVisual(InputAction.CallbackContext context)
+    {
+        if (ring) ring.StopTimer();
     }
 
     #endregion
