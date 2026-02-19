@@ -11,6 +11,7 @@ public class PlayerControllerManager : MonoBehaviour
     public GameObject uiController;
     public GameObject combatController;
     public GameObject cutsceneController;
+    public GameObject mainmenuController;
     ///////////////////////////
 
     private PlayerManager manager;

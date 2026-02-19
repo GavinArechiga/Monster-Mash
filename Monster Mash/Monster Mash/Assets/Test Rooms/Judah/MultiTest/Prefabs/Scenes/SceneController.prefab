@@ -118,17 +118,13 @@ MonoBehaviour:
   myScenes:
   - GameStart
   - MainMenu
-  - Arcade
-  - Gacha
-  - MainSettings
   - CharacterSelect
+  - BuildAScare
+  - Beastiary
   - StageSelect
   - StageLoad
   - Battle
   - BattleResults
-  - Beastiary
-  - Extras
-  - BuildAScare
 --- !u!1 &3723062881592468777
 GameObject:
   m_ObjectHideFlags: 0

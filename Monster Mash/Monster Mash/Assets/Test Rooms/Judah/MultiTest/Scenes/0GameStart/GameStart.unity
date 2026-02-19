@@ -928,26 +928,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[2]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 424373798547200613, guid: 9de7345f69b5e81428b104af8dceadf0,
-        type: 3}
-      propertyPath: spawnPoints.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 424373798547200616, guid: 9de7345f69b5e81428b104af8dceadf0,
         type: 3}
       propertyPath: m_Name
