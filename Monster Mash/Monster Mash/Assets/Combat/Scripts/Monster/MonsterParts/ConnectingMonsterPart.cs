@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class ConnectingMonsterPart : BaseMonsterPart
 {
+    [Header("Connecting Part Attributes")]
     [SerializeField]
-    Transform[] connectionPoints;
+    protected Transform[] connectionPoints;
 
     List<Transform> connectedParts;
 
     [SerializeField]
-    LayerMask connectingPartMask;
-    [SerializeField]
-    Vector3 overlapBoxDimensions;
-    public override void InitializeMonsterPart()
+    protected LayerMask connectingPartMask;
+    public override void InitializeMonsterPart(AttackButtons partButton, CombatMonster combatMonster)
     {
+        SetBaseMonsterPart(partButton, combatMonster);
+
         ConnectAllMonsterParts();
+
+        if(ReturnLimbType() is MonsterPartLimb.Torso)
+        {
+            var torso = this as TorsoMonsterPart;
+
+            torso.InitializeBlendDictionary();
+        }
     }
 
     void ConnectAllMonsterParts()
@@ -45,7 +53,7 @@ public class ConnectingMonsterPart : BaseMonsterPart
         }
     }
 
-    Collider[] ReturnCollidedBodies(Transform point)
+    public virtual Collider[] ReturnCollidedBodies(Transform point)
     {
         Collider[] returnCollider;
 
@@ -60,7 +68,7 @@ public class ConnectingMonsterPart : BaseMonsterPart
 
             case MonsterPartLimb.Head:
 
-                returnCollider = Physics.OverlapBox(point.position, overlapBoxDimensions, point.rotation, connectingPartMask);
+                returnCollider = Physics.OverlapBox(point.position, new Vector3(0.5f,0.5f,0.5f), point.rotation, connectingPartMask);
 
                 break;
         }

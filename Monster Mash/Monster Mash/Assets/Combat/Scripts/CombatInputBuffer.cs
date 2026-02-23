@@ -65,6 +65,11 @@ public class CombatInputBuffer : MonoBehaviour
         ReleaseInputBuffer();
     }
 
+    public void ClearBuffer()
+    {
+        bufferInputs.Clear();
+    }
+
     void ReleaseInputBuffer()
     {
         if(bufferInputs.Count >= 1)
@@ -89,7 +94,7 @@ public class CombatInputBuffer : MonoBehaviour
                 }
             }
 
-            bufferInputs.Clear();
+            ClearBuffer();
 
             highestActionPriority = 0;
         }

@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CombatMonsterPart : BaseMonsterPart
 {
-
+    [Header("Combat Part Attributes")]
     [SerializeField] MonsterPartAttack neutralPartAttack;
 
     [SerializeField] MonsterPartAttack heavyPartAttack;
@@ -15,13 +16,21 @@ public class CombatMonsterPart : BaseMonsterPart
 
     public float maxChargeTime;
 
-    float maxHP;
-
-    float currentHP;
-
     bool isDisabled = false;
-    public override void InitializeMonsterPart()
+
+    int partUsage = 0;
+
+    #region Events
+
+    public Action partNeutralAttack;
+    public Action startPartHeavyCharge;
+    public Action releasePartHeavyAttack;
+
+    #endregion
+    public override void InitializeMonsterPart(AttackButtons partButton, CombatMonster combatMonster)
     {
+        SetBaseMonsterPart(partButton, combatMonster);
+
         neutralAttack = neutralPartAttack.GetComponent<IMonsterAttack>();
         heavyAttack = heavyPartAttack.GetComponent<IMonsterAttack>();
 
@@ -35,20 +44,26 @@ public class CombatMonsterPart : BaseMonsterPart
     public void NeutralAttack()
     {
         //Execute Neutral Attack
-        neutralAttack.ExecuteNeutralAttack(partAnim);
+        InscreasePartUsage();
+        partNeutralAttack?.Invoke();
+        neutralAttack.ExecuteNeutralAttack();
     }
 
     public void HeavyAttackRelease(float multiplier)
     {
         //Release Full Heavy Attack
-        heavyAttack.ExecuteHeavyAttack(multiplier, partAnim);
+        InscreasePartUsage();
+        releasePartHeavyAttack?.Invoke();
+        heavyAttack.ExecuteHeavyAttack(multiplier);
     }
 
     public void HeavyAttackStart()
     {
         //Activate Heavy Attack Charge State
-        partAnim.SetTrigger(MonsterPartAnimTrigger.h_Attk.ToString());
+        startPartHeavyCharge?.Invoke();
     }
+
+    #region Input Buffer Info
 
     public AnimatorClipInfo[] ReturnCurrentAnimationClip()
     {
@@ -64,4 +79,36 @@ public class CombatMonsterPart : BaseMonsterPart
     {
         return partAnim.GetBehaviours<PartAttackBehaviour>();
     }
+
+    #endregion
+
+    #region Part Usage
+    void InscreasePartUsage()
+    {
+        partUsage++;
+    }
+
+    public int ReturnPartUsage()
+    {
+        return partUsage;
+    }
+
+    public void ResetPartUsage()
+    {
+        partUsage = 0;
+    }
+
+    public void DisablePart()
+    {
+        isDisabled = true;
+
+        ResetPartUsage();
+    }
+
+    void ReEnablePart()
+    {
+        isDisabled = false;
+    }
+
+    #endregion
 }
