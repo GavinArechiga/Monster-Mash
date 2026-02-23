@@ -22,7 +22,8 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     private Vector2 bounds2;
     [SerializeField] private Vector3 move;
 
-    private bool justUsedFreeCam = false;
+    [SerializeField] private bool justUsedFreeCam = false;
+    private GameObject lastSelectedButton;
 
     #region (De)Activate Controller
     public void ActivateController()
@@ -42,10 +43,13 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         playerInput.actions["DPadDown"].performed += DPadDown;
         playerInput.actions["RightStick"].performed += RightStickPerformed;
         playerInput.actions["RightStick"].canceled += RightStickCanceled;
+        playerInput.actions["Navigate"].performed += LeftStickPerformed;
 
         MoveCamera();
-        ChangeMenu();
+        SelectButton();
         FindBounds();
+
+        lastSelectedButton = EventSystem.current.currentSelectedGameObject;
     }
 
     public void DeactivateController()
@@ -58,6 +62,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         playerInput.actions["DPadDown"].performed -= DPadDown;
         playerInput.actions["RightStick"].performed -= RightStickPerformed;
         playerInput.actions["RightStick"].canceled -= RightStickCanceled;
+        playerInput.actions["Navigate"].performed -= LeftStickPerformed;
     }
 
     #endregion
@@ -93,6 +98,11 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     private void RightStickCanceled(InputAction.CallbackContext context)
     {
         move = Vector3.zero;
+    }
+
+    private void LeftStickPerformed(InputAction.CallbackContext context)
+    {
+        CheckMenuSwitch();
     }
 
     #endregion
@@ -134,22 +144,22 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
         CheckRoomRange();
         MoveCamera();
-        MenuOff();
+        lastSelectedButton = EventSystem.current.currentSelectedGameObject;
     }
 
     private void MoveCamera()
     {
-        StopCoroutine("MoveThatCamera");
-
         if (justUsedFreeCam)
         {
             ChooseClosestMenu();
         }
+
+        StopCoroutine("MoveThatCamera");
         StartCoroutine("MoveThatCamera", house[currLevel].level[currRoom].pos.position);
         justUsedFreeCam = false;
     }
 
-    private void ChangeMenu()
+    private void SelectButton()
     {
         for (int i = 0; i < house.Length; i++)
         {
@@ -157,27 +167,16 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
             {
                 if (i == currLevel && y == currRoom)
                 {
-                    house[i].level[y].menu.SetActive(true);
                     EventSystem.current.SetSelectedGameObject(null);
                     EventSystem.current.SetSelectedGameObject(house[i].level[y].menu.GetComponentInChildren<Button>().gameObject);
-                }
-                else
-                {
-                    house[i].level[y].menu.SetActive(false);
                 }
             }
         }
     }
 
-    private void MenuOff()
+    private void DeselectButton()
     {
-        for (int i = 0; i < house.Length; i++)
-        {
-            for (int y = 0; y < house[i].level.Length; y++)
-            {
-                house[i].level[y].menu.SetActive(false);
-            }
-        }
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     private void CheckRoomRange()
@@ -203,8 +202,8 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
             yield return null;
         }
 
-        transform.position = targetPosition;
-        ChangeMenu();
+        cam.transform.position = targetPosition;
+        SelectButton();
 
         yield break;
     }
@@ -214,8 +213,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         if (move != Vector3.zero)
         {
             StopCoroutine("MoveThatCamera");
-            MenuOff();
-
+            DeselectButton();
             cam.transform.position += move * 10f * Time.deltaTime;
 
             Vector3 pos = cam.transform.position;
@@ -234,7 +232,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     private void ChooseClosestMenu()
     {
-        float dist = 100f;
+        float dist = 1000f;
 
         for (int i = 0; i < house.Length; i++)
         {
@@ -242,9 +240,49 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
             {
                 Vector2 roomPos = house[i].level[y].pos.position;
 
-                if (Vector2.Distance(cam.transform.position, roomPos) < dist)
+                if (Vector2.Distance(cam.transform.position, roomPos) <= dist)
                 {
                     dist = Vector2.Distance(cam.transform.position, roomPos);
+                    currLevel = i;
+                    currRoom = y;
+                }
+            }
+        }
+    }
+
+    private void CheckMenuSwitch()
+    {
+        if (EventSystem.current.currentSelectedGameObject && lastSelectedButton)
+        {
+            GameObject oldParent = lastSelectedButton.transform.parent.gameObject;
+            GameObject newParent = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
+            if (oldParent != newParent)
+            {
+                lastSelectedButton = EventSystem.current.currentSelectedGameObject;
+                ChooseRoomWithButtonParent();
+                MoveCamera();
+            }
+        }
+        else
+        {
+            SelectButton();
+            lastSelectedButton = EventSystem.current.currentSelectedGameObject;
+            ChooseClosestMenu();
+            MoveCamera();
+        }
+
+    }
+
+    private void ChooseRoomWithButtonParent()
+    {
+        GameObject targetParent = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
+
+        for (int i = 0; i < house.Length; i++)
+        {
+            for (int y = 0; y < house[i].level.Length; y++)
+            {
+                if (house[i].level[y].menu == targetParent)
+                {
                     currLevel = i;
                     currRoom = y;
                 }
