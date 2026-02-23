@@ -18,6 +18,12 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     [SerializeField] private int currLevel = 0; //index for house
     [SerializeField] private int currRoom = 1; //index for house
 
+    private Vector2 bounds1;
+    private Vector2 bounds2;
+    [SerializeField] private Vector3 move;
+
+    private bool justUsedFreeCam = false;
+
     #region (De)Activate Controller
     public void ActivateController()
     {
@@ -34,9 +40,12 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         playerInput.actions["DPadLeft"].performed += DPadLeft;
         playerInput.actions["DPadUp"].performed += DPadUp;
         playerInput.actions["DPadDown"].performed += DPadDown;
+        playerInput.actions["RightStick"].performed += RightStickPerformed;
+        playerInput.actions["RightStick"].canceled += RightStickCanceled;
 
         MoveCamera();
         ChangeMenu();
+        FindBounds();
     }
 
     public void DeactivateController()
@@ -47,6 +56,8 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         playerInput.actions["DPadLeft"].performed -= DPadLeft;
         playerInput.actions["DPadUp"].performed -= DPadUp;
         playerInput.actions["DPadDown"].performed -= DPadDown;
+        playerInput.actions["RightStick"].performed -= RightStickPerformed;
+        playerInput.actions["RightStick"].canceled -= RightStickCanceled;
     }
 
     #endregion
@@ -73,8 +84,23 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         ChangeRooms("down");
     }
 
+    private void RightStickPerformed(InputAction.CallbackContext context)
+    {
+        move = context.ReadValue<Vector2>();
+        justUsedFreeCam = true;
+    }
+
+    private void RightStickCanceled(InputAction.CallbackContext context)
+    {
+        move = Vector3.zero;
+    }
+
     #endregion
 
+    private void Update()
+    {
+        MoveFreeCamera();
+    }
     private void ChangeRooms(string x)
     {
         if (x == "up")
@@ -114,7 +140,13 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     private void MoveCamera()
     {
         StopCoroutine("MoveThatCamera");
+
+        if (justUsedFreeCam)
+        {
+            ChooseClosestMenu();
+        }
         StartCoroutine("MoveThatCamera", house[currLevel].level[currRoom].pos.position);
+        justUsedFreeCam = false;
     }
 
     private void ChangeMenu()
@@ -160,7 +192,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     {
         Vector3 startPos = cam.transform.position;
         float elapsedTime = 0f;
-        float targetTime = 0.5f;
+        float targetTime = 0.25f;
 
         while (elapsedTime < targetTime)
         {
@@ -175,5 +207,48 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         ChangeMenu();
 
         yield break;
+    }
+
+    private void MoveFreeCamera()
+    {
+        if (move != Vector3.zero)
+        {
+            StopCoroutine("MoveThatCamera");
+            MenuOff();
+
+            cam.transform.position += move * 10f * Time.deltaTime;
+
+            Vector3 pos = cam.transform.position;
+            pos.x = Mathf.Clamp(pos.x, bounds1.x, bounds2.x);
+            pos.y = Mathf.Clamp(pos.y, bounds1.y, bounds2.y);
+
+            cam.transform.position = pos;
+        }
+    }
+
+    private void FindBounds()
+    {
+        bounds1 = house[0].level[0].pos.position;
+        bounds2 = house[^1].level[^1].pos.position;
+    }
+
+    private void ChooseClosestMenu()
+    {
+        float dist = 100f;
+
+        for (int i = 0; i < house.Length; i++)
+        {
+            for (int y = 0; y < house[i].level.Length; y++)
+            {
+                Vector2 roomPos = house[i].level[y].pos.position;
+
+                if (Vector2.Distance(cam.transform.position, roomPos) < dist)
+                {
+                    dist = Vector2.Distance(cam.transform.position, roomPos);
+                    currLevel = i;
+                    currRoom = y;
+                }
+            }
+        }
     }
 }
