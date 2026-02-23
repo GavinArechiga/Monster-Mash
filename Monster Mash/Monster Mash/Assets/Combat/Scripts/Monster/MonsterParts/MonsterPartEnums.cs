@@ -16,7 +16,27 @@ public enum MonsterPartAnimTrigger
 {
     n_Attk,
     h_Attk,
-    release
+    release,
+    jump,
+    land,
+    hit,
+    brace,
+    unbrace,
+}
+
+public enum MonsterPartAnimBool
+{
+    isWalking,
+    isRunning
+}
+
+public enum MonsterPartAnimFloat
+{
+    torsoAttkDirX,
+    torsoAttkDirY,
+    legWalkOffset,
+    legRunOffset,
+    legBlendDir
 }
 
 public enum MonsterPartAnimStateTags

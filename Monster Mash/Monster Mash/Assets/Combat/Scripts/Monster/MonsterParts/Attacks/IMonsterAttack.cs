@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IMonsterAttack
 {
 
-    void ExecuteNeutralAttack(Animator partAnim);
-    void ExecuteHeavyAttack(float multiplier, Animator partAnim);
+    void ExecuteNeutralAttack();
+    void ExecuteHeavyAttack(float multiplier);
 }

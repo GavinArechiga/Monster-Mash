@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CombatMonster : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class CombatMonster : MonoBehaviour
 
     //Keeping a Separated Collection for the Parts Used in Combat means we can easily access them for taking damage and being knocked off
     //with out having to deal with parsing through the other parts
+    [SerializeField]
     List<CombatMonsterPart> attackingMonsterParts;
 
     //this will be temproarlily serialized and will be filled out by a different script when combat is Initialized
@@ -22,14 +24,40 @@ public class CombatMonster : MonoBehaviour
     float timer = 0;
     bool isCharging;
 
+    float maxHP;
+
+    float currentHP;
+
+    float partCutoffHP;
+
+    #region Events
+
+    public Action<AttackButtons, Transform> startBrace;
+    public Action<AttackButtons> endBrace;
+    public Action releaseTorsoBrace;
+
+    #endregion
+
     public void InitializeMonster(PlayerCombatManager playerCombatManager)
     {
         _playerCombatManager = playerCombatManager;
+
         InitializeMonsterParts();
 
-        //Connect Monster Parts
+        SubscribeToEvents();
+
+        InitializeHealth(100);
 
         _playerCombatManager.SetPlayerState(PlayerState.Idle);
+    }
+
+    void InitializeHealth(float monsterMaxHP)
+    {
+        maxHP = monsterMaxHP;
+
+        currentHP = maxHP;
+
+        partCutoffHP = (maxHP / attackingMonsterParts.Count);
     }
 
     void InitializeMonsterParts()
@@ -47,20 +75,15 @@ public class CombatMonster : MonoBehaviour
                 attackingMonsterParts.Add(partData._monsterPart as CombatMonsterPart);
             }
 
-            partData._monsterPart.InitializeMonsterPart();
+            partData._monsterPart.InitializeMonsterPart(partData._assignedButton, this);
+
+            //For this to work Right we need to make sure that the Torso is always the first in the list of Monster Parts
+
+            partData._monsterPart.InitializePartGameObject();
         }
-
-        /*
-
-        for (int i = 0; i < pressedButton.Count; i++)
-        {
-            monsterAttackData.Add(pressedButton[i], monsterParts[i]);
-
-            monsterParts[i].InitializeMonsterPart();
-        }
-
-        */
     }
+
+    #region Attack Logic
 
     public void MonsterPartAttack(AttackButtons attack)
     {
@@ -69,6 +92,10 @@ public class CombatMonster : MonoBehaviour
         {
             if(!monsterAttackData[attack].CheckedDisabled())
             {
+                startBrace?.Invoke(attack, monsterAttackData[attack].ReturnParentObject());
+
+                releaseTorsoBrace?.Invoke();
+
                 monsterAttackData[attack].NeutralAttack();
 
                 _currentAttack = attack;
@@ -114,6 +141,8 @@ public class CombatMonster : MonoBehaviour
                 {
                     StopChargeTimer();
 
+                    releaseTorsoBrace?.Invoke();
+
                     monsterAttackData[attack].HeavyAttackRelease(heavyMultiplier);
 
                     _playerCombatManager.SetPlayerState(PlayerState.Attacking);
@@ -125,6 +154,13 @@ public class CombatMonster : MonoBehaviour
         {
             print("Part Not Found");
         }
+    }
+
+    void AttackEnd()
+    {
+        endBrace?.Invoke(_currentAttack);
+
+        _currentAttack = AttackButtons.None;
     }
 
     public bool CheckPartEnabledStatus(AttackButtons attack)
@@ -186,6 +222,8 @@ public class CombatMonster : MonoBehaviour
         return allPartAttacks;
     }
 
+    #endregion
+
     #region Heavy Charge Logic
 
     void StartChargeTimer(AttackButtons attack)
@@ -197,6 +235,8 @@ public class CombatMonster : MonoBehaviour
         _maxChargeTime = monsterAttackData[attack].maxChargeTime;
 
         heavyMultiplier = 1;
+
+        startBrace?.Invoke(attack, monsterAttackData[attack].ReturnParentObject());
 
         monsterAttackData[attack].HeavyAttackStart();
 
@@ -241,4 +281,51 @@ public class CombatMonster : MonoBehaviour
     }
 
     #endregion
+
+    #region Health and Damage
+
+    void MonsterHit()
+    {
+        print("Ouch!");
+    }
+
+    void TakeDamage()
+    {
+        
+    }
+
+    void SortMonsterPartsByUse()
+    {
+        attackingMonsterParts.Sort(SortPartUsage);
+
+        attackingMonsterParts.Reverse();
+    }
+
+    int SortPartUsage(CombatMonsterPart part1, CombatMonsterPart part2)
+    {
+        return part1.ReturnPartUsage().CompareTo(part2.ReturnPartUsage());
+    }
+    #endregion
+
+    #region Event Subscriptions
+
+    void SubscribeToEvents()
+    {
+        _playerCombatManager.onHit += MonsterHit;
+        _playerCombatManager.attackEnd += AttackEnd;
+    }
+
+    void UnsubscribeToEvents()
+    {
+        _playerCombatManager.onHit -= MonsterHit;
+        _playerCombatManager.attackEnd -= AttackEnd;
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeToEvents();
+    }
+
+    #endregion
+
 }

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
+//Temp
+using UnityEditor;
 
 public class PlayerCombatManager : MonoBehaviour
 {
@@ -17,6 +20,10 @@ public class PlayerCombatManager : MonoBehaviour
     CombatInputBuffer combatInputBuffer;
 
     List<MonsterPartAttackBehaviours> _allPartAttacks;
+
+    public Action onHit;
+
+    public Action attackEnd;
 
     private void Awake()
     {
@@ -65,7 +72,18 @@ public class PlayerCombatManager : MonoBehaviour
             //Run a Function that Clears the Input buffer
 
             //This is a use case for if you are hit while attacking, and you end up being changed to the hit state
+
+            combatInputBuffer.ClearBuffer();
         }
+
+        //End Brace
+
+        attackEnd?.Invoke();
+    }
+
+    public void OnHit()
+    {
+        onHit?.Invoke();
     }
 
     private void OnDisable()
@@ -78,4 +96,24 @@ public class PlayerCombatManager : MonoBehaviour
             }
         }
     }
+
+
+#if UNITY_EDITOR
+
+    [CustomEditor(typeof(PlayerCombatManager))]
+    public class DamageSimulation : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            PlayerCombatManager manager = target as PlayerCombatManager;
+
+            if(GUILayout.Button("Monster Hit"))
+            {
+                manager.OnHit();
+            }
+        }
+    }
+#endif
 }

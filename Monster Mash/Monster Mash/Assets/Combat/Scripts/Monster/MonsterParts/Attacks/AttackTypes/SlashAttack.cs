@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class SlashAttack : MonsterPartAttack, IMonsterAttack
 {
-    public void ExecuteNeutralAttack(Animator partAnim)
+    public void ExecuteNeutralAttack()
     {
-        partAnim.SetTrigger(MonsterPartAnimTrigger.n_Attk.ToString());
         print("NEUTRAL SLASH SLASH! " + (damage));
     }
-    public void ExecuteHeavyAttack(float multiplier, Animator partAnim)
+    public void ExecuteHeavyAttack(float multiplier)
     {
-        partAnim.SetTrigger(MonsterPartAnimTrigger.release.ToString());
         print("HEAVY SLASH SLASH! " + (damage * multiplier));
     }
 }
