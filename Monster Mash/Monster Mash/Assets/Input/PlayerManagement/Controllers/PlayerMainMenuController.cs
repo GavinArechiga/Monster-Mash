@@ -13,7 +13,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     GameObject cam;
 
-    private House[] house; //defined in MainMenuNav script
+    [SerializeField] private House[] house; //defined in MainMenuNav script
 
     [SerializeField] private int currLevel = 0; //index for house
     [SerializeField] private int currRoom = 1; //index for house
@@ -29,21 +29,16 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     public void ActivateController()
     {
         playerInput = GetComponentInParent<PlayerInput>();
+        playerInput.SwitchCurrentActionMap("MainMenu");
         isActive = true;
 
-        playerInput.SwitchCurrentActionMap("MainMenu");
 
         cam = Camera.main.gameObject;
 
         house = FindObjectOfType<MainMenuNav>().GetHouse();
 
-        playerInput.actions["DPadRight"].performed += DPadRight;
-        playerInput.actions["DPadLeft"].performed += DPadLeft;
-        playerInput.actions["DPadUp"].performed += DPadUp;
-        playerInput.actions["DPadDown"].performed += DPadDown;
-        playerInput.actions["RightStick"].performed += RightStickPerformed;
-        playerInput.actions["RightStick"].canceled += RightStickCanceled;
-        playerInput.actions["Navigate"].performed += LeftStickPerformed;
+        currLevel = 0;
+        currRoom = 1;
 
         MoveCamera();
         SelectButton();
@@ -55,14 +50,29 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     public void DeactivateController()
     {
         isActive = false;
+    }
 
+    private void OnEnable()
+    {
+        ActivateController();
+        playerInput.actions["DPadRight"].performed += DPadRight;
+        playerInput.actions["DPadLeft"].performed += DPadLeft;
+        playerInput.actions["DPadUp"].performed += DPadUp;
+        playerInput.actions["DPadDown"].performed += DPadDown;
+        playerInput.actions["RightStick"].performed += RightStickPerformed;
+        playerInput.actions["RightStick"].canceled += RightStickCanceled;
+        playerInput.actions["Navigate1"].performed += LeftStickPerformed;
+    }
+
+    private void OnDisable()
+    {
         playerInput.actions["DPadRight"].performed -= DPadRight;
         playerInput.actions["DPadLeft"].performed -= DPadLeft;
         playerInput.actions["DPadUp"].performed -= DPadUp;
         playerInput.actions["DPadDown"].performed -= DPadDown;
         playerInput.actions["RightStick"].performed -= RightStickPerformed;
         playerInput.actions["RightStick"].canceled -= RightStickCanceled;
-        playerInput.actions["Navigate"].performed -= LeftStickPerformed;
+        playerInput.actions["Navigate1"].performed -= LeftStickPerformed;
     }
 
     #endregion
@@ -168,6 +178,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
                 if (i == currLevel && y == currRoom)
                 {
                     EventSystem.current.SetSelectedGameObject(null);
+                    print("3) " + house[i].level[y].menu.GetComponentInChildren<Button>().gameObject);
                     EventSystem.current.SetSelectedGameObject(house[i].level[y].menu.GetComponentInChildren<Button>().gameObject);
                 }
             }

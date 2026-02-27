@@ -235,7 +235,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Navigate",
+                    "name": "Navigate1",
                     "type": "Value",
                     "id": "820e41ed-4a87-4834-b72e-c8c52cd3cc21",
                     "expectedControlType": "Vector2",
@@ -325,7 +325,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Navigate",
+                    "action": "Navigate1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
