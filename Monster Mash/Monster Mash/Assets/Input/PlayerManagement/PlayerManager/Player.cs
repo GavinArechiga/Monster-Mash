@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
             if (existingController != null)//if an existing prefab is passed in, it is setactive so there cant be duplicates
             {
-                existingController.GetComponent<IPlayerController>().ActivateController();
+                IP_Activate(existingController);
 
                 DeactivateAllExcept(existingController);
                 return;

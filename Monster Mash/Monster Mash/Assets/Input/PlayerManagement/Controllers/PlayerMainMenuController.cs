@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 {
@@ -25,26 +26,22 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     [SerializeField] private bool justUsedFreeCam = false;
     private GameObject lastSelectedButton;
 
+    [SerializeField] private bool pauseControls = false;
+
+    EventSystem eventSystem;
+
     #region (De)Activate Controller
     public void ActivateController()
     {
-        playerInput = GetComponentInParent<PlayerInput>();
-        playerInput.SwitchCurrentActionMap("MainMenu");
-        isActive = true;
-
-
-        cam = Camera.main.gameObject;
-
-        house = FindObjectOfType<MainMenuNav>().GetHouse();
-
-        currLevel = 0;
-        currRoom = 1;
+        MakeSureSetUpHappened();
 
         MoveCamera();
         SelectButton();
         FindBounds();
 
-        lastSelectedButton = EventSystem.current.currentSelectedGameObject;
+        lastSelectedButton = eventSystem.currentSelectedGameObject;
+
+        StartCoroutine("LoadTitleCard");
     }
 
     public void DeactivateController()
@@ -54,7 +51,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     private void OnEnable()
     {
-        ActivateController();
+        MakeSureSetUpHappened();
         playerInput.actions["DPadRight"].performed += DPadRight;
         playerInput.actions["DPadLeft"].performed += DPadLeft;
         playerInput.actions["DPadUp"].performed += DPadUp;
@@ -81,105 +78,137 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     private void DPadRight (InputAction.CallbackContext context)
     {
-        ChangeRooms("right");
+        if (!pauseControls)
+        {
+            ChangeRooms("right");
+        }
     }
 
     private void DPadLeft(InputAction.CallbackContext context)
     {
-        ChangeRooms("left");
+        if (!pauseControls)
+        {
+            ChangeRooms("left");
+        }
     }
 
     private void DPadUp(InputAction.CallbackContext context)
     {
-        ChangeRooms("up");
+        if (!pauseControls)
+        {
+            ChangeRooms("up");
+        }
     }
 
     private void DPadDown(InputAction.CallbackContext context)
     {
-        ChangeRooms("down");
+        if (!pauseControls)
+        {
+            ChangeRooms("down");
+        }
     }
 
     private void RightStickPerformed(InputAction.CallbackContext context)
     {
-        move = context.ReadValue<Vector2>();
-        justUsedFreeCam = true;
+        if (!pauseControls)
+        {
+            move = context.ReadValue<Vector2>();
+            justUsedFreeCam = true;
+        }
     }
 
     private void RightStickCanceled(InputAction.CallbackContext context)
     {
-        move = Vector3.zero;
+        if (!pauseControls)
+        {
+            move = Vector3.zero;
+        }
     }
 
     private void LeftStickPerformed(InputAction.CallbackContext context)
     {
-        CheckMenuSwitch();
+        if (!pauseControls)
+        {
+            CheckMenuSwitch();
+        }
     }
 
     #endregion
 
     private void Update()
     {
-        MoveFreeCamera();
+        if (!pauseControls)
+        {
+            MoveFreeCamera();
+        }
     }
     private void ChangeRooms(string x)
     {
-        if (x == "up")
+        if (!pauseControls)
         {
-            if (house.Length - 1 >= currLevel + 1)
+            if (x == "up")
             {
-                currLevel += 1;
+                if (house.Length - 1 >= currLevel + 1)
+                {
+                    currLevel += 1;
+                }
             }
-        }
-        else if (x == "down")
-        {
-            if (0 <= currLevel -1)
+            else if (x == "down")
             {
-                currLevel -= 1;
+                if (0 <= currLevel - 1)
+                {
+                    currLevel -= 1;
+                }
             }
-        }
-        else if(x == "right")
-        {
-            if (house[currLevel].level.Length >= currRoom)
+            else if (x == "right")
             {
-                currRoom += 1;
+                if (house[currLevel].level.Length >= currRoom)
+                {
+                    currRoom += 1;
+                }
             }
-        }
-        else if (x == "left")
-        {
-            if (0 <= currRoom - 1)
+            else if (x == "left")
             {
-                currRoom -= 1;
+                if (0 <= currRoom - 1)
+                {
+                    currRoom -= 1;
+                }
             }
-        }
 
-        CheckRoomRange();
-        MoveCamera();
-        lastSelectedButton = EventSystem.current.currentSelectedGameObject;
+            CheckRoomRange();
+            MoveCamera();
+            lastSelectedButton = eventSystem.currentSelectedGameObject;
+        }
     }
 
     private void MoveCamera()
     {
-        if (justUsedFreeCam)
+        if (!pauseControls)
         {
-            ChooseClosestMenu();
-        }
+            if (justUsedFreeCam)
+            {
+                ChooseClosestMenu();
+            }
 
-        StopCoroutine("MoveThatCamera");
-        StartCoroutine("MoveThatCamera", house[currLevel].level[currRoom].pos.position);
-        justUsedFreeCam = false;
+            StopCoroutine("MoveThatCamera");
+            StartCoroutine("MoveThatCamera", house[currLevel].level[currRoom].pos.position);
+            justUsedFreeCam = false;
+        }
     }
 
     private void SelectButton()
     {
-        for (int i = 0; i < house.Length; i++)
+        if (!pauseControls)
         {
-            for (int y = 0; y < house[i].level.Length; y++)
+            for (int i = 0; i < house.Length; i++)
             {
-                if (i == currLevel && y == currRoom)
+                for (int y = 0; y < house[i].level.Length; y++)
                 {
-                    EventSystem.current.SetSelectedGameObject(null);
-                    print("3) " + house[i].level[y].menu.GetComponentInChildren<Button>().gameObject);
-                    EventSystem.current.SetSelectedGameObject(house[i].level[y].menu.GetComponentInChildren<Button>().gameObject);
+                    if (i == currLevel && y == currRoom)
+                    {
+                        eventSystem.SetSelectedGameObject(null);
+                        eventSystem.SetSelectedGameObject(house[i].level[y].menu.GetComponentInChildren<Button>().gameObject);
+                    }
                 }
             }
         }
@@ -187,7 +216,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     private void DeselectButton()
     {
-        EventSystem.current.SetSelectedGameObject(null);
+        eventSystem.SetSelectedGameObject(null);
     }
 
     private void CheckRoomRange()
@@ -263,13 +292,13 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     private void CheckMenuSwitch()
     {
-        if (EventSystem.current.currentSelectedGameObject && lastSelectedButton)
+        if (eventSystem.currentSelectedGameObject && lastSelectedButton)
         {
             GameObject oldParent = lastSelectedButton.transform.parent.gameObject;
-            GameObject newParent = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
+            GameObject newParent = eventSystem.currentSelectedGameObject.transform.parent.gameObject;
             if (oldParent != newParent)
             {
-                lastSelectedButton = EventSystem.current.currentSelectedGameObject;
+                lastSelectedButton = eventSystem.currentSelectedGameObject;
                 ChooseRoomWithButtonParent();
                 MoveCamera();
             }
@@ -277,7 +306,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         else
         {
             SelectButton();
-            lastSelectedButton = EventSystem.current.currentSelectedGameObject;
+            lastSelectedButton = eventSystem.currentSelectedGameObject;
             ChooseClosestMenu();
             MoveCamera();
         }
@@ -286,7 +315,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     private void ChooseRoomWithButtonParent()
     {
-        GameObject targetParent = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
+        GameObject targetParent = eventSystem.currentSelectedGameObject.transform.parent.gameObject;
 
         for (int i = 0; i < house.Length; i++)
         {
@@ -299,5 +328,59 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
                 }
             }
         }
+    }
+
+    private IEnumerator LoadTitleCard()
+    {
+        bool load = FindObjectOfType<LoadTitleCard>();
+
+        GameObject.Find("ScreenSpaceCanvas")?.SetActive(load);
+
+        if (load)
+        {
+            StopCoroutine("MoveThatCamera");
+            PauseControls(true);
+            yield return new WaitForSeconds(2.0f);
+            GameObject.Find("ScreenSpaceCanvas")?.SetActive(false);
+            Destroy(FindObjectOfType<LoadTitleCard>().gameObject);
+            PauseControls(false);
+        }
+
+        yield break;
+    }
+
+    private void PauseControls(bool pause)
+    {
+        pauseControls = pause;
+
+        if (pause)
+        {
+            eventSystem.enabled = false;
+        }
+        else
+        {
+            eventSystem.enabled = true;
+            MoveCamera();
+            SelectButton();
+            FindBounds();
+
+            lastSelectedButton = eventSystem.currentSelectedGameObject;
+        }
+    }
+
+    private void MakeSureSetUpHappened()
+    {
+        playerInput = GetComponentInParent<PlayerInput>();
+        playerInput.SwitchCurrentActionMap("MainMenu");
+        isActive = true;
+
+        eventSystem = EventSystem.current;
+
+        cam = Camera.main.gameObject;
+
+        house = FindObjectOfType<MainMenuNav>().GetHouse();
+
+        currLevel = 0;
+        currRoom = 1;
     }
 }
