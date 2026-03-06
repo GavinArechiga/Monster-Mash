@@ -352,6 +352,94 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "CharacterSelect",
+            "id": "7c5bd7a0-4d67-435e-aaee-537864f21665",
+            "actions": [
+                {
+                    "name": "PauseCS",
+                    "type": "Button",
+                    "id": "3084e70a-5773-4fea-a3a3-6f3dbf6015c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CancelCS",
+                    "type": "Button",
+                    "id": "668717b8-9fc1-4f95-8e85-8baa81b16174",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SubmitCS",
+                    "type": "Button",
+                    "id": "ba882b0c-5f17-4946-b7d6-b94307389128",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NavigateCS",
+                    "type": "Value",
+                    "id": "a21b75fa-fce5-432e-a9ec-89040dbca516",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1d8b4961-9cb7-4fc2-afc1-9ee9f2bdfa84",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "NavigateCS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0c600bb-28b0-4879-8771-c7bd9ab514d4",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SubmitCS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "888d8868-2b5b-4fb9-af48-ea744797bec1",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "CancelCS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4112ca7e-710b-485e-8a81-333d7ea64f34",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseCS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

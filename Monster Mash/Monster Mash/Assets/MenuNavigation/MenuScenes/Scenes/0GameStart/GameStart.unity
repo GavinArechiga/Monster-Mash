@@ -1208,6 +1208,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
         type: 3}
+      propertyPath: allowJoining
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
+        type: 3}
       propertyPath: cutSceneDuration
       value: 10
       objectReference: {fileID: 0}

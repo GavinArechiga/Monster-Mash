@@ -3079,6 +3079,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
         type: 3}
+      propertyPath: allowJoining
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
+        type: 3}
       propertyPath: controllerForThisScene
       value: 
       objectReference: {fileID: 3816113336416170721, guid: 204dcd9782ee00942964dc10665fdafe,
