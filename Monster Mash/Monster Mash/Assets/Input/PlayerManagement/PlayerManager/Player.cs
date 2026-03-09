@@ -36,6 +36,14 @@ public class Player : MonoBehaviour
         IP_Activate(currentController);
     }
 
+    public void SwitchControllerAndDestroyOld(GameObject controllerPrefab)
+    {
+        DestroyAllControllers();
+        GameObject currentController = Instantiate(controllerPrefab, spawn);
+        currentControllers.Add(currentController);
+        IP_Activate(currentController);
+    }
+
     public void DestroyControllerOfType<T>() where T : IPlayerController
     {
         for (int i = currentControllers.Count - 1; i >= 0; i--)
@@ -66,6 +74,14 @@ public class Player : MonoBehaviour
             {
                 IP_Deactivate(currentControllers[i]);
             }
+        }
+    }
+
+    private void DeactivateAll()
+    {
+        for (int i = 0; i < currentControllers.Count; i++)
+        {
+            IP_Deactivate(currentControllers[i]);
         }
     }
 

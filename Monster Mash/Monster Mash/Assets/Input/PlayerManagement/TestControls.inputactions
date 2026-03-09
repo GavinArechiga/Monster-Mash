@@ -440,6 +440,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "PressToJoin",
+            "id": "74695126-af5b-496f-8129-847d230b4758",
+            "actions": [
+                {
+                    "name": "AnyButtonJoin",
+                    "type": "Button",
+                    "id": "d9652238-db0f-47a0-93a9-d63ea604ba0c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a03bacbb-80e6-4a3a-9714-9789c03723e8",
+                    "path": "<Gamepad>/*",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AnyButtonJoin",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

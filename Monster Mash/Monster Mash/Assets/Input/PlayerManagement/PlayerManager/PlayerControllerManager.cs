@@ -7,11 +7,13 @@ public class PlayerControllerManager : MonoBehaviour
 {
     //this script manages all action map switching. any time a different script would need to do so, it must pass through here.
 
-    //all actionMap controller prefabs are listed below, as of now there are only 2//////////////
+    //all actionMap controller prefabs are listed below, as of now there are only 6//////////////
     public GameObject uiController;
     public GameObject combatController;
     public GameObject cutsceneController;
     public GameObject mainmenuController;
+    public GameObject pressToJoinController;
+    public GameObject characterSelectController;
     ///////////////////////////
 
     private PlayerManager manager;
