@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+//Temp
+using UnityEditor;
 
 public class CombatMonster : MonoBehaviour
 {
@@ -32,15 +34,31 @@ public class CombatMonster : MonoBehaviour
 
     #region Events
 
+    //Locomotion Events
+    public Action<bool> setWalk;
+    public Action<bool> setRun;
+    public Action jump;
+    public Action land;
+
+
+    //Combat Events
     public Action<AttackButtons, Transform> startBrace;
     public Action<AttackButtons> endBrace;
     public Action releaseTorsoBrace;
+    public Action onHit;
 
     #endregion
+
+    #region Initialization
 
     public void InitializeMonster(PlayerCombatManager playerCombatManager)
     {
         _playerCombatManager = playerCombatManager;
+
+        //Sort Part list Makes sure that the Torso is always first in the list of monster parts to properly initialize the part parents
+        //It makes sure heads are second for the same reason
+
+        SortPartList();
 
         InitializeMonsterParts();
 
@@ -77,11 +95,16 @@ public class CombatMonster : MonoBehaviour
 
             partData._monsterPart.InitializeMonsterPart(partData._assignedButton, this);
 
-            //For this to work Right we need to make sure that the Torso is always the first in the list of Monster Parts
-
             partData._monsterPart.InitializePartGameObject();
         }
     }
+
+    void SortPartList()
+    {
+        monsterData.Sort(MonsterPartPriority.SortPartPriority);
+    }
+
+    #endregion
 
     #region Attack Logic
 
@@ -284,12 +307,16 @@ public class CombatMonster : MonoBehaviour
 
     #region Health and Damage
 
-    void MonsterHit()
+    public void MonsterHit(int damage)
     {
         print("Ouch!");
+
+        onHit?.Invoke();
+
+        TakeDamage(damage);
     }
 
-    void TakeDamage()
+    void TakeDamage(int damage)
     {
         
     }
@@ -327,5 +354,85 @@ public class CombatMonster : MonoBehaviour
     }
 
     #endregion
+
+    #region Locomotion Animation Controls
+
+    //Temp To Check Animations for Locomtion before we integrate Davids work
+
+    public void StartWalk()
+    {
+        setWalk?.Invoke(true);
+    }
+
+    public void StartRun()
+    {
+        setRun?.Invoke(true);
+    }
+
+    public void EndMovement()
+    {
+        setRun?.Invoke(false);
+        setWalk?.Invoke(false);
+    }
+
+    public void Jump()
+    {
+        jump?.Invoke();
+    }
+
+    public void Land()
+    {
+        land?.Invoke();
+    }
+
+    #endregion
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(CombatMonster))]
+    public class CombatEditorButtons : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            CombatMonster manager = target as CombatMonster;
+
+            GUIStyle textStyle = new GUIStyle();
+
+            textStyle.fontStyle = FontStyle.Bold;
+
+            textStyle.normal.textColor = Color.white;
+
+            GUILayout.Label("EDITOR TEST FUNCTIONS", textStyle);
+
+            GUILayout.Label("Locomotion Animations");
+
+            if (GUILayout.Button("Start Walk"))
+            {
+                manager.StartWalk();
+            }
+
+            if (GUILayout.Button("Start Run"))
+            {
+                manager.StartRun();
+            }
+
+            if (GUILayout.Button("End Movement"))
+            {
+                manager.EndMovement();
+            }
+
+            if (GUILayout.Button("Jump"))
+            {
+                manager.Jump();
+            }
+
+            if (GUILayout.Button("Land"))
+            {
+                manager.Land();
+            }
+        }
+    }
+#endif
 
 }

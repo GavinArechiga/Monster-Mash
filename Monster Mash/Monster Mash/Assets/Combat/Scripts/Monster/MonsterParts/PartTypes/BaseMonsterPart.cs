@@ -36,6 +36,8 @@ public class BaseMonsterPart : MonoBehaviour
 
     #endregion
 
+    #region Initialization
+
     public virtual void InitializeMonsterPart(AttackButtons partButton, CombatMonster combatMonster)
     {
         SetBaseMonsterPart(partButton, combatMonster);
@@ -81,6 +83,8 @@ public class BaseMonsterPart : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region Set and Return Functions
 
     public void SetPartParent(Transform parentObject)
@@ -106,6 +110,13 @@ public class BaseMonsterPart : MonoBehaviour
         _combatMonster.startBrace += StartBrace;
         _combatMonster.endBrace += EndBrace;
         _combatMonster.releaseTorsoBrace += ReleaseTorsoBrace;
+        _combatMonster.onHit += OnHit;
+
+        //Temp Will Probably Be Replaced By A Different Script
+        _combatMonster.setWalk += SetWalk;
+        _combatMonster.setRun += SetRun;
+        _combatMonster.jump += Jump;
+        _combatMonster.land += Land;
     }
 
     void UnsubscribeToEvents()
@@ -113,6 +124,13 @@ public class BaseMonsterPart : MonoBehaviour
         _combatMonster.startBrace -= StartBrace;
         _combatMonster.endBrace -= EndBrace;
         _combatMonster.releaseTorsoBrace -= ReleaseTorsoBrace;
+        _combatMonster.onHit -= OnHit;
+
+        //Temp
+        _combatMonster.setWalk -= SetWalk;
+        _combatMonster.setRun -= SetRun;
+        _combatMonster.jump -= Jump;
+        _combatMonster.land -= Land;
     }
 
     private void OnDisable()
@@ -122,6 +140,11 @@ public class BaseMonsterPart : MonoBehaviour
 
     #endregion
 
+    #region Event Functions
+
+    #region Combat
+
+    //Combat
     public void StartBrace(AttackButtons attack, Transform dir)
     {
         if(_partButton == attack)
@@ -150,4 +173,35 @@ public class BaseMonsterPart : MonoBehaviour
         }
     }
 
+    public void OnHit()
+    {
+        onHit?.Invoke();
+    }
+    #endregion
+
+    #region Locomotion
+    //Locomotion
+    void SetWalk(bool value)
+    {
+        setWalk?.Invoke(value);
+    }
+
+    void SetRun(bool value)
+    {
+        setRun?.Invoke(value);
+    }
+
+    void Jump()
+    {
+        jump?.Invoke();
+    }
+
+    void Land()
+    {
+        land?.Invoke();
+    }
+
+    #endregion
+
+    #endregion
 }
