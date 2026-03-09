@@ -20,15 +20,22 @@ public class PlayerJoinManager : MonoBehaviour
             SpawnFirstPlayer();
         }
 
-        manager.SubscribePlayerJoin();
+        manager.SubscribePlayerJoinLeft();
     }
     private void Awake()
     {
         manager = GetComponent<PlayerManager>();
     }
+
+    private void OnEnable()
+    {
+        InputSystem.onDeviceChange += OnDeviceChange;
+    }
     private void OnDisable()
     {
         manager.inputManager.onPlayerJoined -= OnPlayerJoined;
+        manager.inputManager.onPlayerLeft -= OnPlayerLeft;
+        InputSystem.onDeviceChange -= OnDeviceChange;
     }
     public void OnPlayerJoined(PlayerInput newPlayer) //instantiates new player and sends it off to get the correct action map and world space positioning
     {
@@ -40,6 +47,28 @@ public class PlayerJoinManager : MonoBehaviour
             manager.AddPlayer(newPlayer);
 
             manager.Scene.SetupNewPlayer(newPlayer);
+        }
+    }
+
+    public void OnPlayerLeft(PlayerInput player)
+    {
+        print("player left :(");
+        manager.RemovePlayer(player);
+        player.GetComponent<Player>().DestroyAllControllers();
+    }
+
+    public void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (change == InputDeviceChange.Disconnected && device is Gamepad)
+        {
+            foreach (var player in PlayerInput.all)
+            {
+                if (player.devices.Count == 0)
+                {
+                    Destroy(player.gameObject);
+                    return;
+                }
+            }
         }
     }
     private void SpawnFirstPlayer() //manually spawn PLAYER UNO. Makes player 1 god of the menu navigation

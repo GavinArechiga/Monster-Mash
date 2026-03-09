@@ -15,12 +15,16 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
     private RectTransform canvas;
     public GameObject window;
     private PlayerManager manager;
+    [SerializeField] public GameObject selection;
+    public Transform selectionPos;
+    [SerializeField] private Vector3 selectionOGPos;
+
+    private SceneController sceneController;
 
     private Vector2 move = new Vector2();
     private float speed = 400f;
     public void ActivateController()
     {
-        print("select controller activate");
         playerInput = GetComponentInParent<PlayerInput>();
         playerInput.SwitchCurrentActionMap("CharacterSelect");
         isActive = true;
@@ -29,11 +33,15 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
         cManager = FindObjectOfType<CursorManager>();
         cManager.AddPlayer(this);
         canvas = cManager.canvas;
+        sceneController = FindObjectOfType<SceneController>();
 
         playerInput.actions["NavigateCS"].performed += Navigate;
         playerInput.actions["NavigateCS"].canceled += NavigateCancel;
         playerInput.actions["SubmitCS"].performed += Submit;
         playerInput.actions["CancelCS"].performed += Cancel;
+        playerInput.actions["ConfirmCS"].performed += Confirm;
+
+        cManager.CheckAllPlayersSelected();
     }
 
     public void DeactivateController()
@@ -42,7 +50,8 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
         playerInput.actions["NavigateCS"].canceled -= NavigateCancel;
         playerInput.actions["SubmitCS"].performed -= Submit;
         playerInput.actions["CancelCS"].performed -= Cancel;
-        cManager.RemovePlayer(this);
+        playerInput.actions["ConfirmCS"].performed -= Confirm;
+        cManager?.RemovePlayer(this);
         isActive = false;
     }
 
@@ -58,14 +67,61 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
 
     private void Submit(InputAction.CallbackContext context)
     {
+        RaycastHit hit;
 
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f))
+        {
+            if (hit.transform.GetComponent<CapsuleCollider>())
+            {
+                print("this lad: " + hit.transform.gameObject);
+
+                if (selection)
+                {
+                    selection.transform.position = selectionOGPos;
+                    selection.GetComponent<CapsuleCollider>().enabled = true;
+                }
+
+                selection = hit.collider.gameObject;
+                selectionOGPos = selection.transform.position;
+                selection.transform.position = selectionPos.position;
+                selection.GetComponent<CapsuleCollider>().enabled = false;
+                cManager.CheckAllPlayersSelected();
+            }
+            else if (hit.transform.GetComponent<BoxCollider>())
+            {
+                hit.transform.GetComponent<BoxCollider>().enabled = false;
+                sceneController.LoadScene(1);
+            }
+        }
     }
 
     private void Cancel(InputAction.CallbackContext context)
     {
-        player.SwitchControllerAndDestroyOld(manager.Controller.pressToJoinController);
+        if (selection)
+        {
+            selection.transform.position = selectionOGPos;
+            selection.GetComponent<CapsuleCollider>().enabled = true;
+            selection = null;
+            cManager.CheckAllPlayersSelected();
+        }
+        else
+        {
+            player.SwitchControllerAndDestroyOld(manager.Controller.pressToJoinController);
+        }
     }
 
+    private void Confirm(InputAction.CallbackContext context)
+    {
+        if (cManager.confirmButton)
+        {
+            cManager.confirmButton.SetActive(false);
+            print("if i see this duplicated then scene loaded more than once :(");
+            sceneController.LoadScene(5);
+        }
+    }
     private void Move()
     {
         myCursor.anchoredPosition += move * speed * Time.deltaTime;
@@ -81,5 +137,8 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
     private void Update()
     {
         Move();
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+        Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
     }
 }

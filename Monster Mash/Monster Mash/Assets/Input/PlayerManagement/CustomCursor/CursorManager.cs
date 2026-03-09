@@ -10,20 +10,24 @@ public class CursorManager : MonoBehaviour
     [SerializeField] private RectTransform[] cursors;
     [SerializeField] private GameObject[] playerWindows;
     [SerializeField] private Vector2[] startPos;
-    [SerializeField] private PlayerCharacterSelectController[] controllers = new PlayerCharacterSelectController[4];
+    [SerializeField] private Transform[] selectionPos;
+    [SerializeField] private PlayerCharacterSelectController[] controllers;
 
     public RectTransform canvas;
+    [SerializeField] public GameObject confirmButton;
 
     // Start is called before the first frame update
     void Start()
     {
         manager = FindObjectOfType<PlayerManager>();
 
+        controllers = new PlayerCharacterSelectController[4];
+
         startPos = new Vector2[cursors.Length];
 
         for (int i = 0; i < cursors.Length; i++)
         {
-            startPos[i] = cursors[i].position;
+            startPos[i] = cursors[i].anchoredPosition;
             cursors[i].gameObject.SetActive(false);
         }
     }
@@ -36,6 +40,8 @@ public class CursorManager : MonoBehaviour
         player.window = playerWindows[index];
         player.window.transform.GetChild(0).gameObject.SetActive(true);
         player.window.transform.GetChild(1).gameObject.SetActive(false);
+        player.selectionPos = selectionPos[index];
+        CheckAllPlayersSelected();
     }
 
     public void RemovePlayer(PlayerCharacterSelectController player)
@@ -49,9 +55,8 @@ public class CursorManager : MonoBehaviour
                 index = i;
             }
         }
-        print("removed at INDEX: " + index);
 
-        cursors[index].position = startPos[index];
+        cursors[index].anchoredPosition = startPos[index];
         cursors[index].gameObject.SetActive(false);
         player.window.transform.GetChild(0).gameObject.SetActive(false);
         player.window.transform.GetChild(1).gameObject.SetActive(true);
@@ -66,10 +71,24 @@ public class CursorManager : MonoBehaviour
         {
             if (controllers[i] == null)
             {
-                index = i;
+                return i;
             }
         }
 
         return index;
+    }
+
+    public void CheckAllPlayersSelected()
+    {
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            if (controllers[i] != null && controllers[i].selection == null)
+            {
+                confirmButton.SetActive(false);
+                return;
+            }
+        }
+
+        confirmButton.SetActive(true);
     }
 }

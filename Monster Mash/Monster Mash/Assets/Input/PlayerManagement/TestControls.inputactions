@@ -358,7 +358,7 @@
             "id": "7c5bd7a0-4d67-435e-aaee-537864f21665",
             "actions": [
                 {
-                    "name": "PauseCS",
+                    "name": "ConfirmCS",
                     "type": "Button",
                     "id": "3084e70a-5773-4fea-a3a3-6f3dbf6015c9",
                     "expectedControlType": "Button",
@@ -435,7 +435,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PauseCS",
+                    "action": "ConfirmCS",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
