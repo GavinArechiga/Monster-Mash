@@ -15,6 +15,8 @@ public class PlayerManager : MonoBehaviour
     public PlayerInputManager inputManager { get; private set; }
 
     private List<PlayerInput> players = new List<PlayerInput>(); //this is a list of all players currently in the game! PlayerJoinManager keeps it up to date
+
+    public int selectedStage;
     private void Awake()
     {
         Join = GetComponent<PlayerJoinManager>();
@@ -49,8 +51,14 @@ public class PlayerManager : MonoBehaviour
         players.Remove(player);
     }
 
-    public void SubscribePlayerJoin() //this used to happen internally in PlayerJoinManager but its OnEnable was missing timing with this script's Awake :(
+    public void SubscribePlayerJoinLeft() //this used to happen internally in PlayerJoinManager but its OnEnable was missing timing with this script's Awake :(
     {
         inputManager.onPlayerJoined += Join.OnPlayerJoined;
+        inputManager.onPlayerLeft += Join.OnPlayerLeft;
+    }
+
+    public void SetSelectedStage(int i)
+    {
+        selectedStage = i;
     }
 }

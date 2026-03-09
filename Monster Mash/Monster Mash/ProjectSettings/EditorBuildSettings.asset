@@ -66,13 +66,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MenuNavigation/MenuScenes/Scenes/0GameStart/GameStart.unity
     guid: cd04b3a2b1dcd4d4d8d2039dac9f32d1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Test Rooms/Judah/MultiTest/Scenes/Arcade.unity
     guid: 43236492dce45454495bb8f07ac8b2f4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Test Rooms/Judah/MultiTest/Scenes/Gacha.unity
     guid: de995c134f332e14aa33c08f662f2f25
-  - enabled: 1
+  - enabled: 0
     path: Assets/Test Rooms/Judah/MultiTest/Scenes/MainSettings.unity
     guid: 64908e6ab1ddbfa43bde7c520e5549fa
   - enabled: 1
@@ -93,9 +93,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MenuNavigation/MenuScenes/Scenes/3BuildAScare/BuildAScare.unity
     guid: b029ee2870ace074fa3802cdd3afcc87
-  - enabled: 1
+  - enabled: 0
     path: Assets/Test Rooms/Judah/MultiTest/Scenes/Extras.unity
     guid: 5c35c32b785af0a44a91d787e5529adb
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/9TempStageA/TempStageA.unity
+    guid: 6011c13b51e4596408fe3495b2793ce5
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/10TempStageB/TempStageB.unity
+    guid: 6ddf928ac63e7334fa8c576f2f99a922
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4aac50c1861c91e4e92485c9846f0c18,
       type: 2}

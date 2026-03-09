@@ -13,8 +13,19 @@ public class SceneController : MonoBehaviour
 
     public string[] myScenes;
 
+    private PlayerManager manager;
+
+    private void Start()
+    {
+        manager = FindObjectOfType<PlayerManager>();
+    }
     public void LoadScene(int i)
     {
         SceneManager.LoadScene(myScenes[i]);
+    }
+
+    public void SetSelectedStage(int i)
+    {
+        manager.SetSelectedStage(i);
     }
 }
