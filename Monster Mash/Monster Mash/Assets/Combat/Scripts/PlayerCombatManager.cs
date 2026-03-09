@@ -8,6 +8,8 @@ using UnityEditor;
 
 public class PlayerCombatManager : MonoBehaviour
 {
+    [Header("Player Manager Attributes")]
+
     [SerializeField] PlayerState currentState= PlayerState.Disabled;
 
     [SerializeField] PlayerInput playerInput;
@@ -21,10 +23,9 @@ public class PlayerCombatManager : MonoBehaviour
 
     List<MonsterPartAttackBehaviours> _allPartAttacks;
 
-    public Action onHit;
+    public Action<int> onHit;
 
     public Action attackEnd;
-
     private void Awake()
     {
         combatActionInitializer.InitializeCombat(playerInput, this, 
@@ -83,7 +84,7 @@ public class PlayerCombatManager : MonoBehaviour
 
     public void OnHit()
     {
-        onHit?.Invoke();
+        onHit?.Invoke(0);
     }
 
     private void OnDisable()
@@ -99,15 +100,24 @@ public class PlayerCombatManager : MonoBehaviour
 
 
 #if UNITY_EDITOR
-
     [CustomEditor(typeof(PlayerCombatManager))]
-    public class DamageSimulation : Editor
+    public class EditorButtons : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
             PlayerCombatManager manager = target as PlayerCombatManager;
+
+            GUIStyle textStyle = new GUIStyle();
+
+            textStyle.fontStyle = FontStyle.Bold;
+
+            textStyle.normal.textColor = Color.white;
+
+            GUILayout.Label("EDITOR TEST FUNCTIONS", textStyle);
+
+            GUILayout.Label("Damage");
 
             if(GUILayout.Button("Monster Hit"))
             {
