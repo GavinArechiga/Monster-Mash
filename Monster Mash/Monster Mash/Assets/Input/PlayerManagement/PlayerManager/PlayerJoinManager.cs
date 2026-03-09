@@ -55,6 +55,7 @@ public class PlayerJoinManager : MonoBehaviour
         print("player left :(");
         manager.RemovePlayer(player);
         player.GetComponent<Player>().DestroyAllControllers();
+        Destroy(player.gameObject);
     }
 
     public void OnDeviceChange(InputDevice device, InputDeviceChange change)

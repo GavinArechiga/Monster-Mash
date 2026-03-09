@@ -76,24 +76,19 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
         {
             if (hit.transform.GetComponent<CapsuleCollider>())
             {
-                print("this lad: " + hit.transform.gameObject);
-
-                if (selection)
-                {
-                    selection.transform.position = selectionOGPos;
-                    selection.GetComponent<CapsuleCollider>().enabled = true;
-                }
-
-                selection = hit.collider.gameObject;
-                selectionOGPos = selection.transform.position;
-                selection.transform.position = selectionPos.position;
-                selection.GetComponent<CapsuleCollider>().enabled = false;
-                cManager.CheckAllPlayersSelected();
+                Select(hit.transform.gameObject);
             }
-            else if (hit.transform.GetComponent<BoxCollider>())
+            else if (hit.transform.GetComponent<BoxCollider>() && hit.transform.GetComponent<BoxCollider>().enabled)
             {
-                hit.transform.GetComponent<BoxCollider>().enabled = false;
-                sceneController.LoadScene(1);
+                if (hit.transform.gameObject.name == "Random")
+                {
+                    Select(cManager.RandomCharacter());
+                }
+                else if (hit.transform.gameObject.name == "BackButton")
+                {
+                    hit.transform.GetComponent<BoxCollider>().enabled = false;
+                    sceneController.LoadScene(1);
+                }
             }
         }
     }
@@ -115,23 +110,26 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
 
     private void Confirm(InputAction.CallbackContext context)
     {
-        if (cManager.confirmButton)
+        if (cManager.confirmButton.activeSelf)
         {
             cManager.confirmButton.SetActive(false);
             print("if i see this duplicated then scene loaded more than once :(");
-            sceneController.LoadScene(5);
+            cManager.Confirmed();
         }
     }
     private void Move()
     {
-        myCursor.anchoredPosition += move * speed * Time.deltaTime;
+        if (myCursor)
+        {
+            myCursor.anchoredPosition += move * speed * Time.deltaTime;
 
-        Vector2 pos = myCursor.anchoredPosition;
+            Vector2 pos = myCursor.anchoredPosition;
 
-        pos.x = Mathf.Clamp(pos.x, canvas.rect.xMin, canvas.rect.xMax);
-        pos.y = Mathf.Clamp(pos.y, canvas.rect.yMin, canvas.rect.yMax);
+            pos.x = Mathf.Clamp(pos.x, canvas.rect.xMin, canvas.rect.xMax);
+            pos.y = Mathf.Clamp(pos.y, canvas.rect.yMin, canvas.rect.yMax);
 
-        myCursor.anchoredPosition = pos;
+            myCursor.anchoredPosition = pos;
+        }
     }
 
     private void Update()
@@ -140,5 +138,21 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
         Vector3 worldPos = myCursor.position;
         Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
         Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
+    }
+
+    private void Select(GameObject obj)
+    {
+        if (selection)
+        {
+            selection.transform.position = selectionOGPos;
+            selection.GetComponent<CapsuleCollider>().enabled = true;
+        }
+
+        selection = obj;
+        selectionOGPos = selection.transform.position;
+        selection.transform.position = selectionPos.position;
+        selection.GetComponent<CapsuleCollider>().enabled = false;
+        cManager.CheckAllPlayersSelected();
+        cManager.ResetCursorPos(this);
     }
 }

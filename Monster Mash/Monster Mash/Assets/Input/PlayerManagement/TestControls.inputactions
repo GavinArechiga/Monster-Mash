@@ -190,6 +190,15 @@
             "id": "df17c78e-f9f4-4e51-8918-6fdd70a379bd",
             "actions": [
                 {
+                    "name": "AnyButtonMM",
+                    "type": "Button",
+                    "id": "8dab1c00-83b5-482b-b9d9-6028147f4e9e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "RightStick",
                     "type": "Value",
                     "id": "feba9f0f-4899-4a29-ae68-a662a992d9b1",
@@ -348,6 +357,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9774d580-b635-4372-b0f2-aaeeb8973a90",
+                    "path": "<Gamepad>/*",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AnyButtonMM",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

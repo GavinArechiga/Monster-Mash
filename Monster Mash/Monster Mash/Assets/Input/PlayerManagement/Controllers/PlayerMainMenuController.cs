@@ -30,6 +30,14 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
 
     EventSystem eventSystem;
 
+    private GameObject titleCard;
+    private GameObject idleVideo;
+
+    private float idleTime = 10f;
+    private float timer = 0f;
+    private bool canStartTimer = false;
+    [SerializeField] private bool playingIdleVideo = false;
+
     #region (De)Activate Controller
     public void ActivateController()
     {
@@ -40,6 +48,10 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         FindBounds();
 
         lastSelectedButton = eventSystem.currentSelectedGameObject;
+
+        titleCard = GameObject.Find("TitleCard");
+        idleVideo = GameObject.Find("IdleVideo");
+        idleVideo?.SetActive(false);
 
         StartCoroutine("LoadTitleCard");
     }
@@ -59,6 +71,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         playerInput.actions["RightStick"].performed += RightStickPerformed;
         playerInput.actions["RightStick"].canceled += RightStickCanceled;
         playerInput.actions["Navigate1"].performed += LeftStickPerformed;
+        playerInput.actions["AnyButtonMM"].performed += AnyButton;
     }
 
     private void OnDisable()
@@ -70,6 +83,7 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         playerInput.actions["RightStick"].performed -= RightStickPerformed;
         playerInput.actions["RightStick"].canceled -= RightStickCanceled;
         playerInput.actions["Navigate1"].performed -= LeftStickPerformed;
+        playerInput.actions["AnyButtonMM"].performed -= AnyButton;
     }
 
     #endregion
@@ -115,6 +129,15 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
             move = context.ReadValue<Vector2>();
             justUsedFreeCam = true;
         }
+
+        if (!playingIdleVideo)
+        {
+            timer = 0.0f;
+        }
+        else
+        {
+            StopIdleVideo();
+        }
     }
 
     private void RightStickCanceled(InputAction.CallbackContext context)
@@ -131,6 +154,27 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         {
             CheckMenuSwitch();
         }
+
+        if (!playingIdleVideo)
+        {
+            timer = 0.0f;
+        }
+        else
+        {
+            StopIdleVideo();
+        }
+    }
+
+    private void AnyButton(InputAction.CallbackContext context)
+    {
+        if (!playingIdleVideo)
+        {
+            timer = 0.0f;
+        }
+        else
+        {
+            StopIdleVideo();
+        }
     }
 
     #endregion
@@ -140,6 +184,16 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
         if (!pauseControls)
         {
             MoveFreeCamera();
+        }
+
+        if (!playingIdleVideo)
+        {
+            timer += Time.deltaTime;
+        }
+
+        if (timer > idleTime)
+        {
+            StartIdleVideo();
         }
     }
     private void ChangeRooms(string x)
@@ -334,19 +388,36 @@ public class PlayerMainMenuController : MonoBehaviour, IPlayerController
     {
         bool load = FindObjectOfType<LoadTitleCard>();
 
-        GameObject.Find("ScreenSpaceCanvas")?.SetActive(load);
+        titleCard?.SetActive(load);
 
         if (load)
         {
             StopCoroutine("MoveThatCamera");
             PauseControls(true);
             yield return new WaitForSeconds(2.0f);
-            GameObject.Find("ScreenSpaceCanvas")?.SetActive(false);
+            titleCard?.SetActive(false);
             Destroy(FindObjectOfType<LoadTitleCard>().gameObject);
             PauseControls(false);
         }
 
+        canStartTimer = true;
         yield break;
+    }
+
+    private void StartIdleVideo()
+    {
+        playingIdleVideo = true;
+        timer = 0.0f;
+        PauseControls(true);
+        idleVideo?.SetActive(true);
+    }
+
+    private void StopIdleVideo()
+    {
+        timer = 0.0f;
+        PauseControls(false);
+        idleVideo?.SetActive(false);
+        playingIdleVideo = false;
     }
 
     private void PauseControls(bool pause)

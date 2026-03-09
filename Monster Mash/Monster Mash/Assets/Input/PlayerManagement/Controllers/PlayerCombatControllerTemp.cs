@@ -8,10 +8,13 @@ public class PlayerCombatControllerTemp : MonoBehaviour, IPlayerController
     PlayerInput playerInput;
 
     private bool isActive = true;
+
+    private Player player;
+    private GameObject character;
     void Update()
     {
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
-        transform.Translate(move * moveSpeed * Time.deltaTime, Space.World);
+        character.transform.Translate(move * moveSpeed * Time.deltaTime, Space.World);
     }
     public string GetActionMap()
     {
@@ -25,6 +28,12 @@ public class PlayerCombatControllerTemp : MonoBehaviour, IPlayerController
         playerInput.SwitchCurrentActionMap("Combat");
         isActive = true;
 
+        player = GetComponentInParent<Player>();
+        character = player.GetCharacter();
+        character.SetActive(true);
+        character.GetComponent<CapsuleCollider>().enabled = true;
+        character.GetComponent<Rigidbody>().useGravity = true;
+
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Pause"].performed += OnPause;
     }
@@ -35,6 +44,9 @@ public class PlayerCombatControllerTemp : MonoBehaviour, IPlayerController
 
         playerInput.actions["Move"].performed -= OnMove;
         playerInput.actions["Pause"].performed -= OnPause;
+
+        character.GetComponent<Rigidbody>().useGravity = false;
+        character.SetActive(false);
     }
     #endregion
 

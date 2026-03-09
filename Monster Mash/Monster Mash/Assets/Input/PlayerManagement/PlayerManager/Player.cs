@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform spawn;
 
+    [SerializeField] private GameObject character;
+
     //called from PlayerControllerManager to switch action maps.
     //new action maps are paired with an instantiated controller prefab designed
     //for the action map needs. the actual SwitchActionMap function is called from the controller script attached to each of these instantiated prefabs
@@ -94,5 +96,21 @@ public class Player : MonoBehaviour
     private void IP_Activate(GameObject iPlayer)
     {
         iPlayer.GetComponent<IPlayerController>().ActivateController();
+    }
+
+    public void SetCharacter(GameObject obj)
+    {
+        character = obj;
+    }
+
+    public GameObject GetCharacter()
+    {
+        return character;
+    }
+
+    public void DestroyCharacter()
+    {
+        Destroy(character);
+        character = null;
     }
 }
