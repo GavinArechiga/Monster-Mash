@@ -14,7 +14,7 @@ using UnityEngine.InputSystem;
 		[Header("Mouse Cursor Settings")] public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 		
-		public void OnMove(InputValue value)
+		public void OnLeftStick(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -27,7 +27,7 @@ using UnityEngine.InputSystem;
 			}
 		}
 
-		public void OnJump(InputValue value)
+		public void OnA(InputValue value)
 		{
 			JumpInput(value.isPressed);
 		}
