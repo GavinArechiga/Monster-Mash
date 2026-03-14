@@ -20,6 +20,8 @@ public class CursorManager : MonoBehaviour
 
     [SerializeField] private GameObject roster;
 
+    [SerializeField] public bool thisIsCharacterSelect = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,6 @@ public class CursorManager : MonoBehaviour
         player.selectionPos = selectionPos[index];
         CheckAllPlayersSelected();
     }
-
     public void RemovePlayer(PlayerCharacterSelectController player)
     {
         if (cursors[0])

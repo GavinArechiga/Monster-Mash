@@ -1514,10 +1514,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
         type: 3}
+      propertyPath: myScenes.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
+        type: 3}
       propertyPath: controllerForThisScene
       value: 
       objectReference: {fileID: 2530080152269799101, guid: b4fdf9c2507629341a8de784a9c51dd9,
         type: 3}
+    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
+        type: 3}
+      propertyPath: myScenes.Array.data[3]
+      value: BAS_PickATorso
+      objectReference: {fileID: 0}
+    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
+        type: 3}
+      propertyPath: myScenes.Array.data[11]
+      value: BuildAScare
+      objectReference: {fileID: 0}
     - target: {fileID: 1707773047803265864, guid: 6538ce9fdeec83b4494cab3c4123180e,
         type: 3}
       propertyPath: m_RootOrder

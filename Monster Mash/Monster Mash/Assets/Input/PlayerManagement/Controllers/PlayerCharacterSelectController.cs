@@ -82,7 +82,14 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
             {
                 if (hit.transform.gameObject.name == "Random")
                 {
-                    Select(cManager.RandomCharacter());
+                    if (cManager.thisIsCharacterSelect  )
+                    {
+                        Select(cManager.RandomCharacter());
+                    }
+                    else
+                    {
+                        Select(null);
+                    }
                 }
                 else if (hit.transform.gameObject.name == "BackButton")
                 {
@@ -142,17 +149,21 @@ public class PlayerCharacterSelectController : MonoBehaviour, IPlayerController
 
     private void Select(GameObject obj)
     {
-        if (selection)
+        if (obj)
         {
-            selection.transform.position = selectionOGPos;
-            selection.GetComponent<CapsuleCollider>().enabled = true;
-        }
+            if (selection)
+            {
+                selection.transform.position = selectionOGPos;
+                selection.GetComponent<CapsuleCollider>().enabled = true;
+            }
 
-        selection = obj;
-        selectionOGPos = selection.transform.position;
-        selection.transform.position = selectionPos.position;
-        selection.GetComponent<CapsuleCollider>().enabled = false;
-        cManager.CheckAllPlayersSelected();
-        cManager.ResetCursorPos(this);
+            selection = obj;
+            selectionOGPos = selection.transform.position;
+            selection.transform.position = selectionPos.position;
+            selection.GetComponent<CapsuleCollider>().enabled = false;
+            cManager.CheckAllPlayersSelected();
+            cManager.ResetCursorPos(this);
+
+        }
     }
 }

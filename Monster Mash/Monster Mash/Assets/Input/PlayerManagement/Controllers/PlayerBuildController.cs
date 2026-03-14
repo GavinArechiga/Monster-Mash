@@ -26,6 +26,14 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
     [SerializeField] private RectTransform crossHair;
     private float crosshairSpeed = 300f;
     private Vector2 crosshairMove;
+
+    private float defaultFOV = 60f;
+    private float maxFOV = 60f;
+    private float minFOV = 35f;
+    private float zoomSpeed = 20f;
+
+    private bool isHoldingRight = false;
+    private bool isHoldingLeft = false;
     public void ActivateController()
     {
         playerInput = GetComponentInParent<PlayerInput>();
@@ -41,6 +49,10 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["LeftStickBS"].canceled += LeftStickCancel;
         playerInput.actions["RightStickBS"].performed += RightStick;
         playerInput.actions["RightStickBS"].canceled += RightStickCancel;
+        playerInput.actions["RightTriggerBS"].performed += CameraZoomIn;
+        playerInput.actions["LeftTriggerBS"].performed += CameraZoomOut;
+        playerInput.actions["RightTriggerBS"].canceled += RightTriggerCancel;
+        playerInput.actions["LeftTriggerBS"].canceled += LeftTriggerCancel;
     }
 
     public void DeactivateController()
@@ -51,6 +63,11 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["LeftStickBS"].canceled -= LeftStickCancel;
         playerInput.actions["RightStickBS"].performed -= RightStick;
         playerInput.actions["RightStickBS"].canceled -= RightStickCancel;
+        playerInput.actions["RightTriggerBS"].performed -= CameraZoomIn;
+        playerInput.actions["LeftTriggerBS"].performed -= CameraZoomOut;
+        playerInput.actions["RightTriggerBS"].canceled -= RightTriggerCancel;
+        playerInput.actions["LeftTriggerBS"].canceled -= LeftTriggerCancel;
+
     }
 
     private void LeftStick(InputAction.CallbackContext context)
@@ -79,6 +96,7 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
     {
         RotateMonster();
         MoveCrosshair();
+        CameraZoom();
     }
 
     private void RotateMonster()
@@ -128,5 +146,41 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         }
 
         return x;
+    }
+
+    private void CameraZoomIn(InputAction.CallbackContext context)
+    {
+        isHoldingRight = true;
+    }
+
+    private void RightTriggerCancel(InputAction.CallbackContext context)
+    {
+        isHoldingRight = false;
+    }
+
+    private void CameraZoomOut(InputAction.CallbackContext context)
+    {
+        isHoldingLeft = true;
+    }
+
+    private void LeftTriggerCancel(InputAction.CallbackContext context)
+    {
+        isHoldingLeft = false;
+    }
+    private void CameraZoom()
+    {
+        if (isHoldingRight)
+        {
+            float newFOV = cam.fieldOfView - (zoomSpeed * Time.deltaTime);
+
+            cam.fieldOfView = Mathf.Max(newFOV, minFOV);
+        }
+
+        if (isHoldingLeft)
+        {
+            float newFOV = cam.fieldOfView + (zoomSpeed * Time.deltaTime);
+
+            cam.fieldOfView = Mathf.Min(newFOV, maxFOV);
+        }
     }
 }
