@@ -236,7 +236,7 @@
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "AllGamepads",
+                    "groups": "AllGamepads;Gamepad",
                     "action": "B",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -247,7 +247,7 @@
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "AllGamepads",
+                    "groups": "AllGamepads;Gamepad",
                     "action": "X",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -258,7 +258,7 @@
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "AllGamepads",
+                    "groups": "AllGamepads;Gamepad",
                     "action": "Y",
                     "isComposite": false,
                     "isPartOfComposite": false
