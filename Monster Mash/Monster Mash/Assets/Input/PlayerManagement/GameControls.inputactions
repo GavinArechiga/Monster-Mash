@@ -225,7 +225,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "AllGamepads",
+                    "groups": "AllGamepads;Gamepad",
                     "action": "A",
                     "isComposite": false,
                     "isPartOfComposite": false

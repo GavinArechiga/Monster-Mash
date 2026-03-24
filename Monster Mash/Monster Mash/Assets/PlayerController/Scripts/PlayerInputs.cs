@@ -26,12 +26,18 @@ public class PlayerInputs : MonoBehaviour, IPlayerController
 
 		playerInput.actions["Left Stick"].performed += LeftStick;
 		playerInput.actions["Left Stick"].canceled += LeftStick;
-
+		playerInput.actions["A"].performed += A;
+		playerInput.actions["A"].canceled += A;
 	}
 
 	public void DeactivateController()
 	{
+		isActive = false;
 
+		playerInput.actions["Left Stick"].performed -= LeftStick;
+		playerInput.actions["Left Stick"].canceled -= LeftStick;
+		playerInput.actions["A"].performed -= A;
+		playerInput.actions["A"].canceled -= A;
 	}
 
 	public void LeftStick(InputAction.CallbackContext context)
@@ -47,9 +53,9 @@ public class PlayerInputs : MonoBehaviour, IPlayerController
 		}
 	}
 
-	public void A(InputValue value)
+	public void A(InputAction.CallbackContext context)
 	{
-		JumpInput(value.isPressed);
+		JumpInput(context.performed);
 	}
 
 

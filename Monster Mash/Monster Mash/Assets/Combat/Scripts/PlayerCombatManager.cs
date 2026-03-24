@@ -28,6 +28,8 @@ public class PlayerCombatManager : MonoBehaviour
     public Action attackEnd;
     private void Awake()
     {
+        playerInput = GetComponentInParent<PlayerInput>();
+
         combatActionInitializer.InitializeCombat(playerInput, this, 
             combatInputBuffer, combatMonster);
 
