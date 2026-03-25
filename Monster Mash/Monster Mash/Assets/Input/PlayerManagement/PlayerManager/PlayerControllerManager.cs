@@ -14,6 +14,7 @@ public class PlayerControllerManager : MonoBehaviour
     public GameObject mainmenuController;
     public GameObject pressToJoinController;
     public GameObject characterSelectController;
+    public GameObject buildController;
     ///////////////////////////
 
     private PlayerManager manager;
