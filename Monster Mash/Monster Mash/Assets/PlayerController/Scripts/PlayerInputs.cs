@@ -3,48 +3,74 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-	public class PlayerInputs : MonoBehaviour
+public class PlayerInputs : MonoBehaviour, IPlayerController
+{
+	//IPlayerController values
+	private bool isActive = false; //for pausing controls
+	PlayerInput playerInput;
+
+	[Header("Character Input Values")] public Vector2 move;
+	public Vector2 look;
+	public bool jump;
+
+	[Header("Movement Settings")] public bool analogMovement;
+
+	[Header("Mouse Cursor Settings")] public bool cursorLocked = true;
+	public bool cursorInputForLook = true;
+
+	public void ActivateController()
 	{
-		[Header("Character Input Values")] public Vector2 move;
-		public Vector2 look;
-		public bool jump;
+		playerInput = GetComponentInParent<PlayerInput>();
+		playerInput.SwitchCurrentActionMap("Monster Controls");
+		isActive = true;
 
-		[Header("Movement Settings")] public bool analogMovement;
+		playerInput.actions["Left Stick"].performed += LeftStick;
+		playerInput.actions["Left Stick"].canceled += LeftStick;
+		playerInput.actions["A"].performed += A;
+		playerInput.actions["A"].canceled += A;
+	}
 
-		[Header("Mouse Cursor Settings")] public bool cursorLocked = true;
-		public bool cursorInputForLook = true;
-		
-		public void OnLeftStick(InputValue value)
+	public void DeactivateController()
+	{
+		isActive = false;
+
+		playerInput.actions["Left Stick"].performed -= LeftStick;
+		playerInput.actions["Left Stick"].canceled -= LeftStick;
+		playerInput.actions["A"].performed -= A;
+		playerInput.actions["A"].canceled -= A;
+	}
+
+	public void LeftStick(InputAction.CallbackContext context)
+	{
+		MoveInput(context.ReadValue<Vector2>());
+	}
+
+	public void Look(InputValue value)
+	{
+		if (cursorInputForLook)
 		{
-			MoveInput(value.Get<Vector2>());
-		}
-
-		public void OnLook(InputValue value)
-		{
-			if (cursorInputForLook)
-			{
-				LookInput(value.Get<Vector2>());
-			}
-		}
-
-		public void OnA(InputValue value)
-		{
-			JumpInput(value.isPressed);
-		}
-
-
-		public void MoveInput(Vector2 newMoveDirection)
-		{
-			move = newMoveDirection;
-		}
-
-		public void LookInput(Vector2 newLookDirection)
-		{
-			look = newLookDirection;
-		}
-
-		public void JumpInput(bool newJumpState)
-		{
-			jump = newJumpState;
+			LookInput(value.Get<Vector2>());
 		}
 	}
+
+	public void A(InputAction.CallbackContext context)
+	{
+		JumpInput(context.performed);
+	}
+
+
+	public void MoveInput(Vector2 newMoveDirection)
+	{
+		move = newMoveDirection;
+	}
+
+	public void LookInput(Vector2 newLookDirection)
+	{
+		look = newLookDirection;
+	}
+
+	public void JumpInput(bool newJumpState)
+	{
+		jump = newJumpState;
+	}
+}

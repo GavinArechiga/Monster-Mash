@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bfcc3c8d0c8004fad0f71ba0477359, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedStage: 0
 --- !u!114 &424373798547200613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiController: {fileID: 8722378828708286347, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
     type: 3}
-  combatController: {fileID: 5824897759677644786, guid: 91dacca390bf98c4b84ce6cb8767bc65,
+  combatController: {fileID: 3345359937556334711, guid: 2be2f3a7115c92a4caf55fbfaf02bf8f,
     type: 3}
   cutsceneController: {fileID: 47607940771883431, guid: 701fd9b551ad3574698a08600a83189f,
     type: 3}
