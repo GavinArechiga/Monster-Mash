@@ -34,6 +34,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
 
     private bool isHoldingRight = false;
     private bool isHoldingLeft = false;
+
+    private RectTransform myCursor;
     public void ActivateController()
     {
         playerInput = GetComponentInParent<PlayerInput>();
@@ -45,6 +47,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         crossHair = GameObject.Find("crossHair").GetComponent<RectTransform>();
         canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
 
+        myCursor = GameObject.Find("crossHair").GetComponent<RectTransform>();
+
         playerInput.actions["LeftStickBS"].performed += LeftStick;
         playerInput.actions["LeftStickBS"].canceled += LeftStickCancel;
         playerInput.actions["RightStickBS"].performed += RightStick;
@@ -53,6 +57,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["LeftTriggerBS"].performed += CameraZoomOut;
         playerInput.actions["RightTriggerBS"].canceled += RightTriggerCancel;
         playerInput.actions["LeftTriggerBS"].canceled += LeftTriggerCancel;
+        playerInput.actions["SubmitBS"].performed += ClickA;
+        playerInput.actions["CancelBS"].performed += ClickB;
     }
 
     public void DeactivateController()
@@ -67,7 +73,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["LeftTriggerBS"].performed -= CameraZoomOut;
         playerInput.actions["RightTriggerBS"].canceled -= RightTriggerCancel;
         playerInput.actions["LeftTriggerBS"].canceled -= LeftTriggerCancel;
-
+        playerInput.actions["SubmitBS"].performed -= ClickA;
+        playerInput.actions["CancelBS"].performed -= ClickB;
     }
 
     private void LeftStick(InputAction.CallbackContext context)
@@ -92,11 +99,48 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         lookInput = Vector2.zero;
     }
 
+    private void ClickA(InputAction.CallbackContext context)
+    {
+        RaycastHit hit;
+
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f))
+        {
+            if (true)//hit.transform.gameObject.name.Contains("Torso"))
+            {
+                var monsterPartLoad = Resources.Load<GameObject>("Build-A-Scare Parts/Arms/Arm 15");
+
+                if (!monsterPartLoad)
+                {
+                    Debug.Log("error monster part dont exist");
+                }
+                else
+                {
+                    GameObject monsterPart = Instantiate(monsterPartLoad);
+                    monsterPart.transform.rotation = Quaternion.FromToRotation(Vector3.right, hit.normal);
+                    monsterPart.transform.position = hit.point;
+                    monsterPart.transform.parent = monster.transform;
+                }
+            }
+        }
+    }
+    private void ClickB(InputAction.CallbackContext context)
+    {
+
+    }
+
     private void Update()
     {
         RotateMonster();
         MoveCrosshair();
         CameraZoom();
+
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+        Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
+        
     }
 
     private void RotateMonster()
@@ -121,8 +165,6 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
 
         float xOffset = canvas.rect.xMax / 10f;
         float yOffset = canvas.rect.yMax / 5f;
-        print("xmax: " + canvas.rect.xMax);
-        print("ymax: " + canvas.rect.yMax);
         pos.x = Mathf.Clamp(pos.x, canvas.rect.xMin + xOffset, canvas.rect.xMax - xOffset);
         pos.y = Mathf.Clamp(pos.y, canvas.rect.yMin + yOffset, canvas.rect.yMax - yOffset);
 
