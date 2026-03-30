@@ -10,7 +10,7 @@ public class AttachCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject.Find("Main Camera").AddComponent<CinemachineBrain>();
+        if (Camera.main != null) Camera.main.gameObject.AddComponent<CinemachineBrain>();
         GetComponent<CinemachineVirtualCamera>().Follow = playerCameraRoot.transform;
         GetComponent<CinemachineVirtualCamera>().LookAt = playerCameraRoot.transform;
         transform.SetParent(transform.parent.parent);
