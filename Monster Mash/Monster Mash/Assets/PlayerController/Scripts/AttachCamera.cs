@@ -7,7 +7,6 @@ public class AttachCamera : MonoBehaviour
 {
     [SerializeField] private GameObject playerCameraRoot;
     
-    // Start is called before the first frame update
     void Start()
     {
         if (Camera.main != null) Camera.main.gameObject.AddComponent<CinemachineBrain>();
