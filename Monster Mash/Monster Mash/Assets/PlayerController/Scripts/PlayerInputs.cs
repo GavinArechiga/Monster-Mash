@@ -10,13 +10,9 @@ public class PlayerInputs : MonoBehaviour, IPlayerController
 	PlayerInput playerInput;
 
 	[Header("Character Input Values")] public Vector2 move;
-	public Vector2 look;
 	public bool jump;
 
 	[Header("Movement Settings")] public bool analogMovement;
-
-	[Header("Mouse Cursor Settings")] public bool cursorLocked = true;
-	public bool cursorInputForLook = true;
 
 	public void ActivateController()
 	{
@@ -45,14 +41,6 @@ public class PlayerInputs : MonoBehaviour, IPlayerController
 		MoveInput(context.ReadValue<Vector2>());
 	}
 
-	public void Look(InputValue value)
-	{
-		if (cursorInputForLook)
-		{
-			LookInput(value.Get<Vector2>());
-		}
-	}
-
 	public void A(InputAction.CallbackContext context)
 	{
 		JumpInput(context.performed);
@@ -62,11 +50,6 @@ public class PlayerInputs : MonoBehaviour, IPlayerController
 	public void MoveInput(Vector2 newMoveDirection)
 	{
 		move = newMoveDirection;
-	}
-
-	public void LookInput(Vector2 newLookDirection)
-	{
-		look = newLookDirection;
 	}
 
 	public void JumpInput(bool newJumpState)

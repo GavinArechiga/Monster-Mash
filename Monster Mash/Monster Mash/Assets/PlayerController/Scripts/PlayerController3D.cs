@@ -1,8 +1,10 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
     
     public class PlayerController3D : MonoBehaviour
     {
+        [SerializeField] private CombatMonster combatMonster;
+        
         [Header("Player")]
         public float MoveSpeed = 2.0f;
         public float RotationSmoothTime = 0.12f;
@@ -68,8 +70,22 @@ using UnityEngine.InputSystem;
         private void Move()
         {
             float targetSpeed = MoveSpeed;
+            float runThreshold = 0.75f;
+            float normalized = (MoveSpeed > 0f) ? speed / MoveSpeed : 0f;
             
-            if (input.move == Vector2.zero) targetSpeed = 0.0f;
+            if (input.move == Vector2.zero)
+            {
+                targetSpeed = 0.0f;
+                combatMonster.EndMovement();
+            }
+            else if (normalized >= runThreshold)
+            {
+                combatMonster.StartRun();
+            }
+            else
+            {
+                combatMonster.StartWalk();
+            }
             
             float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
 
@@ -113,6 +129,7 @@ using UnityEngine.InputSystem;
         {
             if (Grounded)
             {
+                combatMonster.Land();
                 if (verticalVelocity < 0.0f)
                 {
                     verticalVelocity = -2f;
@@ -131,6 +148,7 @@ using UnityEngine.InputSystem;
             }
             else
             {
+                combatMonster.Jump();
                 jumpTimeoutDelta = JumpTimeout;
                 input.jump = false;
             }
