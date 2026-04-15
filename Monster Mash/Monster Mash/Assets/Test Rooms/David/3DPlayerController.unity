@@ -3015,6 +3015,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: NewPlayerPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 3345359937556334714, guid: 2be2f3a7115c92a4caf55fbfaf02bf8f,
+        type: 3}
+      propertyPath: jump
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2be2f3a7115c92a4caf55fbfaf02bf8f, type: 3}
 --- !u!33 &7233287512006665924
@@ -4406,7 +4411,7 @@ Transform:
   m_GameObject: {fileID: 8345070699168445099}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.84525114, y: 1, z: 0.7518137}
+  m_LocalScale: {x: 1.7784141, y: 2.1040068, z: 1.5818212}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 53103664052401589}
@@ -6244,7 +6249,6 @@ GameObject:
   - component: {fileID: 8944336656236325743}
   - component: {fileID: 8944336656236325736}
   - component: {fileID: 8944336656236325737}
-  - component: {fileID: 9078993844512003959}
   - component: {fileID: 384153868}
   m_Layer: 0
   m_Name: MainCamera
@@ -6284,40 +6288,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &9078993844512003959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8944336656236325738}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowDebugText: 0
-  m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
-  m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
-  m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
-  m_CameraCutEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!33 &9111950142700865718
 MeshFilter:
   m_ObjectHideFlags: 0

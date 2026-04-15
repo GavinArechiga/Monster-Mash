@@ -129,10 +129,10 @@ using UnityEngine.InputSystem;
         {
             if (Grounded)
             {
+                combatMonster.Land();
                 if (verticalVelocity < 0.0f)
                 {
                     verticalVelocity = -2f;
-                    combatMonster.Land();
                 }
 
                 // Jump
@@ -144,11 +144,11 @@ using UnityEngine.InputSystem;
                 if (jumpTimeoutDelta >= 0.0f)
                 {
                     jumpTimeoutDelta -= Time.deltaTime;
-                    combatMonster.Jump();
                 }
             }
             else
             {
+                combatMonster.Jump();
                 jumpTimeoutDelta = JumpTimeout;
                 input.jump = false;
             }
