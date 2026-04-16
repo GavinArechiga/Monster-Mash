@@ -34,6 +34,20 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
 
     private bool isHoldingRight = false;
     private bool isHoldingLeft = false;
+
+    private RectTransform myCursor;
+
+    private bool hoverPart = false;
+    private GameObject partToHover;
+    private GameObject monsterMesh;
+    private bool hoverIsHead = false;
+
+    [SerializeField] private List<GameObject> partList;
+
+    private GameObject camTarget;
+
+    private PartPool partPool;
+    private int poolIndex = 0;
     public void ActivateController()
     {
         playerInput = GetComponentInParent<PlayerInput>();
@@ -41,9 +55,17 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         isActive = true;
 
         monster = GameObject.Find("TestTorsos").transform.GetChild(0).gameObject;
+        monsterMesh = monster.GetComponentInChildren<MeshCollider>().gameObject;
         cam = Camera.main;
         crossHair = GameObject.Find("crossHair").GetComponent<RectTransform>();
         canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
+
+        myCursor = GameObject.Find("crossHair").GetComponent<RectTransform>();
+
+        camTarget = monster;
+        partList.Add(monster);
+
+        partPool = FindObjectOfType<PartPool>();
 
         playerInput.actions["LeftStickBS"].performed += LeftStick;
         playerInput.actions["LeftStickBS"].canceled += LeftStickCancel;
@@ -53,6 +75,12 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["LeftTriggerBS"].performed += CameraZoomOut;
         playerInput.actions["RightTriggerBS"].canceled += RightTriggerCancel;
         playerInput.actions["LeftTriggerBS"].canceled += LeftTriggerCancel;
+        playerInput.actions["SubmitBS"].performed += ClickA;
+        playerInput.actions["CancelBS"].performed += ClickB;
+        playerInput.actions["RightBumperBS"].performed += RightBumper;
+        playerInput.actions["LeftBumperBS"].performed += LeftBumper;
+        playerInput.actions["DPadRightBS"].performed += DPadRight;
+        playerInput.actions["DPadLeftBS"].performed += DPadLeft;
     }
 
     public void DeactivateController()
@@ -67,7 +95,12 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["LeftTriggerBS"].performed -= CameraZoomOut;
         playerInput.actions["RightTriggerBS"].canceled -= RightTriggerCancel;
         playerInput.actions["LeftTriggerBS"].canceled -= LeftTriggerCancel;
-
+        playerInput.actions["SubmitBS"].performed -= ClickA;
+        playerInput.actions["CancelBS"].performed -= ClickB;
+        playerInput.actions["RightBumperBS"].performed -= RightBumper;
+        playerInput.actions["LeftBumperBS"].performed -= LeftBumper;
+        playerInput.actions["DPadRightBS"].performed -= DPadRight;
+        playerInput.actions["DPadLeftBS"].performed -= DPadLeft;
     }
 
     private void LeftStick(InputAction.CallbackContext context)
@@ -92,22 +125,136 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         lookInput = Vector2.zero;
     }
 
+    private void ClickA(InputAction.CallbackContext context)
+    {
+        RaycastHit hit;
+
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f))
+        {
+            if (hit.collider is MeshCollider)
+            {
+                if (!hoverPart)
+                {
+                    var monsterPartLoad = Resources.Load<GameObject>("Build-A-Scare Parts/Arms/Arm 15");
+
+                    if (!monsterPartLoad)
+                    {
+                        Debug.Log("error monster part dont exist");
+                    }
+                    else
+                    {
+                        GameObject monsterPart = Instantiate(monsterPartLoad);
+                        monsterPart.transform.rotation = Quaternion.FromToRotation(Vector3.right, hit.normal);
+                        monsterPart.transform.position = hit.point;
+                        //monsterPart.transform.parent = monster.transform;
+                        hoverPart = true;
+                        partToHover = monsterPart;
+                        hoverIsHead = false;
+                        SetLayerRecursively(partToHover, 2);
+                    }
+                } else
+                {
+                    partToHover.transform.parent = hit.transform;
+                    partList.Add(partToHover);
+                    SetLayerRecursively(partToHover, 0);
+                    hoverPart = false;
+                    hoverIsHead = false;
+                    partToHover = null;
+                }
+            } else { print("No mesh collider? " + hit.transform.gameObject.GetComponent<MeshCollider>()); }
+        }
+    }
+    private void ClickB(InputAction.CallbackContext context)
+    {
+        RaycastHit hit;
+
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f))
+        {
+            if (hit.collider is MeshCollider)
+            {
+                if (!hoverPart)
+                {
+                    var monsterPartLoad = Resources.Load<GameObject>("Build-A-Scare Parts/Heads/Head 11");
+
+                    if (!monsterPartLoad)
+                    {
+                        Debug.Log("error monster part dont exist");
+                    }
+                    else
+                    {
+                        GameObject monsterPart = Instantiate(monsterPartLoad);
+                        monsterPart.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                        monsterPart.transform.position = hit.point;
+                        //monsterPart.transform.parent = monster.transform;
+                        hoverPart = true;
+                        partToHover = monsterPart;
+                        hoverIsHead = true;
+                        SetLayerRecursively(partToHover, 2);
+                    }
+                }
+                else
+                {
+                    partToHover.transform.parent = hit.transform;
+                    partList.Add(partToHover);
+                    SetLayerRecursively(partToHover, 0);
+                    hoverPart = false;
+                    hoverIsHead = false;
+                    partToHover = null;
+                }
+            }
+            else { print("No mesh collider? " + hit.transform.gameObject.GetComponent<MeshCollider>()); }
+        }
+    }
+
     private void Update()
     {
         RotateMonster();
         MoveCrosshair();
         CameraZoom();
+
+        Vector3 worldPos = myCursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(Camera.main.WorldToScreenPoint(worldPos));
+        Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
+
+        if (hoverPart)
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(myRay, out hit, 1000f))
+            {
+                if (hit.collider is MeshCollider)
+                {
+                    if (hoverIsHead)
+                    {
+                        partToHover.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                    }
+                    else
+                    {
+                        partToHover.transform.rotation = Quaternion.FromToRotation(Vector3.right, hit.normal);
+                    }
+                    partToHover.transform.position = hit.point;
+                }
+            }
+        }
     }
 
     private void RotateMonster()
     {
+        cam.transform.position = new Vector3(camTarget.transform.position.x, cam.transform.position.y, cam.transform.position.z);
+
         float delta = lookInput.y * rotSpeed * Time.deltaTime;
 
         float newAngle = Mathf.Clamp(currentAngle + delta, minAngle, maxAngle);
 
         float appliedRotation = newAngle - currentAngle;
 
-        cam.transform.RotateAround(monster.transform.position, Vector3.right * 0.5f, appliedRotation);
+        cam.transform.RotateAround(camTarget.transform.position, Vector3.right * 0.5f, appliedRotation);
         monster.transform.Rotate(Vector3.up, lookInput.x * -rotSpeed * Time.deltaTime, Space.World);
 
         currentAngle = newAngle;
@@ -121,8 +268,6 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
 
         float xOffset = canvas.rect.xMax / 10f;
         float yOffset = canvas.rect.yMax / 5f;
-        print("xmax: " + canvas.rect.xMax);
-        print("ymax: " + canvas.rect.yMax);
         pos.x = Mathf.Clamp(pos.x, canvas.rect.xMin + xOffset, canvas.rect.xMax - xOffset);
         pos.y = Mathf.Clamp(pos.y, canvas.rect.yMin + yOffset, canvas.rect.yMax - yOffset);
 
@@ -181,6 +326,74 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
             float newFOV = cam.fieldOfView + (zoomSpeed * Time.deltaTime);
 
             cam.fieldOfView = Mathf.Min(newFOV, maxFOV);
+        }
+    }
+
+    private void RightBumper(InputAction.CallbackContext context)
+    {
+        int index = 0;
+
+        for (int i = 0; i < partList.Count; i++)
+        {
+            if (partList[i] == camTarget)
+            {
+                index = i;
+            }
+        }
+
+        if (index + 1 < partList.Count)
+        {
+            camTarget = partList[index + 1];
+        } else
+        {
+            camTarget = partList[0];
+        }
+
+        cam.transform.rotation = new Quaternion();
+        cam.transform.position = new Vector3(camTarget.transform.position.x, camTarget.transform.position.y, cam.transform.position.z);
+    }
+
+    private void LeftBumper(InputAction.CallbackContext context)
+    {
+        int index = 0;
+
+        for (int i = 0; i < partList.Count; i++)
+        {
+            if (partList[i] == camTarget)
+            {
+                index = i;
+            }
+        }
+
+        if (index - 1 >= 0)
+        {
+            camTarget = partList[index - 1];
+        }
+        else
+        {
+            camTarget = partList[partList.Count - 1];
+        }
+
+        cam.transform.rotation = new Quaternion();
+        cam.transform.position = new Vector3(camTarget.transform.position.x, camTarget.transform.position.y, cam.transform.position.z);
+    }
+
+    private void DPadRight(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void DPadLeft(InputAction.CallbackContext context)
+    {
+
+    }
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
         }
     }
 }
