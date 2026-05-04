@@ -710,7 +710,7 @@
             "id": "29a2044a-7b36-44b8-bc75-28da2062416a",
             "actions": [
                 {
-                    "name": "CancelBS",
+                    "name": "B_BS",
                     "type": "Button",
                     "id": "b3077730-5918-4e28-bfea-68d3155d683e",
                     "expectedControlType": "Button",
@@ -719,9 +719,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SubmitBS",
+                    "name": "A_BS",
                     "type": "Button",
                     "id": "24d6511f-6aaf-4eca-b491-11c7e3b6f6f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "X_BS",
+                    "type": "Button",
+                    "id": "4d05cbe7-e331-4bbd-af10-4f8692c4123b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Y_BS",
+                    "type": "Button",
+                    "id": "d86d1382-9d5a-462d-b324-f3cf1cfc5045",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -825,6 +843,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DPadBS",
+                    "type": "Value",
+                    "id": "b49f346e-facf-4d9c-ba8e-80fa6f13e32b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -901,7 +928,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "SubmitBS",
+                    "action": "A_BS",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -912,7 +939,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "CancelBS",
+                    "action": "B_BS",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -968,6 +995,39 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "LeftBumperBS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a1b3df2-06c0-4de0-aecc-3f156c9775eb",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DPadBS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8234845-33b6-40bf-be8a-b05dd8fd1377",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "X_BS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0cebcd5b-62aa-46c2-85e3-022d5f0f38a8",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Y_BS",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

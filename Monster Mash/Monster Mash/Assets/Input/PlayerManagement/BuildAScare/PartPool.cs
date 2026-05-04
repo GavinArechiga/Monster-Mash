@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class PartPool : MonoBehaviour
 {
-    [SerializeField] string[] partList;
+    [SerializeField] string[] torsoList;
+    [SerializeField] string[] armList;
+    [SerializeField] string[] legList;
+    [SerializeField] string[] headList;
+    [SerializeField] string[] eyeList;
+    [SerializeField] string[] mouthList;
+    [SerializeField] string[] tailList;
+    [SerializeField] string[] wingList;
+    [SerializeField] string[] hornList;
+    [SerializeField] string[] decorList;
 
-    public string[] GetList()
+    private string[][] monsterParts;
+
+    private void Start()
     {
-        return partList;
+        monsterParts = new string[][] { torsoList, armList, legList, headList, eyeList, mouthList, tailList, wingList, hornList, decorList };
     }
-    public string GetIndexString(int i)
+
+    public string[][] GetMonsterParts()
     {
-        return partList[i];
+        return monsterParts;
     }
 }
