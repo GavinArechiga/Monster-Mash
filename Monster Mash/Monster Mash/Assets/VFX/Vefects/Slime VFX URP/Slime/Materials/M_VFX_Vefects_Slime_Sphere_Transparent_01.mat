@@ -9,8 +9,6 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_VFX_Vefects_Slime_Sphere_Transparent_01
   m_Shader: {fileID: 4800000, guid: aca02090cc9ef2e4cad5cc6d3ec684de, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -19,7 +17,6 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -94,6 +91,8 @@ Material:
     - _SpecularHighlights: 1
     - _Src: 5
     - _TriplanarContrast: 1
+    - _UseWorldSpace: 0
+    - _UseWorldSpace1: 0
     - _WPOAxisMask: 0
     - _WPOIntensity: 0.05
     - _WPOTriplanarContrast: 1
@@ -103,7 +102,7 @@ Material:
     - _AxisMaskSelector: {r: 0, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _FrColor: {r: 0, g: 1, b: 0.09949708, a: 0}
-    - _MatcapTint: {r: 1, g: 1, b: 1, a: 0}
+    - _MatcapTint: {r: 1, g: 1, b: 1, a: 1}
     - _NoiseSpeed: {r: 0.1, g: 0.3, b: 0, a: 0}
     - _NormalTile: {r: 0.1, g: 0.05, b: 0.3, a: 0}
     - _NormalTileOffsetCustom: {r: 0, g: 0, b: 0, a: 0}
