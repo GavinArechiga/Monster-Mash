@@ -51,11 +51,8 @@ MonoBehaviour:
     <Right>k__BackingField: {x: 0, y: 0}
     <Up>k__BackingField: {x: 0, y: 0}
     <Down>k__BackingField: {x: 0, y: 0}
-  projectilePrefab: {fileID: 0}
+  projectileConfig: {fileID: 0}
   projectileMuzzle: {fileID: 0}
-  projectileSpeed: 0
-  poolStartSize: 0
-  poolMaxSize: 0
 --- !u!114 &6738113347946364541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,6 +426,7 @@ GameObject:
   - component: {fileID: -2764548610681013181}
   - component: {fileID: 6401529589357678007}
   - component: {fileID: 648842611919859677}
+  - component: {fileID: -6125372638927279090}
   m_Layer: 0
   m_Name: Leg 31
   m_TagString: Connection - Monster Part
@@ -798,6 +796,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6125372638927279090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3867145695429343063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &4012806180244887136
 GameObject:
   m_ObjectHideFlags: 0

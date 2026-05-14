@@ -44955,6 +44955,7 @@ GameObject:
   - component: {fileID: 8831667798763107163}
   - component: {fileID: -2003155560664965310}
   - component: {fileID: 3994991859801768963}
+  - component: {fileID: 8833649284573957705}
   m_Layer: 0
   m_Name: Arm 1
   m_TagString: Connection - Monster Part
@@ -45339,6 +45340,19 @@ MonoBehaviour:
   - {fileID: 3128540100126568892}
   - {fileID: 419656366788097333}
   - {fileID: 1650934583600421222}
+--- !u!114 &8833649284573957705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760118976182949760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &8876690869614736084
 GameObject:
   m_ObjectHideFlags: 0

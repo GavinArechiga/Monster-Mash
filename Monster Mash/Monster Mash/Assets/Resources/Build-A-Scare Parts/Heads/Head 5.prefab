@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 5891745943174959097}
   - component: {fileID: 5909864650149218091}
   - component: {fileID: -6012728993943568584}
+  - component: {fileID: -1301665810392663902}
   m_Layer: 0
   m_Name: Head 5
   m_TagString: Connection - Monster Part
@@ -518,6 +519,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &-1301665810392663902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2185231888546048921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &2891577860306737142
 GameObject:
   m_ObjectHideFlags: 0

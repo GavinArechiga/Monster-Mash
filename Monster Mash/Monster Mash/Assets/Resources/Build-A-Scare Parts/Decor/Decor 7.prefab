@@ -677,6 +677,7 @@ GameObject:
   - component: {fileID: 351539694089058136}
   - component: {fileID: 8785037173908180354}
   - component: {fileID: -7171266798217328452}
+  - component: {fileID: -3326545392941711845}
   m_Layer: 0
   m_Name: Decor 7
   m_TagString: Connection - Monster Part
@@ -936,6 +937,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &-3326545392941711845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3603247938294496639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &3834220741524583168
 GameObject:
   m_ObjectHideFlags: 0

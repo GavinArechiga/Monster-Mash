@@ -34,9 +34,10 @@ public class BAS_Cursor : MonoBehaviour
 
     private string selectedPart;
 
-    private float minScale = 0.5f;
-    private float maxScale = 2f;
-    private float scaleSpeed = 1.5f;
+    private float minScale = 0.15f;
+    private float maxScale = 1.5f;
+    private Vector3 ogScale = Vector3.one;
+    private float scaleSpeed = 2f;
 
     private float rotSpeed = 50f;
 
@@ -134,6 +135,7 @@ public class BAS_Cursor : MonoBehaviour
                         monsterPart.transform.position = hit.point;
                         editPart = true;
                         partToEdit = monsterPart;
+                        ogScale = partToEdit.transform.localScale;
                         currTool = 0;
                         toolWheel.SetToolWheel(currTool);
                         setToolBools();
@@ -144,7 +146,7 @@ public class BAS_Cursor : MonoBehaviour
                     }
                 }
             }
-            else { print("No mesh collider? " + hit.transform.gameObject.GetComponent<MeshCollider>()); }
+            else { print("No mesh collider? " + hit.transform.gameObject); }
         } else if (!editPart)
         {
             UICast();
@@ -321,9 +323,11 @@ public class BAS_Cursor : MonoBehaviour
     {
         Vector3 scale = partToEdit.transform.localScale;
 
-        scale += Vector3.one * scaleSpeed * Time.deltaTime;
+        float scaleRate = ogScale.x / scaleSpeed;
 
-        if (scale.x <= maxScale)
+        scale += Vector3.one * scaleRate * Time.deltaTime;
+
+        if (scale.x <= ogScale.x * maxScale)
         {
             partToEdit.transform.localScale = scale;
         }
@@ -333,9 +337,11 @@ public class BAS_Cursor : MonoBehaviour
     {
         Vector3 scale = partToEdit.transform.localScale;
 
-        scale -= Vector3.one * scaleSpeed * Time.deltaTime;
+        float scaleRate = ogScale.x / scaleSpeed;
 
-        if (scale.x >= minScale)
+        scale -= Vector3.one * scaleRate * Time.deltaTime;
+
+        if (scale.x >= ogScale.x * minScale)
         {
             partToEdit.transform.localScale = scale;
         }

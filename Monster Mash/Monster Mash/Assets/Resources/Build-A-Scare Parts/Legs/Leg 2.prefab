@@ -62047,6 +62047,7 @@ GameObject:
   - component: {fileID: 9041595883396844864}
   - component: {fileID: 3193128232281648734}
   - component: {fileID: -3148348282961523843}
+  - component: {fileID: 6828619522078743213}
   m_Layer: 0
   m_Name: Leg 2
   m_TagString: Connection - Monster Part
@@ -62415,6 +62416,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6828619522078743213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7601838029131612515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &7807970227532851584
 GameObject:
   m_ObjectHideFlags: 0
