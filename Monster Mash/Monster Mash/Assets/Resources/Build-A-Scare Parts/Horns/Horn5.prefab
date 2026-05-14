@@ -2232,11 +2232,8 @@ MonoBehaviour:
     <Right>k__BackingField: {x: 0, y: 0}
     <Up>k__BackingField: {x: 0, y: 0}
     <Down>k__BackingField: {x: 0, y: 0}
-  projectilePrefab: {fileID: 0}
+  projectileConfig: {fileID: 0}
   projectileMuzzle: {fileID: 0}
-  projectileSpeed: 0
-  poolStartSize: 0
-  poolMaxSize: 0
 --- !u!114 &4036295936462763828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2604,6 +2601,7 @@ GameObject:
   - component: {fileID: 4842665033851357641}
   - component: {fileID: -2563398069406548558}
   - component: {fileID: 7383947859599055835}
+  - component: {fileID: -7134650685262138552}
   m_Layer: 0
   m_Name: Horn5
   m_TagString: Connection - Monster Part
@@ -2980,6 +2978,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-7134650685262138552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6268594401107085955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &6394107416342887513
 GameObject:
   m_ObjectHideFlags: 0

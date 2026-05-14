@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 783781017964832666}
   - component: {fileID: 1270423614118857144}
   - component: {fileID: -7808937119508888038}
+  - component: {fileID: 7864662088744891174}
   m_Layer: 0
   m_Name: Torso 17
   m_TagString: Untagged
@@ -587,6 +588,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &7864662088744891174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957412817905526983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &2500572845152883740
 GameObject:
   m_ObjectHideFlags: 0

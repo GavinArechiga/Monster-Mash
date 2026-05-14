@@ -748,6 +748,7 @@ GameObject:
   - component: {fileID: 2922156992744883478}
   - component: {fileID: 9205857187060490462}
   - component: {fileID: 7063587535752082452}
+  - component: {fileID: 1307600325954403570}
   m_Layer: 0
   m_Name: Tail 1
   m_TagString: Connection - Monster Part
@@ -1005,6 +1006,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &1307600325954403570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378425163673360952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &4378425163757297134
 GameObject:
   m_ObjectHideFlags: 0

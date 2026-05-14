@@ -426,6 +426,7 @@ GameObject:
   - component: {fileID: 2944404956080455407}
   - component: {fileID: 2944404956080455406}
   - component: {fileID: -8943009045115901924}
+  - component: {fileID: -909620138981139506}
   m_Layer: 0
   m_Name: Mouth 2
   m_TagString: Connection - Monster Part
@@ -686,6 +687,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &-909620138981139506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2944404956080455400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &2944404956106150536
 GameObject:
   m_ObjectHideFlags: 0
@@ -4395,11 +4409,8 @@ MonoBehaviour:
     <Right>k__BackingField: {x: 0, y: 0}
     <Up>k__BackingField: {x: 0, y: 0}
     <Down>k__BackingField: {x: 0, y: 0}
-  projectilePrefab: {fileID: 0}
+  projectileConfig: {fileID: 0}
   projectileMuzzle: {fileID: 0}
-  projectileSpeed: 0
-  poolStartSize: 0
-  poolMaxSize: 0
 --- !u!114 &4046189606926331682
 MonoBehaviour:
   m_ObjectHideFlags: 0

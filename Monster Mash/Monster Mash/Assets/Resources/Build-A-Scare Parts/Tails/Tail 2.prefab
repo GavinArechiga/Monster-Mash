@@ -103165,6 +103165,7 @@ GameObject:
   - component: {fileID: 2616977609228466216}
   - component: {fileID: -7370856104345317663}
   - component: {fileID: 7940922521964522929}
+  - component: {fileID: -4918865554328558486}
   m_Layer: 0
   m_Name: Tail 2
   m_TagString: Connection - Monster Part
@@ -103533,6 +103534,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-4918865554328558486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934499002262364408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &1934499002299766016
 GameObject:
   m_ObjectHideFlags: 0

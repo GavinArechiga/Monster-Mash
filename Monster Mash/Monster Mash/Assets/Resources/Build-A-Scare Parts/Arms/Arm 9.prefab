@@ -1519,6 +1519,7 @@ GameObject:
   - component: {fileID: 2867403949042957570}
   - component: {fileID: 4292597512312362165}
   - component: {fileID: -6835552772294559828}
+  - component: {fileID: 4040106273337298484}
   m_Layer: 0
   m_Name: Arm 9
   m_TagString: Connection - Monster Part
@@ -1888,6 +1889,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4040106273337298484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329319590494935186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &8346686606578034647
 GameObject:
   m_ObjectHideFlags: 0

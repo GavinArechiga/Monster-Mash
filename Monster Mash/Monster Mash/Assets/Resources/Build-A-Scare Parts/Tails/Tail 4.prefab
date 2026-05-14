@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 4529621768123578088}
   - component: {fileID: 4791370325554386729}
   - component: {fileID: 5175362013241899427}
+  - component: {fileID: 4537333661010206778}
   m_Layer: 0
   m_Name: Tail 4
   m_TagString: Connection - Monster Part
@@ -447,6 +448,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &4537333661010206778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417190314267824275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &1417190314279879712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2649,11 +2663,8 @@ MonoBehaviour:
     <Right>k__BackingField: {x: 0, y: 0}
     <Up>k__BackingField: {x: 0, y: 0}
     <Down>k__BackingField: {x: 0, y: 0}
-  projectilePrefab: {fileID: 0}
+  projectileConfig: {fileID: 0}
   projectileMuzzle: {fileID: 0}
-  projectileSpeed: 0
-  poolStartSize: 0
-  poolMaxSize: 0
 --- !u!114 &6763046858948515978
 MonoBehaviour:
   m_ObjectHideFlags: 0

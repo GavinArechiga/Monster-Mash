@@ -1331,6 +1331,7 @@ GameObject:
   - component: {fileID: 86848071814494541}
   - component: {fileID: 7854751565979272664}
   - component: {fileID: 829606694878328171}
+  - component: {fileID: -4537407080980242609}
   m_Layer: 0
   m_Name: Torso 12
   m_TagString: Untagged
@@ -1574,6 +1575,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &-4537407080980242609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124875332346146522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: Torso
 --- !u!1 &7914683332396054724
 GameObject:
   m_ObjectHideFlags: 0

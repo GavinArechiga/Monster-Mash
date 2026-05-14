@@ -4989,6 +4989,7 @@ GameObject:
   - component: {fileID: 4921724246193761866}
   - component: {fileID: 5853056029963066226}
   - component: {fileID: -793730404833674041}
+  - component: {fileID: 6028922130410621587}
   m_Layer: 0
   m_Name: Wing 5
   m_TagString: Connection - Monster Part
@@ -5245,6 +5246,19 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
+--- !u!114 &6028922130410621587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934317670902980195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 
 --- !u!1 &1218727326580920855
 GameObject:
   m_ObjectHideFlags: 0
