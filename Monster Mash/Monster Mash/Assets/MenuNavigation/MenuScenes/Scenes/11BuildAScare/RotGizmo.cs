@@ -34,22 +34,25 @@ public class RotGizmo : MonoBehaviour
         }
     }
 
-    public void RotateX(int dir)
+    public Vector3 RotateX(int dir)
     {
-        //xAxis.localEulerAngles += Vector3.right * dir * rotSpeed * Time.deltaTime;
-        xAxis.Rotate(Vector3.right * dir * rotSpeed * Time.deltaTime, Space.Self);
+        Vector3 myRot = Vector3.right * -dir * rotSpeed * Time.deltaTime;
+        xAxis.Rotate(myRot, Space.Self);
+        return myRot;
     }
 
-    public void RotateY(int dir)
+    public Vector3 RotateY(int dir)
     {
-        //yAxis.localEulerAngles += Vector3.up * dir * rotSpeed * Time.deltaTime;
-        yAxis.Rotate(Vector3.up * dir * rotSpeed * Time.deltaTime, Space.Self);
+        Vector3 myRot = Vector3.up * -dir * rotSpeed * Time.deltaTime;
+        yAxis.Rotate(myRot, Space.Self);
+        return myRot;
     }
 
-    public void RotateZ(int dir)
+    public Vector3 RotateZ(int dir)
     {
-        //zAxis.localEulerAngles += Vector3.forward * dir * rotSpeed * Time.deltaTime;
-        zAxis.Rotate(Vector3.forward * dir * rotSpeed * Time.deltaTime, Space.Self);
+        Vector3 myRot = Vector3.forward * -dir * rotSpeed * Time.deltaTime;
+        zAxis.Rotate(myRot, Space.Self);
+        return myRot;
     }
 
     public void MoveGizmo(Vector3 newPos)

@@ -10,7 +10,7 @@ public class BAS_Cursor : MonoBehaviour
     private Camera cam;
 
     private float crosshairSpeed = 1000f;
-    private Vector2 crosshairMove;
+    private Vector2 leftStickValue;
 
     [SerializeField] private RectTransform cursor;
 
@@ -44,6 +44,8 @@ public class BAS_Cursor : MonoBehaviour
     private ToolWheel toolWheel;
 
     [SerializeField] private RotGizmo rotGizmo;
+    [SerializeField] private bool usingRotGizmo = false;
+    [SerializeField] private string currAxis;
 
     // Start is called before the first frame update
     void Start()
@@ -58,8 +60,15 @@ public class BAS_Cursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MoveCursor();
-        PreviewPart();
+        if (usingRotGizmo)
+        {
+            RotateGizmo(leftStickValue);
+        }
+        else
+        {
+            MoveCursor();
+            PreviewPart();
+        }
     }
 
     private void PreviewPart()
@@ -91,7 +100,7 @@ public class BAS_Cursor : MonoBehaviour
 
     private void MoveCursor()
     {
-        cursor.anchoredPosition += crosshairMove * crosshairSpeed * Time.deltaTime;
+        cursor.anchoredPosition += leftStickValue * crosshairSpeed * Time.deltaTime;
 
         Vector2 pos = cursor.anchoredPosition;
 
@@ -103,8 +112,14 @@ public class BAS_Cursor : MonoBehaviour
         cursor.anchoredPosition = pos;
     }
 
-    public void PlacePart()
+    public void AButton()
     {
+        if (usingRotGizmo)
+        {
+            StopRotGizmo();
+            return;
+        }
+
         RaycastHit hit;
 
         Vector3 worldPos = cursor.position;
@@ -121,35 +136,28 @@ public class BAS_Cursor : MonoBehaviour
         }
         else if (Physics.Raycast(myRay, out hit, 1000f))
         {
-            if (hit.collider is MeshCollider)
+            if (hit.collider.GetComponent<WhichPartType>())
             {
-                if (!editPart)
+                if (hit.collider.GetComponent<WhichPartType>()?.type is "Torso" or "Head")
                 {
-                    var monsterPartLoad = Resources.Load<GameObject>(selectedPart);
-
-                    if (!monsterPartLoad)
+                    if (!editPart)
                     {
-                        Debug.Log("error monster part dont exist");
-                    }
-                    else
-                    {
-                        GameObject monsterPart = Instantiate(monsterPartLoad);
-                        monsterPart.transform.position = hit.point;
-                        editPart = true;
-                        partToEdit = monsterPart;
-                        ogScale = partToEdit.transform.localScale;
-                        currTool = 0;
-                        toolWheel.SetToolWheel(currTool);
-                        setToolBools();
-                        SetLayerRecursively(partToEdit, 2);
-
-                        currPotentialParent = hit.transform;
-                        partToEdit.transform.parent = currPotentialParent;
+                        InstantiatePart(hit);
                     }
                 }
+                else if (hit.collider.GetComponent<WhichPartType>()?.type is not "Torso" or "Head")
+                {
+                    //code to select to edit monster part;
+                }
             }
-            else { print("No mesh collider? " + hit.transform.gameObject); }
-        } else if (!editPart)
+            else if(hit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+            {
+                currAxis = hit.collider.name;
+                StartRotGizmo();
+            }
+            else { print("No WhichPartType script or anything else found " + hit.transform.gameObject); }
+        }
+        else if (!editPart)
         {
             UICast();
         }
@@ -188,7 +196,7 @@ public class BAS_Cursor : MonoBehaviour
 
     public void LeftStickMove(Vector2 value)
     {
-        crosshairMove = value;
+        leftStickValue = value;
     }
 
     public void SetSelectedPart(string newPart)
@@ -196,9 +204,13 @@ public class BAS_Cursor : MonoBehaviour
         selectedPart = newPart;
     }
 
-    public void CancelEdit()
+    public void BButton()
     {
-        if (editPart)
+        if (usingRotGizmo)
+        {
+            StopRotGizmo();
+        }
+        else if (editPart)
         {
             rotGizmo.Detach();
             Destroy(partToEdit);
@@ -366,5 +378,72 @@ public class BAS_Cursor : MonoBehaviour
     {
         rotGizmo.gameObject.SetActive(true);
         rotGizmo.SetUpGizmo(partToEdit);
+    }
+
+    private void InstantiatePart(RaycastHit hit)
+    {
+        var monsterPartLoad = Resources.Load<GameObject>(selectedPart);
+
+        if (!monsterPartLoad)
+        {
+            Debug.Log("error monster part dont exist");
+        }
+        else
+        {
+            GameObject monsterPart = Instantiate(monsterPartLoad);
+            monsterPart.transform.position = hit.point;
+            editPart = true;
+            partToEdit = monsterPart;
+            ogScale = partToEdit.transform.localScale;
+            currTool = 0;
+            toolWheel.SetToolWheel(currTool);
+            setToolBools();
+            SetLayerRecursively(partToEdit, 2);
+
+            currPotentialParent = hit.transform;
+            partToEdit.transform.parent = currPotentialParent;
+        }
+    }
+
+    private void StartRotGizmo()
+    {
+        usingRotGizmo = true;
+    }
+
+    private void StopRotGizmo()
+    {
+        usingRotGizmo = false;
+    }
+
+    private void RotateGizmo(Vector3 input)
+    {
+        int dir = 0;
+        float total = input.x + input.y;
+
+        Vector3 myRot = new Vector3();
+
+        if (total > 0)
+        {
+            dir = 1;
+        }
+        else if (total < 0)
+        {
+            dir = -1;
+        }
+
+        if (currAxis == "X Axis")
+        {
+            myRot = rotGizmo.RotateX(dir);
+        }
+        else if(currAxis == "Y Axis")
+        {
+            myRot = rotGizmo.RotateY(dir);
+        }
+        else if (currAxis == "Z Axis")
+        {
+            myRot = rotGizmo.RotateZ(dir);
+        }
+
+        partToEdit.transform.Rotate(myRot, Space.Self);
     }
 }

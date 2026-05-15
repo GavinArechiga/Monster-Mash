@@ -108,11 +108,11 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
 
     private void ClickA(InputAction.CallbackContext context)
     {
-        bas_cursor.PlacePart();
+        bas_cursor.AButton();
     }
     private void ClickB(InputAction.CallbackContext context)
     {
-        bas_cursor.CancelEdit();
+        bas_cursor.BButton();
     }
 
     private void ClickX(InputAction.CallbackContext context)
