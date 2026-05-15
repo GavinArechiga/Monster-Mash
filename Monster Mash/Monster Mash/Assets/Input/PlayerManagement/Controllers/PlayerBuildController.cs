@@ -86,12 +86,12 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
 
     private void LeftStick(InputAction.CallbackContext context)
     {
-        bas_cursor.SetCrossHairMove(context.ReadValue<Vector2>());
+        bas_cursor.LeftStickMove(context.ReadValue<Vector2>());
     }
 
     private void LeftStickCancel(InputAction.CallbackContext context)
     {
-        bas_cursor.SetCrossHairMove(Vector2.zero);
+        bas_cursor.LeftStickMove(Vector2.zero);
     }
 
     private void RightStick(InputAction.CallbackContext context)

@@ -43,6 +43,8 @@ public class BAS_Cursor : MonoBehaviour
 
     private ToolWheel toolWheel;
 
+    [SerializeField] private RotGizmo rotGizmo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -184,7 +186,7 @@ public class BAS_Cursor : MonoBehaviour
         }
     }
 
-    public void SetCrossHairMove(Vector2 value)
+    public void LeftStickMove(Vector2 value)
     {
         crosshairMove = value;
     }
@@ -198,6 +200,7 @@ public class BAS_Cursor : MonoBehaviour
     {
         if (editPart)
         {
+            rotGizmo.Detach();
             Destroy(partToEdit);
             editPart = false;
             currTool = 0;
@@ -286,6 +289,8 @@ public class BAS_Cursor : MonoBehaviour
             movePart = false;
             scalePart = false;
             rotatePart = true;
+
+            SetUpRotGizmo();
         }
     }
 
@@ -355,5 +360,11 @@ public class BAS_Cursor : MonoBehaviour
     private void RotateLeft()
     {
         partToEdit.transform.Rotate(Vector3.up, -rotSpeed * Time.deltaTime);
+    }
+
+    private void SetUpRotGizmo()
+    {
+        rotGizmo.gameObject.SetActive(true);
+        rotGizmo.SetUpGizmo(partToEdit);
     }
 }
