@@ -25,9 +25,6 @@ public class BAS_Cursor : MonoBehaviour
 
     private Transform currPotentialParent;
 
-    private GameObject monsterMesh;
-    private bool hoverIsArm = false;
-
     [SerializeField] private GameObject monster;
 
     [SerializeField] private List<GameObject> partList;
@@ -47,14 +44,21 @@ public class BAS_Cursor : MonoBehaviour
     [SerializeField] private bool usingRotGizmo = false;
     [SerializeField] private string currAxis;
 
+    public BAS_CurrentPart bas_currentPart = new();
+    private Collider currTorso;
+
+
+    private List<Collider> toTurnBackOn = new List<Collider>();
+    private List<Collider> toTurnBackOff = new List<Collider>();
+
     // Start is called before the first frame update
     void Start()
     {
-        monsterMesh = monster.GetComponentInChildren<MeshCollider>().gameObject;
         cam = Camera.main;
         canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         partList.Add(monster);
         toolWheel = FindObjectOfType<ToolWheel>();
+        bas_currentPart.SetCurrTorso(monster);
     }
 
     // Update is called once per frame
@@ -75,27 +79,57 @@ public class BAS_Cursor : MonoBehaviour
     {
         Vector3 worldPos = cursor.position;
         Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+        
         Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
-        if (movePart)
-        {
+        if (!movePart) return;
             RaycastHit hit;
 
-            if (Physics.Raycast(myRay, out hit, 1000f))
+        if (Physics.Raycast(myRay, out hit, 1000f))
+        {
+            Debug.Log(hit.collider.gameObject);
+
+            if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
             {
-                if (hit.collider is MeshCollider)
-                {
-                    if (!hoverIsArm)
-                    {
-                        //partToHover.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                    }
-                    else
-                    {
-                        //partToHover.transform.eulerAngles = new Vector3(0, 90, 0);
-                    }
-                    partToEdit.transform.position = hit.point;
-                }
+                partToEdit.transform.position = hit.point;
             }
         }
+
+        /*if (!movePart) return;
+
+        Vector3 worldpos = cursor.position;
+
+        Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldpos));
+        Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
+
+        Plane plane = new Plane(Camera.main.transform.forward * -1f, new Vector3(0, 0, -5f));
+
+        if (plane.Raycast(myRay, out float enter))
+        {
+            Vector3 cursorWorldPoint = myRay.GetPoint(enter);
+
+            Vector3 closestPoint = bas_currentPart.GetCurrTorso().ClosestPoint(cursorWorldPoint);
+            float closestDist = Vector3.Distance(cursorWorldPoint, closestPoint);
+
+            List<Collider> allHeads = bas_currentPart.GetAllHeads();
+
+            if (allHeads.Count > 0)
+            {
+                for (int i = 0; i < allHeads.Count; i++)
+                {
+                    Vector3 headPoint = allHeads[i].ClosestPoint(cursorWorldPoint);
+
+                    float headDist = Vector3.Distance(cursorWorldPoint, headPoint);
+
+                    if (headDist < closestDist)
+                    {
+                        closestDist = headDist;
+                        closestPoint = headPoint;
+                    }
+                }
+            }
+
+        partToEdit.transform.position = closestPoint;
+        }*/
     }
 
     private void MoveCursor()
@@ -130,6 +164,11 @@ public class BAS_Cursor : MonoBehaviour
             //partToEdit.transform.parent = currPotentialParent;
             partList.Add(partToEdit);
 
+            if (partToEdit.GetComponentInChildren<WhichPartType>().type is PartType.Head)
+            {
+                bas_currentPart.AddHead(partToEdit);
+            }
+
             editPart = false;
             setToolBools();
 
@@ -138,14 +177,14 @@ public class BAS_Cursor : MonoBehaviour
         {
             if (hit.collider.GetComponent<WhichPartType>())
             {
-                if (hit.collider.GetComponent<WhichPartType>()?.type is "Torso" or "Head")
+                if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
                 {
                     if (!editPart)
                     {
                         InstantiatePart(hit);
                     }
                 }
-                else if (hit.collider.GetComponent<WhichPartType>()?.type is not "Torso" or "Head")
+                else if (hit.collider.GetComponent<WhichPartType>()?.type is not PartType.Torso or PartType.Head)
                 {
                     //code to select to edit monster part;
                 }
@@ -183,17 +222,6 @@ public class BAS_Cursor : MonoBehaviour
             }
         }
     }
-
-    void SetLayerRecursively(GameObject obj, int newLayer)
-    {
-        obj.layer = newLayer;
-
-        foreach (Transform child in obj.transform)
-        {
-            SetLayerRecursively(child.gameObject, newLayer);
-        }
-    }
-
     public void LeftStickMove(Vector2 value)
     {
         leftStickValue = value;
@@ -289,12 +317,16 @@ public class BAS_Cursor : MonoBehaviour
             movePart = true;
             scalePart = false;
             rotatePart = false;
+
+            ResetAllColliders();
         }
         else if (currTool == 1)
         {
             movePart = false;
             scalePart = true;
             rotatePart = false;
+
+            CorrectLimbColliders(partToEdit);
         }
         else if (currTool == 2)
         {
@@ -302,6 +334,7 @@ public class BAS_Cursor : MonoBehaviour
             scalePart = false;
             rotatePart = true;
 
+            CorrectLimbColliders(partToEdit);
             SetUpRotGizmo();
         }
     }
@@ -398,7 +431,6 @@ public class BAS_Cursor : MonoBehaviour
             currTool = 0;
             toolWheel.SetToolWheel(currTool);
             setToolBools();
-            SetLayerRecursively(partToEdit, 2);
 
             currPotentialParent = hit.transform;
             partToEdit.transform.parent = currPotentialParent;
@@ -417,7 +449,7 @@ public class BAS_Cursor : MonoBehaviour
 
     private void RotateGizmo(Vector3 input)
     {
-        int dir = 0;
+        float dir = 0;
         float total = input.x + input.y;
 
         Vector3 myRot = new Vector3();
@@ -430,6 +462,8 @@ public class BAS_Cursor : MonoBehaviour
         {
             dir = -1;
         }
+
+        dir *= Mathf.Abs(total);
 
         if (currAxis == "X Axis")
         {
@@ -445,5 +479,38 @@ public class BAS_Cursor : MonoBehaviour
         }
 
         partToEdit.transform.Rotate(myRot, Space.Self);
+    }
+
+
+    private void CorrectLimbColliders(GameObject limb)
+    {
+        Collider[] allCols = limb.GetComponentsInChildren<Collider>();
+
+        foreach (Collider col in allCols)
+        {
+            if (col.GetComponent<WhichPartType>())
+            {
+                col.enabled = true;
+                toTurnBackOff.Add(col);
+            }
+            else
+            {
+                col.enabled = false;
+                toTurnBackOn.Add(col);
+            }
+        }
+    }
+
+    private void ResetAllColliders()
+    {
+        for (int i = 0; i < toTurnBackOff.Count; i++)
+        {
+            toTurnBackOff[i].enabled = false;
+        }
+
+        for (int i = 0; i < toTurnBackOn.Count; i++)
+        {
+            toTurnBackOn[i].enabled = true;
+        }
     }
 }

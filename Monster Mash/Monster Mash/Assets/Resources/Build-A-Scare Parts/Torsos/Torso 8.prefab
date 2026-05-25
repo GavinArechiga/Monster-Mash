@@ -390,6 +390,7 @@ GameObject:
   - component: {fileID: 7838650316400327842}
   - component: {fileID: 3165837356781460807}
   - component: {fileID: 4467733840755651505}
+  - component: {fileID: 141401718159490933}
   m_Layer: 0
   m_Name: pCylinder3
   m_TagString: Untagged
@@ -481,9 +482,22 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8321685774571456786, guid: 66f2a36f8f2545b40bc4164cdca47d1c, type: 3}
+--- !u!114 &141401718159490933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3015309107874774901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: Torso
 --- !u!1 &3804691890894057177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,7 +1518,6 @@ GameObject:
   - component: {fileID: 3301692041929616277}
   - component: {fileID: 3052640862554804337}
   - component: {fileID: -1860225807541285999}
-  - component: {fileID: 5968241468810762093}
   m_Layer: 0
   m_Name: Torso 8
   m_TagString: Connection - Monster Part
@@ -1747,19 +1760,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &5968241468810762093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8945065497889429804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: Torso
 --- !u!1 &9088126855120731208
 GameObject:
   m_ObjectHideFlags: 0

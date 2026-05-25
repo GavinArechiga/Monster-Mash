@@ -34,23 +34,23 @@ public class RotGizmo : MonoBehaviour
         }
     }
 
-    public Vector3 RotateX(int dir)
+    public Vector3 RotateX(float input)
     {
-        Vector3 myRot = Vector3.right * -dir * rotSpeed * Time.deltaTime;
+        Vector3 myRot = Vector3.right * -input * rotSpeed * Time.deltaTime;
         xAxis.Rotate(myRot, Space.Self);
         return myRot;
     }
 
-    public Vector3 RotateY(int dir)
+    public Vector3 RotateY(float input)
     {
-        Vector3 myRot = Vector3.up * -dir * rotSpeed * Time.deltaTime;
+        Vector3 myRot = Vector3.up * -input * rotSpeed * Time.deltaTime;
         yAxis.Rotate(myRot, Space.Self);
         return myRot;
     }
 
-    public Vector3 RotateZ(int dir)
+    public Vector3 RotateZ(float input)
     {
-        Vector3 myRot = Vector3.forward * -dir * rotSpeed * Time.deltaTime;
+        Vector3 myRot = Vector3.forward * -input * rotSpeed * Time.deltaTime;
         zAxis.Rotate(myRot, Space.Self);
         return myRot;
     }

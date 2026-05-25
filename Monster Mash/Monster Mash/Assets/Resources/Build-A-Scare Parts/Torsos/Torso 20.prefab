@@ -28,9 +28,10 @@ Transform:
   m_LocalScale: {x: 0.80160326, y: 0.80160326, z: 0.80160326}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1136896148522069977}
   - {fileID: 7273773051085364550}
   m_Father: {fileID: 4642930041315463799}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2183696336529084286
 GameObject:
@@ -572,6 +573,7 @@ GameObject:
   - component: {fileID: 1136896148522069977}
   - component: {fileID: 1401190171878531047}
   - component: {fileID: 7933736937994839445}
+  - component: {fileID: 2262670607421359284}
   m_Layer: 0
   m_Name: Torus
   m_TagString: Untagged
@@ -586,13 +588,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4428259654483377539}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 124.74999, y: 124.74999, z: 124.74999}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4642930041315463799}
-  m_RootOrder: 1
+  m_Father: {fileID: 2966297251888675570}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &1401190171878531047
 SkinnedMeshRenderer:
@@ -663,9 +665,22 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8803937527578110353, guid: 8ca779df574739148887f95662226876, type: 3}
+--- !u!114 &2262670607421359284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4428259654483377539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: Torso
 --- !u!1 &4570513268957058639
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +928,7 @@ Transform:
   m_Children:
   - {fileID: 2245576100064713229}
   m_Father: {fileID: 2966297251888675570}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5368825799919079685
 GameObject:
@@ -991,7 +1006,6 @@ GameObject:
   - component: {fileID: 1876881028725809406}
   - component: {fileID: 4198619687018083562}
   - component: {fileID: -7058114760584810359}
-  - component: {fileID: 3013596343403586810}
   m_Layer: 0
   m_Name: Torso 20
   m_TagString: Untagged
@@ -1012,7 +1026,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7722525750227406685}
-  - {fileID: 1136896148522069977}
   - {fileID: 2966297251888675570}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -1235,19 +1248,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &3013596343403586810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5414682353017112781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: Torso
 --- !u!1 &6082301369537043836
 GameObject:
   m_ObjectHideFlags: 0
