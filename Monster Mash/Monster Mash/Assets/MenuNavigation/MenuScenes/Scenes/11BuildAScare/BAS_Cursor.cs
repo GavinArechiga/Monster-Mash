@@ -311,6 +311,7 @@ public class BAS_Cursor : MonoBehaviour
             movePart = false;
             scalePart = false;
             rotatePart = false;
+            DontIgnorePartRaycast();
         }
         else if (currTool == 0)
         {
@@ -318,15 +319,14 @@ public class BAS_Cursor : MonoBehaviour
             scalePart = false;
             rotatePart = false;
 
-            ResetAllColliders();
+            IgnorePartRaycast();
         }
         else if (currTool == 1)
         {
             movePart = false;
             scalePart = true;
             rotatePart = false;
-
-            CorrectLimbColliders(partToEdit);
+            DontIgnorePartRaycast();
         }
         else if (currTool == 2)
         {
@@ -334,8 +334,8 @@ public class BAS_Cursor : MonoBehaviour
             scalePart = false;
             rotatePart = true;
 
-            CorrectLimbColliders(partToEdit);
             SetUpRotGizmo();
+            DontIgnorePartRaycast();
         }
     }
 
@@ -432,6 +432,7 @@ public class BAS_Cursor : MonoBehaviour
             toolWheel.SetToolWheel(currTool);
             setToolBools();
 
+            CorrectLimbColliders(monsterPart);
             currPotentialParent = hit.transform;
             partToEdit.transform.parent = currPotentialParent;
         }
@@ -501,7 +502,7 @@ public class BAS_Cursor : MonoBehaviour
         }
     }
 
-    private void ResetAllColliders()
+    private void ResetAllLimbColliders()
     {
         for (int i = 0; i < toTurnBackOff.Count; i++)
         {
@@ -511,6 +512,26 @@ public class BAS_Cursor : MonoBehaviour
         for (int i = 0; i < toTurnBackOn.Count; i++)
         {
             toTurnBackOn[i].enabled = true;
+        }
+    }
+
+    void IgnorePartRaycast()
+    {
+        WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
+
+        foreach (WhichPartType col in partCols)
+        {
+            col.gameObject.layer = 2; //ignore raycast
+        }
+    }
+
+    void DontIgnorePartRaycast()
+    {
+        WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
+
+        foreach (WhichPartType col in partCols)
+        {
+            col.gameObject.layer = 0;
         }
     }
 }
