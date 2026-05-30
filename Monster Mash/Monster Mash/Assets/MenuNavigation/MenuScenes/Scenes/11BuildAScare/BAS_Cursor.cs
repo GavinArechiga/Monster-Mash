@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class BAS_Cursor : MonoBehaviour
 {
+    [SerializeField] private Tools currTool = Tools.none;
+
     private RectTransform canvas;
     private Camera cam;
 
@@ -18,10 +20,7 @@ public class BAS_Cursor : MonoBehaviour
     private GameObject partToEdit;
 
     [SerializeField] private bool movePart = false;
-    [SerializeField] private bool scalePart = false;
     [SerializeField] private bool rotatePart = false;
-    private string[] tools = new string[] { "Move", "Scale", "Rotate" };
-    [SerializeField] private int currTool = 0;
 
     private Transform currPotentialParent;
 
@@ -38,7 +37,7 @@ public class BAS_Cursor : MonoBehaviour
 
     private float rotSpeed = 50f;
 
-    private ToolWheel toolWheel;
+    //private ToolWheel toolWheel;
 
     [SerializeField] private RotGizmo rotGizmo;
     [SerializeField] private bool usingRotGizmo = false;
@@ -57,7 +56,7 @@ public class BAS_Cursor : MonoBehaviour
         cam = Camera.main;
         canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         partList.Add(monster);
-        toolWheel = FindObjectOfType<ToolWheel>();
+        //toolWheel = FindObjectOfType<ToolWheel>();
         bas_currentPart.SetCurrTorso(monster);
     }
 
@@ -81,8 +80,9 @@ public class BAS_Cursor : MonoBehaviour
         Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
         
         Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
-        if (!movePart) return;
-            RaycastHit hit;
+        if (currTool is not Tools.move) return;
+        
+        RaycastHit hit;
 
         if (Physics.Raycast(myRay, out hit, 1000f))
         {
@@ -159,19 +159,18 @@ public class BAS_Cursor : MonoBehaviour
         Vector3 worldPos = cursor.position;
         Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
 
-        if (editPart)
+        if (currTool == Tools.move)
         {
-            //partToEdit.transform.parent = currPotentialParent;
             partList.Add(partToEdit);
+            DontIgnorePartRaycast();
 
             if (partToEdit.GetComponentInChildren<WhichPartType>().type is PartType.Head)
             {
                 bas_currentPart.AddHead(partToEdit);
             }
 
-            editPart = false;
-            setToolBools();
-
+            //editPart = false;
+            StartEditMode();
         }
         else if (Physics.Raycast(myRay, out hit, 1000f))
         {
@@ -179,14 +178,17 @@ public class BAS_Cursor : MonoBehaviour
             {
                 if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
                 {
-                    if (!editPart)
+                    if (currTool == Tools.newPart)
                     {
                         InstantiatePart(hit);
+                        currTool = Tools.move;
+                        IgnorePartRaycast();
                     }
                 }
                 else if (hit.collider.GetComponent<WhichPartType>()?.type is not PartType.Torso or PartType.Head)
                 {
-                    //code to select to edit monster part;
+                    partToEdit = hit.collider.GetComponentInParent<TempPartData>().gameObject;
+                    StartEditMode();
                 }
             }
             else if(hit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
@@ -194,11 +196,14 @@ public class BAS_Cursor : MonoBehaviour
                 currAxis = hit.collider.name;
                 StartRotGizmo();
             }
-            else { print("No WhichPartType script or anything else found " + hit.transform.gameObject); }
         }
-        else if (!editPart)
+        else if (currTool == Tools.none)
         {
             UICast();
+        }
+        else
+        {
+            StopEditMode();
         }
     }
 
@@ -230,6 +235,7 @@ public class BAS_Cursor : MonoBehaviour
     public void SetSelectedPart(string newPart)
     {
         selectedPart = newPart;
+        currTool = Tools.newPart;
     }
 
     public void BButton()
@@ -238,14 +244,18 @@ public class BAS_Cursor : MonoBehaviour
         {
             StopRotGizmo();
         }
-        else if (editPart)
+        else if (currTool is Tools.newPart)
         {
-            rotGizmo.Detach();
+            currTool = Tools.none;
+        }
+        else if (currTool is Tools.move or Tools.edit)
+        {
+            if (currTool is Tools.edit) StopEditMode();
+
+            rotGizmo?.Detach();
             Destroy(partToEdit);
-            editPart = false;
-            currTool = 0;
-            toolWheel.SetToolWheel(currTool);
-            setToolBools();
+            currTool = Tools.none;
+            //editPart = false;
             partList.Remove(partToEdit);
         }
     }
@@ -258,115 +268,14 @@ public class BAS_Cursor : MonoBehaviour
         }
     }
 
-    public void RotatePreview()
+    public void RightBumper()
     {
-        if (movePart)
-        {
-            //partToEdit.transform.Rotate(Vector3.up, 1f);
-        }
+        if (currTool == Tools.edit) Grow();
     }
 
-    public void ToolWheelRight()
+    public void LeftBumper()
     {
-        if (editPart && !toolWheel.GetWait())
-        {
-            if (currTool + 1 < tools.Length)
-            {
-                currTool++;
-            }
-            else
-            {
-                currTool = 0;
-            }
-            
-            toolWheel.SetToolWheel(currTool);
-
-            setToolBools();
-        }
-    }
-
-    public void ToolWheelLeft()
-    {
-        if (editPart && !toolWheel.GetWait())
-        {
-            if (currTool - 1 >= 0)
-            {
-                currTool--;
-            }
-            else
-            {
-                currTool = tools.Length - 1;
-            }
-            
-            toolWheel.SetToolWheel(currTool);
-
-            setToolBools();
-        }
-    }
-
-    private void setToolBools()
-    {
-        if (!editPart)
-        {
-            movePart = false;
-            scalePart = false;
-            rotatePart = false;
-            DontIgnorePartRaycast();
-        }
-        else if (currTool == 0)
-        {
-            movePart = true;
-            scalePart = false;
-            rotatePart = false;
-
-            IgnorePartRaycast();
-        }
-        else if (currTool == 1)
-        {
-            movePart = false;
-            scalePart = true;
-            rotatePart = false;
-            DontIgnorePartRaycast();
-        }
-        else if (currTool == 2)
-        {
-            movePart = false;
-            scalePart = false;
-            rotatePart = true;
-
-            SetUpRotGizmo();
-            DontIgnorePartRaycast();
-        }
-    }
-
-    public void DPadRight()
-    {
-        if (editPart)
-        {
-            if (scalePart)
-            {
-                Grow();
-            }
-            else if (rotatePart)
-            {
-                RotateRight();
-            }
-        }
-    }
-
-    public void DPadLeft()
-    {
-        if (editPart)
-        {
-            if (scalePart)
-            {
-                Shrink();
-            }
-            else if (rotatePart)
-            {
-                RotateLeft();
-            }
-        }
+        if (currTool == Tools.edit) Shrink();
     }
 
     private void Grow()
@@ -425,12 +334,10 @@ public class BAS_Cursor : MonoBehaviour
         {
             GameObject monsterPart = Instantiate(monsterPartLoad);
             monsterPart.transform.position = hit.point;
-            editPart = true;
+            //editPart = true;
+            currTool = Tools.edit;
             partToEdit = monsterPart;
             ogScale = partToEdit.transform.localScale;
-            currTool = 0;
-            toolWheel.SetToolWheel(currTool);
-            setToolBools();
 
             CorrectLimbColliders(monsterPart);
             currPotentialParent = hit.transform;
@@ -441,11 +348,13 @@ public class BAS_Cursor : MonoBehaviour
     private void StartRotGizmo()
     {
         usingRotGizmo = true;
+        currTool = Tools.rotate;
     }
 
     private void StopRotGizmo()
     {
         usingRotGizmo = false;
+        currTool = Tools.edit;
     }
 
     private void RotateGizmo(Vector3 input)
@@ -533,5 +442,19 @@ public class BAS_Cursor : MonoBehaviour
         {
             col.gameObject.layer = 0;
         }
+    }
+
+    private void StartEditMode()
+    {
+        currTool = Tools.edit;
+        //add gavins ui and turn ON (i still gotta do this)
+
+        SetUpRotGizmo();
+    }
+
+    private void StopEditMode()
+    {
+        currTool = Tools.none;
+        rotGizmo?.Detach();
     }
 }

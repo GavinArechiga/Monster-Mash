@@ -18,12 +18,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
     private bool isHoldingRight = false;
     private bool isHoldingLeft = false;
 
-    private bool isHoldingY = false;
-
-    private bool isHoldingDPadRight = false;
-    private bool isHoldingDPadLeft = false;
-
-    private ToolWheel toolWheel;
+    private bool isHoldingRB = false;
+    private bool isHoldingLB = false;
 
     private BAS_Camera bas_Camera;
 
@@ -34,7 +30,6 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.SwitchCurrentActionMap("BuildAScare");
         isActive = true;
 
-        toolWheel = FindObjectOfType<ToolWheel>();
         bas_Camera = FindObjectOfType<BAS_Camera>();
         bas_cursor = FindObjectOfType<BAS_Cursor>();
 
@@ -53,6 +48,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["Y_BS"].canceled += CancelY;
         playerInput.actions["RightBumperBS"].performed += RightBumper;
         playerInput.actions["LeftBumperBS"].performed += LeftBumper;
+        playerInput.actions["RightBumperBS"].performed += RightBumperCancel;
+        playerInput.actions["LeftBumperBS"].performed += LeftBumperCancel;
         playerInput.actions["DPadRightBS"].performed += DPadRight;
         playerInput.actions["DPadRightBS"].canceled += DPadRightCancel;
         playerInput.actions["DPadLeftBS"].performed += DPadLeft;
@@ -78,6 +75,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["Y_BS"].canceled -= CancelY;
         playerInput.actions["RightBumperBS"].performed -= RightBumper;
         playerInput.actions["LeftBumperBS"].performed -= LeftBumper;
+        playerInput.actions["RightBumperBS"].performed -= RightBumperCancel;
+        playerInput.actions["LeftBumperBS"].performed -= LeftBumperCancel;
         playerInput.actions["DPadRightBS"].performed -= DPadRight;
         playerInput.actions["DPadRightBS"].canceled -= DPadRightCancel;
         playerInput.actions["DPadLeftBS"].performed -= DPadLeft;
@@ -121,28 +120,27 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
     }
     private void ClickY(InputAction.CallbackContext context)
     {
-        isHoldingY = true;
+
     }
 
     private void CancelY(InputAction.CallbackContext context)
     {
-        isHoldingY = false;
+        
     }
 
     private void Update()
     {
         RotateMonster();
         CameraZoom();
-        RotatePreview();
 
-        if (isHoldingDPadRight)
+        if (isHoldingRB)
         {
-            bas_cursor.DPadRight();
+            bas_cursor.RightBumper();
         }
 
-        if (isHoldingDPadLeft)
+        if (isHoldingLB)
         {
-            bas_cursor.DPadLeft();
+            bas_cursor.LeftBumper();
         }
     }
 
@@ -205,45 +203,43 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
             }
         }
     }
-
-    private void RotatePreview()
-    {
-        if (bas_cursor)
-        {
-            if (isHoldingY)
-            {
-                bas_cursor.RotatePreview();
-            }
-        }
-    }
-
     private void RightBumper(InputAction.CallbackContext context)
     {
-        bas_cursor.ToolWheelRight();
+        isHoldingRB = true;
     }
 
     private void LeftBumper(InputAction.CallbackContext context)
     {
-        bas_cursor.ToolWheelLeft();
+        isHoldingLB = true;
+    }
+
+    private void RightBumperCancel(InputAction.CallbackContext context)
+    {
+        isHoldingRB = false;
+    }
+
+    private void LeftBumperCancel(InputAction.CallbackContext context)
+    {
+        isHoldingLB = false;
     }
 
     private void DPadRight(InputAction.CallbackContext context)
     {
-        isHoldingDPadRight = true;
+        //isHoldingDPadRight = true;
     }
 
     private void DPadRightCancel(InputAction.CallbackContext context)
     {
-        isHoldingDPadRight = false;
+        //isHoldingDPadRight = false;
     }
 
     private void DPadLeft(InputAction.CallbackContext context)
     {
-        isHoldingDPadLeft = true;
+        //isHoldingDPadLeft = true;
     }
 
     private void DPadLeftCancel(InputAction.CallbackContext context)
     {
-        isHoldingDPadLeft = false;
+        //isHoldingDPadLeft = false;
     }
 }
