@@ -44,6 +44,15 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""a1921a55-ece7-4d94-b7ed-47731fe52e12"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -68,6 +77,45 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8174c94a-85f5-46dd-82a8-98624a413310"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Monstro UI"",
+            ""id"": ""8f1bb257-5cca-4986-9e39-3f475aad3785"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""192198a7-152a-4f3a-8200-ae2926402636"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e64b2b8e-589c-409b-a219-31156b642d2f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -78,6 +126,10 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         m_MonstroMovement = asset.FindActionMap("Monstro Movement", throwIfNotFound: true);
         m_MonstroMovement_Movement = m_MonstroMovement.FindAction("Movement", throwIfNotFound: true);
         m_MonstroMovement_Jump = m_MonstroMovement.FindAction("Jump", throwIfNotFound: true);
+        m_MonstroMovement_Pause = m_MonstroMovement.FindAction("Pause", throwIfNotFound: true);
+        // Monstro UI
+        m_MonstroUI = asset.FindActionMap("Monstro UI", throwIfNotFound: true);
+        m_MonstroUI_Newaction = m_MonstroUI.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -141,12 +193,14 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     private List<IMonstroMovementActions> m_MonstroMovementActionsCallbackInterfaces = new List<IMonstroMovementActions>();
     private readonly InputAction m_MonstroMovement_Movement;
     private readonly InputAction m_MonstroMovement_Jump;
+    private readonly InputAction m_MonstroMovement_Pause;
     public struct MonstroMovementActions
     {
         private @MonstroControls m_Wrapper;
         public MonstroMovementActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_MonstroMovement_Movement;
         public InputAction @Jump => m_Wrapper.m_MonstroMovement_Jump;
+        public InputAction @Pause => m_Wrapper.m_MonstroMovement_Pause;
         public InputActionMap Get() { return m_Wrapper.m_MonstroMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -162,6 +216,9 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IMonstroMovementActions instance)
@@ -172,6 +229,9 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IMonstroMovementActions instance)
@@ -189,9 +249,60 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         }
     }
     public MonstroMovementActions @MonstroMovement => new MonstroMovementActions(this);
+
+    // Monstro UI
+    private readonly InputActionMap m_MonstroUI;
+    private List<IMonstroUIActions> m_MonstroUIActionsCallbackInterfaces = new List<IMonstroUIActions>();
+    private readonly InputAction m_MonstroUI_Newaction;
+    public struct MonstroUIActions
+    {
+        private @MonstroControls m_Wrapper;
+        public MonstroUIActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_MonstroUI_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_MonstroUI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MonstroUIActions set) { return set.Get(); }
+        public void AddCallbacks(IMonstroUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Add(instance);
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
+        }
+
+        private void UnregisterCallbacks(IMonstroUIActions instance)
+        {
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
+        }
+
+        public void RemoveCallbacks(IMonstroUIActions instance)
+        {
+            if (m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMonstroUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MonstroUIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MonstroUIActions @MonstroUI => new MonstroUIActions(this);
     public interface IMonstroMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IMonstroUIActions
+    {
+        void OnNewaction(InputAction.CallbackContext context);
     }
 }
