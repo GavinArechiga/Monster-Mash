@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class monstroLocomotion : MonoBehaviour
 {
+    //Walking and Running
     private CharacterController controller;
-    private float moveSpeed = 20f;
+    private float moveSpeed = 30f;
     private float walkSpeed = 10f;
     private float runSpeed = 30f;
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 inputVector = Vector2.zero;
-    private float gravity = -100f;
-    private float flightedGravity = -5f;
-    private float jumpPower = 10f;
-    public bool wingedMonster;
+
+    //Gravity
+    public Transform groundCheck;
+    private bool isGrounded;
+    private float groundDistance = 0.4f;
+    public LayerMask groundMask;
+    private float gravity = -150f;
+    private float normalizedGravity = -80f;
+    private float flightedGravity = -50f;
+
+    //Jumping and Flight
+    private float jumpPower = 12f;
+    private float flightedJumpPower = 12f;
+    public bool wingedMonster = false;
     private bool isFlying = false;
     private int jumpsLeft = 2;
     private bool isLanded = true;
@@ -24,7 +35,7 @@ public class monstroLocomotion : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    public void setInputVector(Vector2 direction)
+    public void movementInput(Vector2 direction)
     {
         inputVector = direction;
 
@@ -41,16 +52,22 @@ public class monstroLocomotion : MonoBehaviour
     public void jumpInput()
     {
         if (jumpsLeft == 0) return;
+        if (flightedJumpPower == 0) return; 
 
-        if (!wingedMonster)
+        if (wingedMonster == false)
         {
+            #region Jump and Double Jump - Non Winged Monsters
+
             jumpsLeft = jumpsLeft - 1;
             velocity.y = 0f;
             velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+
+            #endregion
         }
         else
         {
-            if (controller.isGrounded)
+            #region Jump and Flight - Winged Monsters
+            if (isGrounded)
             {
                 velocity.y = 0f;
                 velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
@@ -60,8 +77,8 @@ public class monstroLocomotion : MonoBehaviour
                 if (isFlying)
                 {
                     velocity.y = 0f;
-                    isFlying = false;
-                    jumpsLeft = 0;
+                    flightedJumpPower = flightedJumpPower - 2;
+                    velocity.y += Mathf.Sqrt(flightedJumpPower * -2f * gravity);
                 }
                 else
                 {
@@ -70,10 +87,11 @@ public class monstroLocomotion : MonoBehaviour
                     isFlying = true;
                 }
             }
+
+            #endregion
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
@@ -86,13 +104,20 @@ public class monstroLocomotion : MonoBehaviour
 
     private void applyGravity()
     {
-        if (controller.isGrounded)
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (isGrounded && ((velocity.y == 0) || (velocity.y < 0)))
         {
-            land();
+            if (isLanded == false)
+            {
+                land();
+            }
         }
         else
         {
-            if (isFlying)
+            isLanded = false;
+
+            if (isFlying && (velocity.y == 0 || velocity.y < 0))
             {
                 velocity.y += flightedGravity * Time.deltaTime;
                 controller.Move(velocity * Time.deltaTime);
@@ -109,7 +134,9 @@ public class monstroLocomotion : MonoBehaviour
     {
         velocity.y = 0f;
         jumpsLeft = 2;
+        flightedJumpPower = jumpPower;
         isFlying = false;
         isLanded = true;
     }
+
 }

@@ -6,18 +6,18 @@ using UnityEngine.InputSystem;
 
 public class monstroInputHandler : MonoBehaviour
 {
-    MonstroControls monstroControls;
+    PlayerInput playerInput;
     private monstroLocomotion locomotion;
 
     private void Awake()
     {
-        monstroControls = new MonstroControls();
+        playerInput = GetComponent<PlayerInput>();
         locomotion = GetComponent<monstroLocomotion>();
     }
 
     public void OnMove(CallbackContext context)
     {
-        locomotion.setInputVector(context.ReadValue<Vector2>());
+        locomotion.movementInput(context.ReadValue<Vector2>());
     }
 
     public void OnJump(CallbackContext context)
@@ -26,5 +26,19 @@ public class monstroInputHandler : MonoBehaviour
         {
             locomotion.jumpInput();
         }
+    }
+
+    public void OnPause(CallbackContext context)
+    {
+        if (context.started)
+        {
+            print("pause");//this will call out to some sort of menu manager to throw up a pause screen
+        }
+    }
+
+    public void switchToMonsterControls()
+    {
+        locomotion.enabled = true;
+        playerInput.SwitchCurrentActionMap("Monstro Movement");
     }
 }
