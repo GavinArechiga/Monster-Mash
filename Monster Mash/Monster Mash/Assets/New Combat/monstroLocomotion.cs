@@ -17,18 +17,24 @@ public class monstroLocomotion : MonoBehaviour
     private bool isGrounded;
     private float groundDistance = 0.4f;
     public LayerMask groundMask;
-    private float gravity = -150f;
+    private float gravity = -120f;//was 150
     private float normalizedGravity = -80f;
-    private float flightedGravity = -50f;
+    private float flightedGravity = -20f;
 
     //Jumping and Flight
-    private float jumpPower = 12f;
-    private float flightedJumpPower = 12f;
+    private float jumpPower = 10f;
+    private float flightedJumpPower = 10f;
     public bool wingedMonster = false;
     private bool isFlying = false;
     private int jumpsLeft = 2;
     private bool isLanded = true;
     Vector3 velocity;
+
+    //Hazards and Level Interaction
+    public LayerMask trampolineMask;
+    private bool isBouncing = false;
+
+    public LayerMask outOfBounds;
 
     private void Awake()
     {
@@ -105,6 +111,13 @@ public class monstroLocomotion : MonoBehaviour
     private void applyGravity()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isBouncing = Physics.CheckSphere(groundCheck.position, groundDistance, trampolineMask);
+
+        if (isBouncing && ((velocity.y == 0) || (velocity.y < 0)))
+        {
+            bounce();
+            return;
+        }
 
         if (isGrounded && ((velocity.y == 0) || (velocity.y < 0)))
         {
@@ -138,5 +151,27 @@ public class monstroLocomotion : MonoBehaviour
         isFlying = false;
         isLanded = true;
     }
+
+    #region Level Hazards and Interactions
+
+    private void bounce() //when the monster lands on a trampoline
+    {
+        velocity.y = 0f;
+        velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+        jumpsLeft = 2;
+        flightedJumpPower = jumpPower;
+        isFlying = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Out of Bounds")
+        {
+            monstroFightManager fightManager = Object.FindFirstObjectByType<monstroFightManager>();
+            fightManager.respawnPlayer(this.gameObject);
+            velocity.y = 0f;
+        }
+    }
+    #endregion
 
 }
