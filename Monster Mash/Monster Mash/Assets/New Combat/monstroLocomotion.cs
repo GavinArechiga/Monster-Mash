@@ -34,6 +34,13 @@ public class monstroLocomotion : MonoBehaviour
     public LayerMask trampolineMask;
     private bool isBouncing = false;
 
+    //
+    private bool isStunLocked;
+    private Vector3 launchDirection;
+    private int launchPower = 50;
+    private int lightLaunchPower = 50;
+    private int HeavyLaunchPower = 100;
+
     public LayerMask outOfBounds;
 
     private void Awake()
@@ -100,11 +107,17 @@ public class monstroLocomotion : MonoBehaviour
 
     void Update()
     {
-        moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
-        moveDirection = transform.TransformDirection(moveDirection);
-        moveDirection *= moveSpeed;
-
-        controller.Move(moveDirection * Time.deltaTime);
+        if (isStunLocked == false)
+        {
+            moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
+            moveDirection = transform.TransformDirection(moveDirection);
+            moveDirection *= moveSpeed;
+            controller.Move(moveDirection * Time.deltaTime);
+        }
+        else
+        {
+            controller.Move(launchDirection * launchPower * Time.deltaTime);
+        }
         applyGravity();
     }
 
@@ -152,7 +165,7 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = true;
     }
 
-    #region Level Hazards and Interactions
+    #region Level Interactions
 
     private void bounce() //when the monster lands on a trampoline
     {
@@ -163,7 +176,7 @@ public class monstroLocomotion : MonoBehaviour
         isFlying = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)//Level Triggers
     {
         if (other.gameObject.tag == "Out of Bounds")
         {
@@ -172,6 +185,44 @@ public class monstroLocomotion : MonoBehaviour
             velocity.y = 0f;
         }
     }
+
+    #endregion
+
+    #region Damage Launching
+    public void damageLaunch(Collider hitBox, bool isHeavy)
+    {
+        StopCoroutine(damageLaunchDelay());
+        Vector3 hitPoint = hitBox.ClosestPoint(transform.position);
+        launchDirection = transform.position - hitPoint;
+        launchDirection.Normalize();
+
+        if (isHeavy)
+        {
+            launchPower = HeavyLaunchPower;
+        }
+        else
+        {
+            launchPower = lightLaunchPower;
+        }
+
+        StartCoroutine(damageLaunchDelay());
+    }
+
+    IEnumerator damageLaunchDelay()
+    {
+        isStunLocked = true;
+
+        if (launchPower == HeavyLaunchPower)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        isStunLocked = false;
+    }
+
     #endregion
 
 }
