@@ -32,6 +32,9 @@ public class monstroFightManager : MonoBehaviour
 
     IEnumerator playIntroSpawnPortal(monstroInputHandler spawningMonster)
     {
+        //reset data
+        spawningMonster.gameObject.GetComponent<monstroHealth>().resetHealth();
+
         //grab spawn point
         GameObject playerSpawnPoint = GameObject.Find(spawningMonster.name + " Spawn");
 
