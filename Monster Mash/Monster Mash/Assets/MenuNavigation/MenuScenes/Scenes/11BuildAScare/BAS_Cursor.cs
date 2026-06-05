@@ -79,6 +79,11 @@ public class BAS_Cursor : MonoBehaviour
             MoveCursor();
             PreviewPart();
         }
+
+        if (currTool is Tools.edit)
+        { 
+            cursorArt.Change(RotGizmoRaycast() ? Hands.open : Hands.point);
+        }
     }
 
     private void PreviewPart()
@@ -138,25 +143,22 @@ public class BAS_Cursor : MonoBehaviour
             StartEditMode();
             return;
         }
-        
-        RaycastHit hit;
 
-        Vector3 worldPos = cursor.position;
-        Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
-
-        RaycastHit hitRot;
-        Ray myRayRot = rotCam.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+        RaycastHit rotHit;
         
-        if (Physics.Raycast(myRayRot, out hitRot, 1000f, rotMask))
+        if (RotGizmoRaycast(out rotHit))
         {
-            if (hitRot.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+            if (rotHit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
             {
-                currAxis = hitRot.collider.name;
+                currAxis = rotHit.collider.name;
                 StartRotGizmo();
                 return;
             }
         }
-        else if (Physics.Raycast(myRay, out hit, 1000f, partMask))
+
+        RaycastHit hit;
+
+        if (PartRaycast(out hit))
         {
             if (hit.collider.GetComponent<WhichPartType>())
             {
@@ -330,12 +332,14 @@ public class BAS_Cursor : MonoBehaviour
     {
         usingRotGizmo = true;
         currTool = Tools.rotate;
+        cursorArt.Change(Hands.closed);
     }
 
     private void StopRotGizmo()
     {
         usingRotGizmo = false;
         currTool = Tools.edit;
+        cursorArt.Change(Hands.point);
     }
 
     private void RotateGizmo(Vector3 input)
@@ -425,17 +429,85 @@ public class BAS_Cursor : MonoBehaviour
         }
     }
 
+    private bool PartRaycast(out RaycastHit hit)
+    {
+        Vector3 worldPos = cursor.position;
+        Ray myRay = cam.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f, partMask))
+        {
+            if (hit.collider.GetComponent<WhichPartType>())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool PartRaycast()
+    {
+        Vector3 worldPos = cursor.position;
+        RaycastHit hit;
+        Ray myRay = cam.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f, partMask))
+        {
+            if (hit.collider.GetComponent<WhichPartType>())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool RotGizmoRaycast(out RaycastHit hit)
+    {
+        Vector3 worldPos = cursor.position;
+        Ray myRay = rotCam.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f, rotMask))
+        {
+            if (hit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool RotGizmoRaycast()
+    {
+        Vector3 worldPos = cursor.position;
+        RaycastHit hit;
+        Ray myRay = rotCam.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+
+        if (Physics.Raycast(myRay, out hit, 1000f, rotMask))
+        {
+            if (hit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void StartEditMode()
     {
         currTool = Tools.edit;
         //add gavins ui and turn ON (i still gotta do this)
 
         SetUpRotGizmo();
+        cursorArt.Change(Hands.point);
     }
 
     private void StopEditMode()
     {
         currTool = Tools.none;
         rotGizmo?.Detach();
+        cursorArt.Change(Hands.point);
     }
 }
