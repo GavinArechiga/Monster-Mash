@@ -50,6 +50,12 @@ public class BAS_Cursor : MonoBehaviour
     private List<Collider> toTurnBackOn = new List<Collider>();
     private List<Collider> toTurnBackOff = new List<Collider>();
 
+    [SerializeField] private Camera rotCam;
+    [SerializeField] private LayerMask partMask;
+    [SerializeField] private LayerMask rotMask;
+
+    private CursorArt cursorArt;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +64,7 @@ public class BAS_Cursor : MonoBehaviour
         partList.Add(monster);
         //toolWheel = FindObjectOfType<ToolWheel>();
         bas_currentPart.SetCurrTorso(monster);
+        cursorArt = FindObjectOfType<CursorArt>();
     }
 
     // Update is called once per frame
@@ -93,43 +100,6 @@ public class BAS_Cursor : MonoBehaviour
                 partToEdit.transform.position = hit.point;
             }
         }
-
-        /*if (!movePart) return;
-
-        Vector3 worldpos = cursor.position;
-
-        Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldpos));
-        Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
-
-        Plane plane = new Plane(Camera.main.transform.forward * -1f, new Vector3(0, 0, -5f));
-
-        if (plane.Raycast(myRay, out float enter))
-        {
-            Vector3 cursorWorldPoint = myRay.GetPoint(enter);
-
-            Vector3 closestPoint = bas_currentPart.GetCurrTorso().ClosestPoint(cursorWorldPoint);
-            float closestDist = Vector3.Distance(cursorWorldPoint, closestPoint);
-
-            List<Collider> allHeads = bas_currentPart.GetAllHeads();
-
-            if (allHeads.Count > 0)
-            {
-                for (int i = 0; i < allHeads.Count; i++)
-                {
-                    Vector3 headPoint = allHeads[i].ClosestPoint(cursorWorldPoint);
-
-                    float headDist = Vector3.Distance(cursorWorldPoint, headPoint);
-
-                    if (headDist < closestDist)
-                    {
-                        closestDist = headDist;
-                        closestPoint = headPoint;
-                    }
-                }
-            }
-
-        partToEdit.transform.position = closestPoint;
-        }*/
     }
 
     private void MoveCursor()
@@ -154,10 +124,6 @@ public class BAS_Cursor : MonoBehaviour
             return;
         }
 
-        RaycastHit hit;
-
-        Vector3 worldPos = cursor.position;
-        Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
 
         if (currTool == Tools.move)
         {
@@ -169,10 +135,28 @@ public class BAS_Cursor : MonoBehaviour
                 bas_currentPart.AddHead(partToEdit);
             }
 
-            //editPart = false;
             StartEditMode();
+            return;
         }
-        else if (Physics.Raycast(myRay, out hit, 1000f))
+        
+        RaycastHit hit;
+
+        Vector3 worldPos = cursor.position;
+        Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+
+        RaycastHit hitRot;
+        Ray myRayRot = rotCam.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
+        
+        if (Physics.Raycast(myRayRot, out hitRot, 1000f, rotMask))
+        {
+            if (hitRot.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+            {
+                currAxis = hitRot.collider.name;
+                StartRotGizmo();
+                return;
+            }
+        }
+        else if (Physics.Raycast(myRay, out hit, 1000f, partMask))
         {
             if (hit.collider.GetComponent<WhichPartType>())
             {
@@ -183,18 +167,15 @@ public class BAS_Cursor : MonoBehaviour
                         InstantiatePart(hit);
                         currTool = Tools.move;
                         IgnorePartRaycast();
+                        return;
                     }
                 }
-                else if (hit.collider.GetComponent<WhichPartType>()?.type is not PartType.Torso or PartType.Head)
+
+                if (currTool == Tools.none)
                 {
                     partToEdit = hit.collider.GetComponentInParent<TempPartData>().gameObject;
                     StartEditMode();
                 }
-            }
-            else if(hit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
-            {
-                currAxis = hit.collider.name;
-                StartRotGizmo();
             }
         }
         else if (currTool == Tools.none)
@@ -388,7 +369,7 @@ public class BAS_Cursor : MonoBehaviour
             myRot = rotGizmo.RotateZ(dir);
         }
 
-        partToEdit.transform.Rotate(myRot, Space.Self);
+        partToEdit?.transform.Rotate(myRot, Space.Self);
     }
 
 

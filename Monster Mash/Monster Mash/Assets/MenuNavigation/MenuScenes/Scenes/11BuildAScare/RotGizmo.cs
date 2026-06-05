@@ -10,9 +10,11 @@ public class RotGizmo : MonoBehaviour
 
     [SerializeField] private float rotSpeed = 1.5f;
     private float scaleMultiplier = 1f;
+
+    private Vector3 ogScale;
     void Start()
     {
-        
+        ogScale = transform.localScale;
     }
 
     // Update is called once per frame
@@ -74,7 +76,7 @@ public class RotGizmo : MonoBehaviour
     {
         transform.position = myObj.transform.position;
         transform.eulerAngles = myObj.transform.eulerAngles;
-        ScaleGizmo(myObj.transform.lossyScale);
+        //ScaleGizmo(myObj.transform.lossyScale);
         transform.parent = myObj.transform;
     }
 
@@ -82,5 +84,6 @@ public class RotGizmo : MonoBehaviour
     {
         transform.parent = null;
         gameObject.SetActive(false);
+        //transform.localScale = ogScale;
     }
 }

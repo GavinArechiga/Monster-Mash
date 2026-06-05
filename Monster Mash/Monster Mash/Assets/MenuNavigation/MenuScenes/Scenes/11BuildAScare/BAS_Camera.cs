@@ -14,15 +14,10 @@ public class BAS_Camera : MonoBehaviour
     private float minFOV = 5f;
     private float zoomSpeed = 35f;
 
-    private Camera cam;
+    [SerializeField] private Camera mainCam;
+    [SerializeField] private Camera rotCam;
 
     [SerializeField] private GameObject monster;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        cam = Camera.main;
-    }
 
     // Update is called once per frame
     void Update()
@@ -32,7 +27,7 @@ public class BAS_Camera : MonoBehaviour
 
     public void RotateMonster(Vector3 lookInput)
     {
-        transform.position = new Vector3(monster.transform.position.x, transform.position.y, transform.position.z);
+        rotCam.transform.position = new Vector3(monster.transform.position.x, rotCam.transform.position.y, rotCam.transform.position.z);
 
         float delta = lookInput.y * rotSpeed * Time.deltaTime;
 
@@ -40,7 +35,7 @@ public class BAS_Camera : MonoBehaviour
 
         float appliedRotation = newAngle - currentAngle;
 
-        transform.RotateAround(monster.transform.position, Vector3.right * 0.5f, appliedRotation);
+        rotCam.transform.RotateAround(monster.transform.position, Vector3.right * 0.5f, appliedRotation);
         monster.transform.Rotate(Vector3.up, lookInput.x * -rotSpeed * Time.deltaTime, Space.World);
 
         currentAngle = newAngle;
@@ -48,15 +43,15 @@ public class BAS_Camera : MonoBehaviour
 
     public void CameraZoomIn()
     {
-        float newFOV = cam.fieldOfView - (zoomSpeed * Time.deltaTime);
+        float newFOV = mainCam.fieldOfView - (zoomSpeed * Time.deltaTime);
 
-        cam.fieldOfView = Mathf.Max(newFOV, minFOV);
+        mainCam.fieldOfView = Mathf.Max(newFOV, minFOV);
     }
 
     public void CameraZoomOut()
     {
-        float newFOV = cam.fieldOfView + (zoomSpeed * Time.deltaTime);
+        float newFOV = mainCam.fieldOfView + (zoomSpeed * Time.deltaTime);
 
-        cam.fieldOfView = Mathf.Min(newFOV, maxFOV);
+        mainCam.fieldOfView = Mathf.Min(newFOV, maxFOV);
     }
 }
