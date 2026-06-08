@@ -18,7 +18,7 @@ public class monstroLocomotion : MonoBehaviour
     private float groundDistance = 0.4f;
     public LayerMask groundMask;
     private float gravity = -120f;//was 150
-    private float normalizedGravity = -80f;
+    //private float normalizedGravity = -80f;
     private float flightedGravity = -20f;
 
     //Jumping and Flight
@@ -165,6 +165,13 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = true;
     }
 
+    public void forceRespawn()
+    {
+        monstroFightManager fightManager = Object.FindFirstObjectByType<monstroFightManager>();
+        fightManager.respawnPlayer(this.gameObject);
+        velocity.y = 0f;
+    }
+
     #region Level Interactions
 
     private void bounce() //when the monster lands on a trampoline
@@ -180,9 +187,12 @@ public class monstroLocomotion : MonoBehaviour
     {
         if (other.gameObject.tag == "Out of Bounds")
         {
-            monstroFightManager fightManager = Object.FindFirstObjectByType<monstroFightManager>();
-            fightManager.respawnPlayer(this.gameObject);
-            velocity.y = 0f;
+            forceRespawn();
+        }
+
+        if (other.gameObject.tag == "Animation")
+        {
+            other.gameObject.GetComponent<Animator>().SetTrigger("playAnimation");
         }
     }
 

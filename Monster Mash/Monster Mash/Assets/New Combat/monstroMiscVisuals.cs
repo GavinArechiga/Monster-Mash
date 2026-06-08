@@ -9,6 +9,9 @@ public class monstroMiscVisuals : MonoBehaviour
     private GameObject playerRing;
     private bool playerRingActive = true;
 
+    //effects
+    public ParticleSystem burningEffect;
+
 
     void Update()
     {
@@ -39,4 +42,16 @@ public class monstroMiscVisuals : MonoBehaviour
     {
         playerRing = Instantiate(playerRingPrefab);
     }
+
+    public void playFireEffect()
+    {
+        burningEffect.Play();
+    }
+
+    public void stopFireEffect()
+    {
+        burningEffect.Stop();
+    }
+
+
 }
