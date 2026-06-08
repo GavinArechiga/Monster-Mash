@@ -5,19 +5,24 @@ using UnityEngine;
 public class monstroHealth : MonoBehaviour
 {
     private monstroLocomotion locomotion;
+    private monstroMiscVisuals monstroMiscVis;
     public int health = 200;
     private int healthPerPart = 200;
     public int mappedParts = 1;
     private int partsLeft = 1;
 
     //built in damage from hazards
+    //hazard damage is built in to limit the traffic and back and forth needed for info that could just be sourced locally
     private int fireDamagePerSecond = 10;
     private bool isOnFire = false;
     private int carDamage = 50;
+    private int sharkDamage = 30;
+    private int toothDamage = 50;
 
     private void Awake()
     {
         locomotion = GetComponent<monstroLocomotion>();
+        monstroMiscVis = GetComponent<monstroMiscVisuals>();
     }
 
     public void resetHealth()
@@ -59,15 +64,32 @@ public class monstroHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)//Damage Triggers
     {
-        if (other.gameObject.tag == "Fire" && isOnFire == false)
+        if (other.gameObject.tag == "Hazard") //Hazards just need a trigger box, the hazard tag, and a hazard script
         {
-            StartCoroutine(takeFireDamage());
-        }
+            string hazardName = other.GetComponent<hazard>().selectedHazard;
 
-        if (other.gameObject.tag == "Car")
-        {
-            locomotion.damageLaunch(other, true);
-            takeDamage(carDamage);
+            if (hazardName == "fire" && isOnFire == false)
+            {
+                StartCoroutine(takeFireDamage());
+            }
+
+            if(hazardName == "car")
+            {
+                locomotion.damageLaunch(other, true);
+                takeDamage(carDamage);
+            }
+
+            if(hazardName == "shark")
+            {
+                locomotion.damageLaunch(other, false);
+                takeDamage(sharkDamage);
+            }
+
+            if(hazardName == "teeth")
+            {
+                takeDamage(toothDamage);
+                locomotion.forceRespawn();//we put things like a respawn first through the locomotion script to stop all velocity and movement
+            }
         }
     }
 
@@ -75,6 +97,7 @@ public class monstroHealth : MonoBehaviour
     {
         //fire will inflict 50 damage overall over 4 seconds
         isOnFire = true;
+        monstroMiscVis.playFireEffect();
         takeDamage(fireDamagePerSecond);
         yield return new WaitForSeconds(1);
         takeDamage(fireDamagePerSecond);
@@ -85,5 +108,6 @@ public class monstroHealth : MonoBehaviour
         yield return new WaitForSeconds(1);
         takeDamage(fireDamagePerSecond);
         isOnFire = false;
+        monstroMiscVis.stopFireEffect();
     }
 }

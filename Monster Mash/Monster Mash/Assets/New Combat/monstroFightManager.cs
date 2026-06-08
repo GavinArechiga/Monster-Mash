@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class monstroFightManager : MonoBehaviour
 {
@@ -8,11 +9,14 @@ public class monstroFightManager : MonoBehaviour
     private monstroInputHandler[] monstroMonsters;
     public int introDelayTime;
 
+    private CinemachineTargetGroup cameraTargetGroup;
+
     //this scripts goal is to take players loaded into the scene and place them on to spawn points
     //it will also tell player input handlers to switch to the monster action map
     private void Awake()
     {
         monstroMonsters = FindObjectsByType<monstroInputHandler>(FindObjectsSortMode.None);
+        cameraTargetGroup = FindFirstObjectByType<CinemachineTargetGroup>();
         StartCoroutine(introDelay());
     }
 
@@ -51,6 +55,12 @@ public class monstroFightManager : MonoBehaviour
         //move location of spawning player to correct spawn point
         spawningMonster.transform.position = playerSpawnPoint.transform.position;
 
+        //add them to camera target group
+        if (cameraTargetGroup != null)
+        {
+            cameraTargetGroup.AddMember(spawningMonster.transform, 1, 0.5f);
+        }
+
         //change monster controls from UI to character movement
         spawningMonster.switchToMonsterControls();
     }
@@ -58,7 +68,6 @@ public class monstroFightManager : MonoBehaviour
     public void respawnPlayer(GameObject outOfBoundsMonster)
     {
         StartCoroutine(playRespawnPortal(outOfBoundsMonster));
-
     }
 
     IEnumerator playRespawnPortal(GameObject respawningMonster)
