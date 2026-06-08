@@ -48,8 +48,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["Y_BS"].canceled += CancelY;
         playerInput.actions["RightBumperBS"].performed += RightBumper;
         playerInput.actions["LeftBumperBS"].performed += LeftBumper;
-        playerInput.actions["RightBumperBS"].performed += RightBumperCancel;
-        playerInput.actions["LeftBumperBS"].performed += LeftBumperCancel;
+        playerInput.actions["RightBumperBS"].canceled += RightBumperCancel;
+        playerInput.actions["LeftBumperBS"].canceled += LeftBumperCancel;
         playerInput.actions["DPadRightBS"].performed += DPadRight;
         playerInput.actions["DPadRightBS"].canceled += DPadRightCancel;
         playerInput.actions["DPadLeftBS"].performed += DPadLeft;
@@ -75,8 +75,8 @@ public class PlayerBuildController : MonoBehaviour, IPlayerController
         playerInput.actions["Y_BS"].canceled -= CancelY;
         playerInput.actions["RightBumperBS"].performed -= RightBumper;
         playerInput.actions["LeftBumperBS"].performed -= LeftBumper;
-        playerInput.actions["RightBumperBS"].performed -= RightBumperCancel;
-        playerInput.actions["LeftBumperBS"].performed -= LeftBumperCancel;
+        playerInput.actions["RightBumperBS"].canceled -= RightBumperCancel;
+        playerInput.actions["LeftBumperBS"].canceled -= LeftBumperCancel;
         playerInput.actions["DPadRightBS"].performed -= DPadRight;
         playerInput.actions["DPadRightBS"].canceled -= DPadRightCancel;
         playerInput.actions["DPadLeftBS"].performed -= DPadLeft;

@@ -12,6 +12,7 @@ public class RotGizmo : MonoBehaviour
     private float scaleMultiplier = 1f;
 
     private Vector3 ogScale;
+    private Transform target;
     void Start()
     {
         ogScale = transform.localScale;
@@ -20,20 +21,7 @@ public class RotGizmo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.K))
-        {
-            RotateX(1);
-        }
-
-        if (Input.GetKey(KeyCode.J))
-        {
-            RotateY(1);
-        }
-
-        if (Input.GetKey(KeyCode.H))
-        {
-            RotateZ(1);
-        }
+        MakeGizmoStickWithParent();
     }
 
     public Vector3 RotateX(float input)
@@ -76,14 +64,17 @@ public class RotGizmo : MonoBehaviour
     {
         transform.position = myObj.transform.position;
         transform.eulerAngles = myObj.transform.eulerAngles;
-        //ScaleGizmo(myObj.transform.lossyScale);
-        transform.parent = myObj.transform;
+        target = myObj.transform;
     }
 
     public void Detach()
     {
-        transform.parent = null;
+        target = null;
         gameObject.SetActive(false);
-        //transform.localScale = ogScale;
+    }
+
+    private void MakeGizmoStickWithParent() //i cant actually parent or it gets really sad with scale stuff :((
+    {
+        transform.position = target.position;
     }
 }

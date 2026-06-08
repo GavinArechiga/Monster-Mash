@@ -17,7 +17,7 @@ public class BAS_Cursor : MonoBehaviour
     [SerializeField] private RectTransform cursor;
 
     [SerializeField] private bool editPart;
-    private GameObject partToEdit;
+    [SerializeField] private GameObject partToEdit;
 
     [SerializeField] private bool movePart = false;
     [SerializeField] private bool rotatePart = false;
@@ -36,6 +36,9 @@ public class BAS_Cursor : MonoBehaviour
     private float scaleSpeed = 2f;
 
     private float rotSpeed = 50f;
+
+    private Vector3 oldRot; //I have this so rotation can be canceled
+    [SerializeField] private Vector3 oldPos = Vector3.zero; //^
 
     //private ToolWheel toolWheel;
 
@@ -98,8 +101,6 @@ public class BAS_Cursor : MonoBehaviour
 
         if (Physics.Raycast(myRay, out hit, 1000f))
         {
-            Debug.Log(hit.collider.gameObject);
-
             if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
             {
                 partToEdit.transform.position = hit.point;
@@ -132,7 +133,8 @@ public class BAS_Cursor : MonoBehaviour
 
         if (currTool == Tools.move)
         {
-            partList.Add(partToEdit);
+            if (!partList.Contains(partToEdit)) partList.Add(partToEdit);
+
             DontIgnorePartRaycast();
 
             if (partToEdit.GetComponentInChildren<WhichPartType>().type is PartType.Head)
@@ -140,19 +142,23 @@ public class BAS_Cursor : MonoBehaviour
                 bas_currentPart.AddHead(partToEdit);
             }
 
+            oldPos = Vector3.zero;
             StartEditMode();
             return;
         }
 
         RaycastHit rotHit;
         
-        if (RotGizmoRaycast(out rotHit))
+        if (currTool == Tools.edit)
         {
-            if (rotHit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+            if (RotGizmoRaycast(out rotHit))
             {
-                currAxis = rotHit.collider.name;
-                StartRotGizmo();
-                return;
+                if (rotHit.collider.name is "X Axis" or "Y Axis" or "Z Axis")
+                {
+                    currAxis = rotHit.collider.name;
+                    StartRotGizmo();
+                    return;
+                }
             }
         }
 
@@ -160,9 +166,18 @@ public class BAS_Cursor : MonoBehaviour
 
         if (PartRaycast(out hit))
         {
-            if (hit.collider.GetComponent<WhichPartType>())
+            if (hit.collider.GetComponentInParent<WhichPartType>())
             {
-                if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
+                if (currTool == Tools.edit && (hit.collider.GetComponentInParent<WhichPartType>()?.type is not PartType.Torso) && partToEdit == hit.collider.GetComponentInParent<TempPartData>().gameObject)
+                {
+                    IgnorePartRaycast();
+                    rotGizmo?.Detach();
+                    oldPos = partToEdit.transform.position;
+                    currTool = Tools.move;
+                    return;
+                }
+
+                if (hit.collider.GetComponentInParent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
                 {
                     if (currTool == Tools.newPart)
                     {
@@ -225,6 +240,7 @@ public class BAS_Cursor : MonoBehaviour
     {
         if (usingRotGizmo)
         {
+            partToEdit.transform.eulerAngles = oldRot;
             StopRotGizmo();
         }
         else if (currTool is Tools.newPart)
@@ -233,13 +249,29 @@ public class BAS_Cursor : MonoBehaviour
         }
         else if (currTool is Tools.move or Tools.edit)
         {
-            if (currTool is Tools.edit) StopEditMode();
 
             rotGizmo?.Detach();
-            Destroy(partToEdit);
-            currTool = Tools.none;
-            //editPart = false;
-            partList.Remove(partToEdit);
+
+            if ((partToEdit.GetComponentInChildren<WhichPartType>()?.type is not PartType.Torso && currTool is Tools.edit) || (currTool is Tools.move && oldPos == Vector3.zero))
+            {
+                Destroy(partToEdit);
+                partList.Remove(partToEdit);
+                currTool = Tools.none;
+
+                if (currTool is Tools.edit)
+                {
+                    StopEditMode();
+                }
+                return;
+            }
+
+            if (currTool is Tools.move && oldPos != Vector3.zero)
+            {
+                partToEdit.transform.position = oldPos;
+                oldPos = Vector3.zero;
+                DontIgnorePartRaycast();
+                StartEditMode();
+            }
         }
     }
 
@@ -322,7 +354,10 @@ public class BAS_Cursor : MonoBehaviour
             partToEdit = monsterPart;
             ogScale = partToEdit.transform.localScale;
 
-            CorrectLimbColliders(monsterPart);
+            if (partToEdit.GetComponentInParent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
+            {
+                CorrectLimbColliders(monsterPart);
+            }
             currPotentialParent = hit.transform;
             partToEdit.transform.parent = currPotentialParent;
         }
@@ -333,6 +368,7 @@ public class BAS_Cursor : MonoBehaviour
         usingRotGizmo = true;
         currTool = Tools.rotate;
         cursorArt.Change(Hands.closed);
+        oldRot = partToEdit.transform.eulerAngles;
     }
 
     private void StopRotGizmo()
@@ -411,19 +447,49 @@ public class BAS_Cursor : MonoBehaviour
 
     void IgnorePartRaycast()
     {
-        WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
+        /*WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
 
         foreach (WhichPartType col in partCols)
         {
-            col.gameObject.layer = 2; //ignore raycast
+            if (col.type is PartType.Head or PartType.Torso)
+            {
+                col.gameObject.layer = 2; //ignore raycast
+            }
+            else
+            {
+                foreach (Collider bbCol in col.GetComponentsInChildren<Collider>())
+                {
+                    bbCol.gameObject.layer = 2;
+                }
+            }
+        }*/
+
+        foreach (Collider col in partToEdit.GetComponentsInChildren<Collider>())
+        {
+            col.gameObject.layer = 2;
         }
     }
 
     void DontIgnorePartRaycast()
     {
-        WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
+        /*WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
 
         foreach (WhichPartType col in partCols)
+        {
+
+            if (col.type is PartType.Head or PartType.Torso)
+            {
+                col.gameObject.layer = 0; //dont ignore raycast
+            }
+            else
+            {
+                foreach (Collider bbCol in col.GetComponentsInChildren<Collider>())
+                {
+                    bbCol.gameObject.layer = 0;
+                }
+            }
+        }*/
+        foreach (Collider col in partToEdit.GetComponentsInChildren<Collider>())
         {
             col.gameObject.layer = 0;
         }
@@ -436,7 +502,7 @@ public class BAS_Cursor : MonoBehaviour
 
         if (Physics.Raycast(myRay, out hit, 1000f, partMask))
         {
-            if (hit.collider.GetComponent<WhichPartType>())
+            if (hit.collider.GetComponentInParent<WhichPartType>() || hit.collider.GetComponentInChildren<WhichPartType>())
             {
                 return true;
             }
@@ -453,7 +519,7 @@ public class BAS_Cursor : MonoBehaviour
 
         if (Physics.Raycast(myRay, out hit, 1000f, partMask))
         {
-            if (hit.collider.GetComponent<WhichPartType>())
+            if (hit.collider.GetComponentInParent<WhichPartType>() || hit.collider.GetComponentInChildren<WhichPartType>())
             {
                 return true;
             }
