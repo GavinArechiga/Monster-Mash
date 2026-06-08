@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(WhichPartType))]
-public class PartTypes : Editor
+
+//[CustomEditor(typeof(WhichPartType))]
+public class PartTypes : MonoBehaviour
 {
+
+    /*
     string[] options = new string[]
     {
         "Torso",
@@ -30,4 +33,5 @@ public class PartTypes : Editor
         index = EditorGUILayout.Popup("Type", index, options);
         type.type = options[index];
     }
+    */
 }
