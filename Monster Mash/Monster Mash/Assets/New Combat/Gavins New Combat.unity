@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 134610971}
   - component: {fileID: 134610970}
   - component: {fileID: 134610969}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,6 +639,7 @@ GameObject:
   - component: {fileID: 369714583}
   - component: {fileID: 369714582}
   - component: {fileID: 369714586}
+  - component: {fileID: 369714587}
   m_Layer: 0
   m_Name: Test Car
   m_TagString: Hazard
@@ -738,6 +739,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hazardDropDown: 1
   selectedHazard: 
+--- !u!54 &369714587
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 369714580}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &431041740
 GameObject:
   m_ObjectHideFlags: 0
@@ -2671,15 +2688,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "6-7-26 Gavin Notes\n\nAdd controllers with any button, then click which
+  m_text: "6-10-26 Gavin Notes\n\nAdd controllers with any button, then click which
     scene you want to load into. If you want your monster to be a flying monster,
     click on the appropriate button.\n\nFeatures added that require QA\n- Player
     locomotion (flighted and non-flighted monsters)\n- Collisions for Block Party
     and Monsterberry Munch Mania\n- Player Spawning and Respawning \n- Stage Hazards
     (Cars, Fire, Brick Shark, Toy Shark)\n- battle camera\n- player launching\n\nKnown
-    Bugs and issues\n- Gravity gets really intense sometimes when falling off edges
-    \n- Player circles can be weird, they are a temporary visual\n- elevator transportation
-    on Block Party looks weird\n"
+    Bugs and issues\n- Player circles can be weird, they are a temporary visual\n-
+    elevator transportation on Block Party looks weird\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5101,6 +5117,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530839509604072964, guid: 8486511465afa4740beb5afec96c17a8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4530839509604072970, guid: 8486511465afa4740beb5afec96c17a8,
         type: 3}

@@ -15,10 +15,11 @@ public class monstroLocomotion : MonoBehaviour
     //Gravity
     public Transform groundCheck;
     private bool isGrounded;
-    private float groundDistance = 0.4f;
+    private float groundDistance = 1f;//originally 0.4f
     public LayerMask groundMask;
+    public LayerMask slopeMask;
     private float gravity = -120f;//was 150
-    //private float normalizedGravity = -80f;
+    private float immenseGravity = -400f;
     private float flightedGravity = -20f;
 
     //Jumping and Flight
@@ -27,7 +28,7 @@ public class monstroLocomotion : MonoBehaviour
     public bool wingedMonster = false;
     private bool isFlying = false;
     private int jumpsLeft = 2;
-    private bool isLanded = true;
+    private bool isLanded = true;//used to ensure that landing functions only happen once. Also used to tell if players walk or fell off terrain as opposed to jumping
     Vector3 velocity;
 
     //Hazards and Level Interaction
@@ -46,6 +47,11 @@ public class monstroLocomotion : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        velocity.y = 0f;
+        jumpsLeft = 2;
+        flightedJumpPower = jumpPower;
+        isFlying = false;
+        isLanded = true;
     }
 
     public void movementInput(Vector2 direction)
@@ -65,7 +71,9 @@ public class monstroLocomotion : MonoBehaviour
     public void jumpInput()
     {
         if (jumpsLeft == 0) return;
-        if (flightedJumpPower == 0) return; 
+        if (flightedJumpPower == 0) return;
+
+        isLanded = false;
 
         if (wingedMonster == false)
         {
@@ -119,12 +127,41 @@ public class monstroLocomotion : MonoBehaviour
             controller.Move(launchDirection * launchPower * Time.deltaTime);
         }
         applyGravity();
+        
     }
 
     private void applyGravity()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        bool groundSphereDetected = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        bool slopeDetected = (Physics.Raycast(groundCheck.position, Vector3.down, groundDistance * 2, slopeMask));
         isBouncing = Physics.CheckSphere(groundCheck.position, groundDistance, trampolineMask);
+
+        if (groundSphereDetected)
+        {
+            isGrounded = true;
+        }
+        else if (slopeDetected) //slopes require an immense downward force in order to avoid juttering
+        {
+            isGrounded = true;
+
+            if (isLanded)
+            {
+                //increase downwards forces
+                if (velocity.y > -6000)
+                {
+                    velocity.y += immenseGravity * Time.deltaTime;
+                }
+                else
+                {
+                    velocity.y = -6000;
+                }
+                controller.Move(velocity * Time.deltaTime);
+            }
+        }
+        else
+        {
+            isGrounded = false;
+        }
 
         if (isBouncing && ((velocity.y == 0) || (velocity.y < 0)))
         {
@@ -141,16 +178,38 @@ public class monstroLocomotion : MonoBehaviour
         }
         else
         {
-            isLanded = false;
+            //falling
 
-            if (isFlying && (velocity.y == 0 || velocity.y < 0))
+            if (isLanded)
             {
-                velocity.y += flightedGravity * Time.deltaTime;
+                isLanded = false;
+                velocity.y = 0f;
+            }
+
+            if (isFlying && (velocity.y == 0 || velocity.y < 0)) //falling with flight
+            {
+                //put a velocity cap
+                if (velocity.y > -120)
+                {
+                    velocity.y += flightedGravity * Time.deltaTime;
+                }
+                else
+                {
+                    velocity.y = -120;
+                }
                 controller.Move(velocity * Time.deltaTime);
             }
-            else
+            else //regular falling
             {
-                velocity.y += gravity * Time.deltaTime;
+                //put a velocity cap
+                if (velocity.y > -120) 
+                {
+                    velocity.y += gravity * Time.deltaTime;
+                }
+                else
+                {
+                    velocity.y = -120;
+                }
                 controller.Move(velocity * Time.deltaTime);
             }
         }
@@ -158,6 +217,7 @@ public class monstroLocomotion : MonoBehaviour
 
     private void land()
     {
+        print("land");
         velocity.y = 0f;
         jumpsLeft = 2;
         flightedJumpPower = jumpPower;
@@ -202,9 +262,11 @@ public class monstroLocomotion : MonoBehaviour
     public void damageLaunch(Collider hitBox, bool isHeavy)
     {
         StopCoroutine(damageLaunchDelay());
-        Vector3 hitPoint = hitBox.ClosestPoint(transform.position);
-        launchDirection = transform.position - hitPoint;
+        launchDirection = transform.position - hitBox.transform.position;
+        launchDirection.y = 0;
         launchDirection.Normalize();
+        velocity.x = 0;
+        velocity.z = 0;
 
         if (isHeavy)
         {

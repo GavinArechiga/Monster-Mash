@@ -9,7 +9,8 @@ public class hazard : MonoBehaviour
         fire,
         car,
         shark,
-        teeth
+        teeth,
+        press
     };
 
     public typesOfHazard hazardDropDown = new typesOfHazard();

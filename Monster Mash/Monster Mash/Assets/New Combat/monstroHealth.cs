@@ -18,6 +18,7 @@ public class monstroHealth : MonoBehaviour
     private int carDamage = 50;
     private int sharkDamage = 30;
     private int toothDamage = 50;
+    private int pressDamage = 50;
 
     private void Awake()
     {
@@ -89,6 +90,12 @@ public class monstroHealth : MonoBehaviour
             {
                 takeDamage(toothDamage);
                 locomotion.forceRespawn();//we put things like a respawn first through the locomotion script to stop all velocity and movement
+            }
+
+            if (hazardName == "press")
+            {
+                takeDamage(pressDamage);
+                locomotion.forceRespawn();
             }
         }
     }
