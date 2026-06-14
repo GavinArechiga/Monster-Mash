@@ -20,6 +20,8 @@ public class CursorManager : MonoBehaviour
 
     [SerializeField] private GameObject roster;
 
+    [SerializeField] private int nextScene = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -143,7 +145,7 @@ public class CursorManager : MonoBehaviour
                 }
             }
 
-            sceneController.LoadScene(5);
+            sceneController.LoadScene(nextScene);
         }
     }
 

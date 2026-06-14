@@ -35,7 +35,7 @@ public class BAS_Camera : MonoBehaviour
 
         float appliedRotation = newAngle - currentAngle;
 
-        rotCam.transform.RotateAround(monster.transform.position, Vector3.right * 0.5f, appliedRotation);
+        rotCam.transform.RotateAround(monster.transform.position, -Vector3.right * 0.5f, appliedRotation);
         monster.transform.Rotate(Vector3.up, lookInput.x * -rotSpeed * Time.deltaTime, Space.World);
 
         currentAngle = newAngle;
