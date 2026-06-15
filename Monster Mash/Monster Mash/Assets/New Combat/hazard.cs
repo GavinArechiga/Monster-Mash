@@ -10,15 +10,33 @@ public class hazard : MonoBehaviour
         car,
         shark,
         teeth,
-        press
+        press,
+        trap
     };
 
+    private Collider triggerCollider;
+    private Animator hazardAnimator;
     public typesOfHazard hazardDropDown = new typesOfHazard();
     public string selectedHazard;
-    //private int hazardIndex;
+
     private void Awake()
     {
-        //hazardIndex = (int)hazardDropDown;
         selectedHazard = hazardDropDown.ToString();
+        triggerCollider = this.GetComponent<Collider>();
+        hazardAnimator = this.GetComponent<Animator>();
     }
+
+    public void playTrapAnimation()
+    {
+        triggerCollider.enabled = false;
+        hazardAnimator.SetTrigger("playAnimation");
+        StartCoroutine(clearAnimatorData());
+    }
+
+    IEnumerator clearAnimatorData()
+    {
+        yield return new WaitForSeconds(0.5f);
+        hazardAnimator.ResetTrigger("playAnimation");
+    }
+
 }

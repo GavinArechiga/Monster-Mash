@@ -6,6 +6,7 @@ public class monstroLocomotion : MonoBehaviour
 {
     //Walking and Running
     private CharacterController controller;
+    private bool playerLock = true;
     private float moveSpeed = 30f;
     private float walkSpeed = 10f;
     private float runSpeed = 30f;
@@ -21,6 +22,7 @@ public class monstroLocomotion : MonoBehaviour
     private float gravity = -120f;//was 150
     private float immenseGravity = -400f;
     private float flightedGravity = -20f;
+    private bool stuckOnWall;
 
     //Jumping and Flight
     private float jumpPower = 10f;
@@ -44,18 +46,30 @@ public class monstroLocomotion : MonoBehaviour
 
     public LayerMask outOfBounds;
 
-    private void Awake()
+    private void OnEnable()
     {
         controller = GetComponent<CharacterController>();
+        velocity.x = 0f;
+        velocity.z = 0f;
         velocity.y = 0f;
         jumpsLeft = 2;
         flightedJumpPower = jumpPower;
         isFlying = false;
         isLanded = true;
+        stuckOnWall = false;
+        playerLock = true;
+        StartCoroutine(movementSpawnDelay());
+    }
+
+    IEnumerator movementSpawnDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        playerLock = false;
     }
 
     public void movementInput(Vector2 direction)
     {
+        if (playerLock) return;
         inputVector = direction;
 
         if ((direction.x > 0.35f || direction.x < -0.35f) || (direction.y > 0.35f || direction.y < -0.35f))
@@ -72,6 +86,7 @@ public class monstroLocomotion : MonoBehaviour
     {
         if (jumpsLeft == 0) return;
         if (flightedJumpPower == 0) return;
+        if (playerLock) return;
 
         isLanded = false;
 
@@ -115,16 +130,19 @@ public class monstroLocomotion : MonoBehaviour
 
     void Update()
     {
-        if (isStunLocked == false)
+        if (playerLock == false)
         {
-            moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= moveSpeed;
-            controller.Move(moveDirection * Time.deltaTime);
-        }
-        else
-        {
-            controller.Move(launchDirection * launchPower * Time.deltaTime);
+            if (isStunLocked == false)
+            {
+                moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
+                moveDirection = transform.TransformDirection(moveDirection);
+                moveDirection *= moveSpeed;
+                controller.Move(moveDirection * Time.deltaTime);
+            }
+            else
+            {
+                controller.Move(launchDirection * launchPower * Time.deltaTime);
+            }
         }
         applyGravity();
         
@@ -134,7 +152,9 @@ public class monstroLocomotion : MonoBehaviour
     {
         bool groundSphereDetected = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         bool slopeDetected = (Physics.Raycast(groundCheck.position, Vector3.down, groundDistance * 2, slopeMask));
+        bool slopeSphereDetected = Physics.CheckSphere(groundCheck.position, groundDistance, slopeMask);
         isBouncing = Physics.CheckSphere(groundCheck.position, groundDistance, trampolineMask);
+        bool underTrampoline = (Physics.Raycast(groundCheck.position, Vector3.up, 5, trampolineMask));
 
         if (groundSphereDetected)
         {
@@ -163,11 +183,13 @@ public class monstroLocomotion : MonoBehaviour
             isGrounded = false;
         }
 
-        if (isBouncing && ((velocity.y == 0) || (velocity.y < 0)))
+        
+        if (isBouncing && (underTrampoline == false) && ((velocity.y == 0) || (velocity.y < 0)))
         {
             bounce();
             return;
         }
+        
 
         if (isGrounded && ((velocity.y == 0) || (velocity.y < 0)))
         {
@@ -201,6 +223,18 @@ public class monstroLocomotion : MonoBehaviour
             }
             else //regular falling
             {
+
+                if (isLanded == false && isGrounded == false && slopeSphereDetected && stuckOnWall == false)//this means we are sticky on the walls
+                {
+                    stuckOnWall = true;
+                }
+
+                if (stuckOnWall)//this will stop the fast fall after becoming sticky
+                {
+                    velocity.y = -40;
+                    stuckOnWall = false;
+                }
+
                 //put a velocity cap
                 if (velocity.y > -120) 
                 {
@@ -217,12 +251,12 @@ public class monstroLocomotion : MonoBehaviour
 
     private void land()
     {
-        print("land");
         velocity.y = 0f;
         jumpsLeft = 2;
         flightedJumpPower = jumpPower;
         isFlying = false;
         isLanded = true;
+        stuckOnWall = false;
     }
 
     public void forceRespawn()
@@ -237,7 +271,7 @@ public class monstroLocomotion : MonoBehaviour
     private void bounce() //when the monster lands on a trampoline
     {
         velocity.y = 0f;
-        velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+        velocity.y += Mathf.Sqrt((jumpPower * 1.5f) * -2f * gravity);
         jumpsLeft = 2;
         flightedJumpPower = jumpPower;
         isFlying = false;
@@ -252,7 +286,33 @@ public class monstroLocomotion : MonoBehaviour
 
         if (other.gameObject.tag == "Animation")
         {
-            other.gameObject.GetComponent<Animator>().SetTrigger("playAnimation");
+            if (other.gameObject.GetComponent<animationStarter>() != null)
+            {
+                other.gameObject.GetComponent<animationStarter>().playAnimation();
+            }
+            else if (other.gameObject.GetComponentInParent<animationStarter>() != null)
+            {
+                other.gameObject.GetComponentInParent<animationStarter>().playAnimation();
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == trampolineMask)
+        {
+            if (collision.gameObject.GetComponent<Animation>() != null)
+            {
+                Animation trampolineAnimation = collision.gameObject.GetComponent<Animation>();
+                trampolineAnimation.Stop();
+                trampolineAnimation.Play();
+            }
+            else if (collision.gameObject.GetComponentInParent<Animation>() != null)
+            {
+                Animation trampolineAnimation = collision.gameObject.GetComponentInParent<Animation>();
+                trampolineAnimation.Stop();
+                trampolineAnimation.Play();
+            }
         }
     }
 

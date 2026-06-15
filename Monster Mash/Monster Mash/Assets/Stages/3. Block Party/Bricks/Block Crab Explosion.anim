@@ -33,7 +33,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (1)
+    path: Crab Movement/1 x 2 Bar (1)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -52,7 +52,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (7)
+    path: Crab Movement/1 x 1 Clip (7)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -71,7 +71,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (4)
+    path: Crab Movement/1 x 1 Clip (4)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -90,7 +90,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (2)
+    path: Crab Movement/1 x 2 Bar (2)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -109,7 +109,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (6)
+    path: Crab Movement/1 x 1 Clip (6)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -128,7 +128,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (3)
+    path: Crab Movement/1 x 1 Clip (3)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -147,7 +147,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (4)
+    path: Crab Movement/1 x 2 Bar (4)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -166,7 +166,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 2 x 2 Plate (1)
+    path: Crab Movement/2 x 2 Plate (1)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -185,7 +185,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (8)
+    path: Crab Movement/1 x 1 Clip (8)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -204,7 +204,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (1)
+    path: Crab Movement/1 x 1 Clip (1)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -223,7 +223,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (5)
+    path: Crab Movement/1 x 1 Clip (5)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -242,7 +242,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (2)
+    path: Crab Movement/1 x 1 Clip (2)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -261,7 +261,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (3)
+    path: Crab Movement/1 x 2 Bar (3)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -280,8 +280,27 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Slope (2)
+    path: Crab Movement/1 x 2 Slope (2)
     classID: 54
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 103
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_IsActive
+    path: Crab Movement/Collider
+    classID: 1
     script: {fileID: 0}
   m_PPtrCurves: []
   m_SampleRate: 60
@@ -329,7 +348,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (1)
+    path: Crab Movement/1 x 2 Bar (1)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -348,7 +367,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (7)
+    path: Crab Movement/1 x 1 Clip (7)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -367,7 +386,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (4)
+    path: Crab Movement/1 x 1 Clip (4)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -386,7 +405,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (2)
+    path: Crab Movement/1 x 2 Bar (2)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -405,7 +424,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (6)
+    path: Crab Movement/1 x 1 Clip (6)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -424,7 +443,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (3)
+    path: Crab Movement/1 x 1 Clip (3)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -443,7 +462,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (4)
+    path: Crab Movement/1 x 2 Bar (4)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -462,7 +481,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 2 x 2 Plate (1)
+    path: Crab Movement/2 x 2 Plate (1)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -481,7 +500,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (8)
+    path: Crab Movement/1 x 1 Clip (8)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -500,7 +519,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (1)
+    path: Crab Movement/1 x 1 Clip (1)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -519,7 +538,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (5)
+    path: Crab Movement/1 x 1 Clip (5)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -538,7 +557,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 1 Clip (2)
+    path: Crab Movement/1 x 1 Clip (2)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -557,7 +576,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Bar (3)
+    path: Crab Movement/1 x 2 Bar (3)
     classID: 54
     script: {fileID: 0}
   - curve:
@@ -576,8 +595,27 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsKinematic
-    path: 1 x 2 Slope (2)
+    path: Crab Movement/1 x 2 Slope (2)
     classID: 54
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 103
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_IsActive
+    path: Crab Movement/Collider
+    classID: 1
     script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0

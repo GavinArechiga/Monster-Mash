@@ -24,6 +24,7 @@ TagManager:
   - CinemachineTarget
   - Animation
   - Hazard
+  - Solid
   layers:
   - Default
   - TransparentFX
@@ -43,7 +44,7 @@ TagManager:
   - Unlit
   - Connectable
   - Connecting Part
-  - 
+  - Hurt Box
   - 
   - 
   - 
