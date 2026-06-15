@@ -12,7 +12,6 @@ public class monstroMiscVisuals : MonoBehaviour
     //effects
     public ParticleSystem burningEffect;
 
-
     void Update()
     {
         if (playerRing != null)
@@ -24,23 +23,24 @@ public class monstroMiscVisuals : MonoBehaviour
                 Vector3 normalizedPlayerPoint = new Vector3(detectedGroundPoint.point.x, detectedGroundPoint.point.y + 0.2f, detectedGroundPoint.point.z);
 
                 playerRing.transform.position = normalizedPlayerPoint;
-
-                if (playerRingActive == false)
-                {
-                    playerRing.SetActive(true);
-                    playerRingActive = true;
-                }
             }
-        }
-        else
-        {
-            generatePlayerRing();
         }
     }
 
-    private void generatePlayerRing()
+    public void generatePlayerRing()
     {
         playerRing = Instantiate(playerRingPrefab);
+        hidePlayerRing();
+    }
+
+    public void hidePlayerRing()
+    {
+        playerRing.SetActive(false);
+    }
+
+    public void showPlayerRing()
+    {
+        playerRing.SetActive(true);
     }
 
     public void playFireEffect()

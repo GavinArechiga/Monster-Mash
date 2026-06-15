@@ -8,6 +8,7 @@ public class monstroFightManager : MonoBehaviour
     [SerializeField]
     private monstroInputHandler[] monstroMonsters;
     public int introDelayTime;
+    private int respawnDelay = 1;
 
     private CinemachineTargetGroup cameraTargetGroup;
 
@@ -17,7 +18,24 @@ public class monstroFightManager : MonoBehaviour
     {
         monstroMonsters = FindObjectsByType<monstroInputHandler>(FindObjectsSortMode.None);
         cameraTargetGroup = FindFirstObjectByType<CinemachineTargetGroup>();
+        turnOffAllMonsterVisuals();
         StartCoroutine(introDelay());
+    }
+
+    private void turnOffAllMonsterVisuals()
+    {
+        for (int i = 0; i < monstroMonsters.Length; i++)
+        {
+            //this is a temp visual enabler and disabler because james is annoying me lol
+            monstroMonsters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
+            monstroMonsters[i].gameObject.GetComponent<monstroMiscVisuals>().generatePlayerRing();
+        }
+    }
+
+    IEnumerator introDelay()
+    {
+        yield return new WaitForSeconds(introDelayTime);
+        spawnAllMonsters();
     }
 
     private void spawnAllMonsters()
@@ -26,12 +44,6 @@ public class monstroFightManager : MonoBehaviour
         {
             StartCoroutine(playIntroSpawnPortal(monstroMonsters[i]));
         }
-    }
-
-    IEnumerator introDelay()
-    {
-        yield return new WaitForSeconds(introDelayTime);
-        spawnAllMonsters();
     }
 
     IEnumerator playIntroSpawnPortal(monstroInputHandler spawningMonster)
@@ -55,6 +67,10 @@ public class monstroFightManager : MonoBehaviour
         //move location of spawning player to correct spawn point
         spawningMonster.transform.position = playerSpawnPoint.transform.position;
 
+        //this is a temp visual enabler and disabler because james is annoying me lol
+        spawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        spawningMonster.gameObject.GetComponent<monstroMiscVisuals>().showPlayerRing();
+
         //add them to camera target group
         if (cameraTargetGroup != null)
         {
@@ -67,18 +83,34 @@ public class monstroFightManager : MonoBehaviour
 
     public void respawnPlayer(GameObject outOfBoundsMonster)
     {
+        if (cameraTargetGroup != null)
+        {
+            cameraTargetGroup.RemoveMember(outOfBoundsMonster.transform);
+        }
+
         StartCoroutine(playRespawnPortal(outOfBoundsMonster));
     }
 
     IEnumerator playRespawnPortal(GameObject respawningMonster)
     {
-        //we can put a respawn delay here if we want
+        //this is a temp visual enabler and disabler because james is annoying me lol
+        respawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        respawningMonster.gameObject.GetComponent<monstroMiscVisuals>().hidePlayerRing();
         respawningMonster.GetComponent<monstroLocomotion>().enabled = false;
         GameObject playerSpawnPoint = GameObject.Find(respawningMonster.name + " Spawn");
+        respawningMonster.transform.position = playerSpawnPoint.transform.position;
+
+        yield return new WaitForSeconds(respawnDelay);
         playerSpawnPoint.GetComponent<Animation>().Stop();
         playerSpawnPoint.GetComponent<Animation>().Play();
+        if (cameraTargetGroup != null)
+        {
+            cameraTargetGroup.AddMember(respawningMonster.transform, 1, 0.5f);
+        }
+
         yield return new WaitForSeconds(1.5f);
-        respawningMonster.transform.position = playerSpawnPoint.transform.position;
+        respawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        respawningMonster.gameObject.GetComponent<monstroMiscVisuals>().showPlayerRing();
         respawningMonster.GetComponent<monstroLocomotion>().enabled = true;
     }
 }

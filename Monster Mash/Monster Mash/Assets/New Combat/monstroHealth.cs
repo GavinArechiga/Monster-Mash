@@ -67,7 +67,8 @@ public class monstroHealth : MonoBehaviour
     {
         if (other.gameObject.tag == "Hazard") //Hazards just need a trigger box, the hazard tag, and a hazard script
         {
-            string hazardName = other.GetComponent<hazard>().selectedHazard;
+            hazard hazardHandler = other.GetComponent<hazard>();
+            string hazardName = hazardHandler.selectedHazard;
 
             if (hazardName == "fire" && isOnFire == false)
             {
@@ -80,7 +81,12 @@ public class monstroHealth : MonoBehaviour
                 takeDamage(carDamage);
             }
 
-            if(hazardName == "shark")
+            if (hazardName == "trap")
+            {
+                hazardHandler.playTrapAnimation();
+            }
+
+            if (hazardName == "shark")
             {
                 locomotion.damageLaunch(other, false);
                 takeDamage(sharkDamage);
@@ -97,6 +103,8 @@ public class monstroHealth : MonoBehaviour
                 takeDamage(pressDamage);
                 locomotion.forceRespawn();
             }
+
+
         }
     }
 
