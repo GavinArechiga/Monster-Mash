@@ -5,6 +5,7 @@ using UnityEngine;
 public enum Tools
 {
     move,
+    rotGizmo,
     rotate,
     duplicate,
     recolor,

@@ -58,6 +58,7 @@ public class BAS_Cursor : MonoBehaviour
     [SerializeField] private LayerMask rotMask;
 
     private CursorArt cursorArt;
+    [SerializeField] private GameObject editGizmos;
 
     // Start is called before the first frame update
     void Start()
@@ -258,10 +259,10 @@ public class BAS_Cursor : MonoBehaviour
                 partList.Remove(partToEdit);
                 currTool = Tools.none;
 
-                if (currTool is Tools.edit)
-                {
+                //if (currTool is Tools.edit)
+                //{
                     StopEditMode();
-                }
+                //}
                 return;
             }
 
@@ -464,7 +465,7 @@ public class BAS_Cursor : MonoBehaviour
             }
         }*/
 
-        foreach (Collider col in partToEdit.GetComponentsInChildren<Collider>())
+        foreach (Collider col in partToEdit?.GetComponentsInChildren<Collider>())
         {
             col.gameObject.layer = 2;
         }
@@ -568,6 +569,17 @@ public class BAS_Cursor : MonoBehaviour
 
         SetUpRotGizmo();
         cursorArt.Change(Hands.point);
+        editGizmos.SetActive(true);
+    }
+
+    private void StartRotateMode()
+    {
+        SetUpRotGizmo();
+    }
+
+    private void StopRotateMode()
+    {
+
     }
 
     private void StopEditMode()
@@ -575,5 +587,6 @@ public class BAS_Cursor : MonoBehaviour
         currTool = Tools.none;
         rotGizmo?.Detach();
         cursorArt.Change(Hands.point);
+        editGizmos.SetActive(false);
     }
 }
