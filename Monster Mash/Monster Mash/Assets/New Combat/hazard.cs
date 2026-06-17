@@ -11,11 +11,13 @@ public class hazard : MonoBehaviour
         shark,
         teeth,
         press,
-        trap
+        trap,
+        rubberBand
     };
 
     private Collider triggerCollider;
     private Animator hazardAnimator;
+    public animationStarter animationHandler;
     public typesOfHazard hazardDropDown = new typesOfHazard();
     public string selectedHazard;
 
@@ -37,6 +39,14 @@ public class hazard : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         hazardAnimator.ResetTrigger("playAnimation");
+    }
+
+    public void playHazardAnimation()
+    {
+        if (animationHandler != null)
+        {
+            animationHandler.playAnimation();
+        }
     }
 
 }

@@ -104,6 +104,15 @@ public class monstroHealth : MonoBehaviour
                 locomotion.forceRespawn();
             }
 
+            if (hazardName == "rubberBand")
+            {
+                if (locomotion.isStunLocked) //you will only bounce back if you were punched into the rubber band, otherwise it will ignore it
+                {
+                    hazardHandler.playHazardAnimation();
+                    locomotion.damageLaunch(other, false);
+                }
+            }
+
 
         }
     }
