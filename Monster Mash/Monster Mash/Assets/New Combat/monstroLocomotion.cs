@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class monstroLocomotion : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class monstroLocomotion : MonoBehaviour
     private bool isBouncing = false;
 
     //
-    private bool isStunLocked;
+    public bool isStunLocked;
     private Vector3 launchDirection;
     private int launchPower = 50;
     private int lightLaunchPower = 50;
@@ -288,11 +289,41 @@ public class monstroLocomotion : MonoBehaviour
         {
             if (other.gameObject.GetComponent<animationStarter>() != null)
             {
-                other.gameObject.GetComponent<animationStarter>().playAnimation();
+                animationStarter animHandler = other.gameObject.GetComponent<animationStarter>();
+
+                if (animHandler.isTrampolineAnimation)
+                {
+                    bool nearTrampoline = Physics.CheckSphere(groundCheck.position, groundDistance, trampolineMask);
+
+                    if (nearTrampoline)
+                    {
+                        animHandler.playAnimation();
+                    }
+                }
+                else
+                {
+                    animHandler.playAnimation();
+                }
             }
             else if (other.gameObject.GetComponentInParent<animationStarter>() != null)
             {
                 other.gameObject.GetComponentInParent<animationStarter>().playAnimation();
+
+                animationStarter animHandler = other.gameObject.GetComponentInParent<animationStarter>();
+
+                if (animHandler.isTrampolineAnimation)
+                {
+                    bool nearTrampoline = Physics.CheckSphere(groundCheck.position, groundDistance, trampolineMask);
+
+                    if (nearTrampoline)
+                    {
+                        animHandler.playAnimation();
+                    }
+                }
+                else
+                {
+                    animHandler.playAnimation();
+                }
             }
         }
     }

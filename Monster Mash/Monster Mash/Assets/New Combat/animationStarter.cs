@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class animationStarter : MonoBehaviour
 {
-    public Animation myAnimationClip;
+    public Animation myAnimationHandler;
+    public AnimationClip myAnimationClip;
+    public bool isTrampolineAnimation;
 
     public void playAnimation()
     {
-        myAnimationClip.Stop();
-        myAnimationClip.Play();
+        myAnimationHandler.Stop();
+        if(myAnimationClip != null)
+        {
+            myAnimationHandler.clip = myAnimationClip;
+        }
+        myAnimationHandler.Play();
     }
 }
