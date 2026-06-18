@@ -4,15 +4,15 @@ using UnityEngine;
 
 public enum Tools
 {
+    none,
+    newPart,
+    edit,
     move,
-    rotGizmo,
-    rotate,
     duplicate,
     recolor,
     scale,
-    edit,
-    newPart,
-    none
+    rotate,
+    rotGizmo
 }
 
 

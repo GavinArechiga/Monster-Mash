@@ -69,6 +69,8 @@ public class BAS_Cursor : MonoBehaviour
         //toolWheel = FindObjectOfType<ToolWheel>();
         bas_currentPart.SetCurrTorso(monster);
         cursorArt = FindObjectOfType<CursorArt>();
+
+        currTool = Tools.none;
     }
 
     // Update is called once per frame

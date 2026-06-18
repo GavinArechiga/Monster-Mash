@@ -76,5 +76,9 @@ public class RotGizmo : MonoBehaviour
     private void MakeGizmoStickWithParent() //i cant actually parent or it gets really sad with scale stuff :((
     {
         transform.position = target.position;
+
+        Vector3 rot = transform.eulerAngles;
+        rot.y = target.eulerAngles.y;
+        transform.eulerAngles = rot;
     }
 }
