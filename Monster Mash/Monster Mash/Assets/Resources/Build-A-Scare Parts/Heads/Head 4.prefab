@@ -1386,7 +1386,6 @@ GameObject:
   - component: {fileID: 8225320568347315639}
   - component: {fileID: 8178558785594967087}
   - component: {fileID: -4362791199594601052}
-  - component: {fileID: -7573748922795375309}
   m_Layer: 0
   m_Name: Head 4
   m_TagString: Connection - Monster Part
@@ -1643,19 +1642,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &-7573748922795375309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8027212915249271249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 
 --- !u!1 &8222308639653424592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1699,6 +1685,7 @@ GameObject:
   - component: {fileID: 1317179791657560154}
   - component: {fileID: 7606871321065687744}
   - component: {fileID: 8076341010836831609}
+  - component: {fileID: 8471759290816517774}
   m_Layer: 0
   m_Name: moe_low.001
   m_TagString: Untagged
@@ -1790,11 +1777,24 @@ MeshCollider:
   m_GameObject: {fileID: 8595278436320782886}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5180044682052057502, guid: ec92f9dd710e33f419c5b3153c4bf7bd, type: 3}
+--- !u!114 &8471759290816517774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8595278436320782886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
 --- !u!1 &8825269262565059706
 GameObject:
   m_ObjectHideFlags: 0

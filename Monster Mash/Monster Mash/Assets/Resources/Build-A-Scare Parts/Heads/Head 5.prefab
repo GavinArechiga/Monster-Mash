@@ -263,7 +263,6 @@ GameObject:
   - component: {fileID: 5891745943174959097}
   - component: {fileID: 5909864650149218091}
   - component: {fileID: -6012728993943568584}
-  - component: {fileID: -1301665810392663902}
   m_Layer: 0
   m_Name: Head 5
   m_TagString: Connection - Monster Part
@@ -519,19 +518,6 @@ MonoBehaviour:
     palleteSwapIndex: 
     partHexCode: 
     isFlipped: 0
---- !u!114 &-1301665810392663902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2185231888546048921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 
 --- !u!1 &2891577860306737142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1088,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5896616382886032625}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.12, z: 0}
+  m_LocalPosition: {x: 0, y: 0.907, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1289,6 +1275,7 @@ GameObject:
   - component: {fileID: 3043200056500339119}
   - component: {fileID: 8078918467809794013}
   - component: {fileID: 1530832504772966835}
+  - component: {fileID: 2323650354618565997}
   m_Layer: 0
   m_Name: Head_LP1
   m_TagString: Untagged
@@ -1380,11 +1367,24 @@ MeshCollider:
   m_GameObject: {fileID: 7591611481993038195}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1710940818410129638, guid: 217c1045353bee348863a0fb56e8094c, type: 3}
+--- !u!114 &2323650354618565997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591611481993038195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
 --- !u!1 &7649007772712873194
 GameObject:
   m_ObjectHideFlags: 0

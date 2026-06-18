@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class WhichPartType : MonoBehaviour
 {
-    public string type;
+    public PartType type;
 }

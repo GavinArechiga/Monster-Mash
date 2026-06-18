@@ -660,7 +660,6 @@ GameObject:
   - component: {fileID: 6766967802810427790}
   - component: {fileID: -5254429254423042930}
   - component: {fileID: -4501644885819080835}
-  - component: {fileID: 4796304027121355219}
   m_Layer: 0
   m_Name: Torso 1
   m_TagString: Untagged
@@ -927,19 +926,6 @@ MonoBehaviour:
   - {fileID: 2643082671781887836}
   - {fileID: 8113172507098058520}
   - {fileID: 3318466945214285763}
---- !u!114 &4796304027121355219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6087154158218315933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: Torso
 --- !u!1 &6099619328384698614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,6 +1745,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1080207801892526133, guid: 91f97795de292e844873eac31a3c6e0d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3804154877689916054, guid: 91f97795de292e844873eac31a3c6e0d,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -1862,6 +1853,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 91f97795de292e844873eac31a3c6e0d, type: 3}
+--- !u!114 &4394966083401088054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815315950302534055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c47d8432435f944fa63d5f713ca6e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: Torso
 --- !u!4 &5208155677668974501 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2667755715887319962, guid: 91f97795de292e844873eac31a3c6e0d,

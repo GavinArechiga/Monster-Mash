@@ -52,6 +52,8 @@ public class BAS_PartSelect : MonoBehaviour
             monsterPart.transform.localEulerAngles = new Vector3();
             monsterPart.transform.localScale = Vector3.one;
             monsterPart.transform.localPosition = new Vector3();
+
+            cursor.bas_currentPart.SetCurrTorso(monsterPart);
         }
     }
 
