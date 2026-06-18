@@ -244,11 +244,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
-  look: {x: 0, y: 0}
   jump: 0
   analogMovement: 1
-  cursorLocked: 1
-  cursorInputForLook: 1
 --- !u!114 &3345359937556334713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,12 +259,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatMonster: {fileID: 7011080682492822014}
-  MoveSpeed: 5
+  MoveSpeed: 16.3
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
-  JumpHeight: 0.8
-  Gravity: -15
-  JumpTimeout: 0.2
+  JumpHeight: 4.52
+  Gravity: -49.2
+  JumpTimeout: 0.15
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28

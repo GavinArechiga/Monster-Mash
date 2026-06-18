@@ -10,7 +10,6 @@ TagManager:
   - DragIcon
   - TorsoPrefab
   - LimbPrefab
-  - Ground
   - Connection - Monster Part
   - Hurtbox
   - Hitbox
@@ -19,15 +18,13 @@ TagManager:
   - Limb
   - Stomp Box
   - Ledge
-  - Semi Solid
-  - Solid
-  - Platform Edge
-  - slope
-  - semi_solid
   - ConnectionCheck
   - Trailing Connection
+  - Out of Bounds
   - CinemachineTarget
-  - RotGizmo
+  - Animation
+  - Hazard
+  - Solid
   layers:
   - Default
   - TransparentFX
@@ -39,15 +36,15 @@ TagManager:
   - No Post Processing
   - Light Layer 2
   - Light Layer 3
-  - Solid Ground
-  - Semi-Solid Ground
-  - Tearling
+  - Ground
+  - Trampoline
+  - Out of Bounds
   - Player
-  - Boss
+  - Slope
   - Unlit
   - Connectable
   - Connecting Part
-  - 
+  - Hurt Box
   - 
   - 
   - 
