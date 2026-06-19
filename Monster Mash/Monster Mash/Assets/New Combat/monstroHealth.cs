@@ -10,6 +10,7 @@ public class monstroHealth : MonoBehaviour
     private int healthPerPart = 200;
     public int mappedParts = 1;
     private int partsLeft = 1;
+    public Transform launchPoint;
 
     //built in damage from hazards
     //hazard damage is built in to limit the traffic and back and forth needed for info that could just be sourced locally
@@ -19,6 +20,7 @@ public class monstroHealth : MonoBehaviour
     private int sharkDamage = 30;
     private int toothDamage = 50;
     private int pressDamage = 50;
+    private int electricityDamage = 20;
 
     private void Awake()
     {
@@ -65,54 +67,87 @@ public class monstroHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)//Damage Triggers
     {
+        //note, to return to the last version, plug in other instead of launch point
+        //Vector3 exactHitPoint = other.ClosestPointOnBounds(other.transform.position);
+
         if (other.gameObject.tag == "Hazard") //Hazards just need a trigger box, the hazard tag, and a hazard script
         {
             hazard hazardHandler = other.GetComponent<hazard>();
             string hazardName = hazardHandler.selectedHazard;
+            bool reverseLaunchNeeded = hazardHandler.needsDirectLaunchTarget;
+
+            if (reverseLaunchNeeded)
+            {
+                launchPoint.transform.position = hazardHandler.directLaunchTarget.position;
+            }
+            else
+            {
+                Vector3 exactHitPoint = other.ClosestPoint(other.transform.position);
+                launchPoint.transform.position = exactHitPoint;
+            }
 
             if (hazardName == "fire" && isOnFire == false)
             {
                 StartCoroutine(takeFireDamage());
+                hazardHandler.playHazardAnimation();
             }
 
             if(hazardName == "car")
             {
-                locomotion.damageLaunch(other, true);
+                locomotion.damageLaunch(launchPoint, true, reverseLaunchNeeded);
                 takeDamage(carDamage);
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "trap")
             {
                 hazardHandler.playTrapAnimation();
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "shark")
             {
-                locomotion.damageLaunch(other, false);
+                locomotion.damageLaunch(launchPoint, false, reverseLaunchNeeded);
                 takeDamage(sharkDamage);
+                hazardHandler.playHazardAnimation();
             }
 
             if(hazardName == "teeth")
             {
                 takeDamage(toothDamage);
                 locomotion.forceRespawn();//we put things like a respawn first through the locomotion script to stop all velocity and movement
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "press")
             {
                 takeDamage(pressDamage);
                 locomotion.forceRespawn();
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "rubberBand")
             {
                 if (locomotion.isStunLocked) //you will only bounce back if you were punched into the rubber band, otherwise it will ignore it
                 {
+                    locomotion.damageLaunch(launchPoint, false, reverseLaunchNeeded);
                     hazardHandler.playHazardAnimation();
-                    locomotion.damageLaunch(other, false);
                 }
             }
 
+            if (hazardName == "electricity")
+            {
+                locomotion.electricDamageLaunch(launchPoint, true, reverseLaunchNeeded);
+                takeDamage(electricityDamage);
+                monstroMiscVis.playElectricEffect();
+                hazardHandler.playHazardAnimation();
+            }
+
+            if (hazardName == "antiAir")
+            {
+                locomotion.antiAirDamageLaunch(launchPoint, true, reverseLaunchNeeded);
+                hazardHandler.playHazardAnimation();
+            }
 
         }
     }

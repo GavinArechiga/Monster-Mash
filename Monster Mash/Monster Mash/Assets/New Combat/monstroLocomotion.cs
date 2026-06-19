@@ -40,6 +40,7 @@ public class monstroLocomotion : MonoBehaviour
 
     //
     public bool isStunLocked;
+    public bool isElectricLocked;
     private Vector3 launchDirection;
     private int launchPower = 50;
     private int lightLaunchPower = 50;
@@ -131,7 +132,7 @@ public class monstroLocomotion : MonoBehaviour
 
     void Update()
     {
-        if (playerLock == false)
+        if (playerLock == false && isElectricLocked == false)
         {
             if (isStunLocked == false)
             {
@@ -258,6 +259,7 @@ public class monstroLocomotion : MonoBehaviour
         isFlying = false;
         isLanded = true;
         stuckOnWall = false;
+        isStunLocked = false;
     }
 
     public void forceRespawn()
@@ -350,10 +352,20 @@ public class monstroLocomotion : MonoBehaviour
     #endregion
 
     #region Damage Launching
-    public void damageLaunch(Collider hitBox, bool isHeavy)
+    public void damageLaunch(Transform hitPoint, bool isHeavy, bool requiresReverseLaunch)
     {
         StopCoroutine(damageLaunchDelay());
-        launchDirection = transform.position - hitBox.transform.position;
+        StopCoroutine(electricLaunchDelay());
+
+        if (requiresReverseLaunch)
+        {
+            launchDirection = hitPoint.position - transform.position;
+        }
+        else
+        {
+            launchDirection = transform.position - hitPoint.position;
+        }
+
         launchDirection.y = 0;
         launchDirection.Normalize();
         velocity.x = 0;
@@ -373,6 +385,7 @@ public class monstroLocomotion : MonoBehaviour
 
     IEnumerator damageLaunchDelay()
     {
+        isElectricLocked = false;
         isStunLocked = true;
 
         if (launchPower == HeavyLaunchPower)
@@ -384,6 +397,92 @@ public class monstroLocomotion : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         isStunLocked = false;
+    }
+
+    public void electricDamageLaunch(Transform hitPoint, bool isHeavy, bool requiresReverseLaunch)
+    {
+        StopCoroutine(damageLaunchDelay());
+        StopCoroutine(electricLaunchDelay());
+
+        if (requiresReverseLaunch)
+        {
+            launchDirection = hitPoint.position - transform.position;
+        }
+        else
+        {
+            launchDirection = transform.position - hitPoint.position;
+        }
+
+        launchDirection.y = 0;
+        launchDirection.Normalize();
+        velocity.x = 0;
+        velocity.z = 0;
+
+        if (isHeavy)
+        {
+            launchPower = HeavyLaunchPower;
+        }
+        else
+        {
+            launchPower = lightLaunchPower;
+        }
+
+        StartCoroutine(electricLaunchDelay());
+    }
+
+    IEnumerator electricLaunchDelay()
+    {
+        isElectricLocked = true;
+        yield return new WaitForSeconds(1f);
+        isElectricLocked = false;
+
+        isStunLocked = true;
+
+        if (launchPower == HeavyLaunchPower)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        isStunLocked = false;
+    }
+
+    public void antiAirDamageLaunch(Transform hitPoint, bool isHeavy, bool requiresReverseLaunch)
+    {
+        StopCoroutine(damageLaunchDelay());
+        StopCoroutine(electricLaunchDelay());
+
+        if (requiresReverseLaunch)
+        {
+            launchDirection = hitPoint.position - transform.position;
+        }
+        else
+        {
+            launchDirection = transform.position - hitPoint.position;
+        }
+
+        launchDirection.y = 0;
+        launchDirection.Normalize();
+        velocity.x = 0;
+        velocity.z = 0;
+        velocity.y = 0f;
+        velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+        isFlying = false;
+        jumpsLeft = 0;
+        flightedJumpPower = 0;
+
+        if (isHeavy)
+        {
+            launchPower = HeavyLaunchPower * 2;
+        }
+        else
+        {
+            launchPower = lightLaunchPower;
+        }
+
+        isStunLocked = true;
     }
 
     #endregion
