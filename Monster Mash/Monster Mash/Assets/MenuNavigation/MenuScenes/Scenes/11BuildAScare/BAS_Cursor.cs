@@ -60,6 +60,8 @@ public class BAS_Cursor : MonoBehaviour
     private CursorArt cursorArt;
     [SerializeField] private GameObject editGizmos;
 
+    private float floatingZ = -0.5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,17 +78,19 @@ public class BAS_Cursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (usingRotGizmo)
+        if (currTool is Tools.rotGizmo)
         {
             RotateGizmo(leftStickValue);
-        }
-        else
-        {
-            MoveCursor();
-            PreviewPart();
+            return;
         }
 
-        if (currTool is Tools.edit)
+        MoveCursor();
+
+        if (currTool is Tools.newPart or Tools.move)
+        {
+            PreviewPart();
+        }
+        else if (currTool is Tools.rotate)
         { 
             cursorArt.Change(RotGizmoRaycast() ? Hands.open : Hands.point);
         }
@@ -98,7 +102,6 @@ public class BAS_Cursor : MonoBehaviour
         Ray myRay = Camera.main.ScreenPointToRay(RectTransformUtility.WorldToScreenPoint(null, worldPos));
         
         Debug.DrawRay(myRay.origin, myRay.direction * 1000f, Color.red);
-        if (currTool is not Tools.move) return;
         
         RaycastHit hit;
 
@@ -107,6 +110,15 @@ public class BAS_Cursor : MonoBehaviour
             if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
             {
                 partToEdit.transform.position = hit.point;
+                partToEdit.transform.parent = hit.transform.parent;
+
+                return;
+            }
+            else if (hit.collider.name == "Backdrop")
+            {
+                Vector3 newPos = hit.point;
+                newPos.z = floatingZ;
+                partToEdit.transform.position = newPos;
             }
         }
     }
@@ -121,38 +133,22 @@ public class BAS_Cursor : MonoBehaviour
         float yOffset = 0f;//canvas.rect.yMax / 5f;
         pos.x = Mathf.Clamp(pos.x, canvas.rect.xMin + xOffset, canvas.rect.xMax - xOffset);
         pos.y = Mathf.Clamp(pos.y, canvas.rect.yMin + yOffset, canvas.rect.yMax - yOffset);
-
+        
         cursor.anchoredPosition = pos;
     }
 
     public void AButton()
     {
-        if (usingRotGizmo)
+        if (currTool is Tools.rotGizmo)
         {
             StopRotGizmo();
-            return;
-        }
-
-
-        if (currTool == Tools.move)
-        {
-            if (!partList.Contains(partToEdit)) partList.Add(partToEdit);
-
-            DontIgnorePartRaycast();
-
-            if (partToEdit.GetComponentInChildren<WhichPartType>().type is PartType.Head)
-            {
-                bas_currentPart.AddHead(partToEdit);
-            }
-
-            oldPos = Vector3.zero;
-            StartEditMode();
+            StartRotateMode();
             return;
         }
 
         RaycastHit rotHit;
         
-        if (currTool == Tools.edit)
+        if (currTool is Tools.rotate)
         {
             if (RotGizmoRaycast(out rotHit))
             {
@@ -171,40 +167,48 @@ public class BAS_Cursor : MonoBehaviour
         {
             if (hit.collider.GetComponentInParent<WhichPartType>())
             {
-                if (currTool == Tools.edit && (hit.collider.GetComponentInParent<WhichPartType>()?.type is not PartType.Torso) && partToEdit == hit.collider.GetComponentInParent<TempPartData>().gameObject)
+                if (currTool is Tools.edit && (hit.collider.GetComponentInParent<WhichPartType>()?.type is not PartType.Torso) && partToEdit == hit.collider.GetComponentInParent<TempPartData>().gameObject)
                 {
                     IgnorePartRaycast();
-                    rotGizmo?.Detach();
                     oldPos = partToEdit.transform.position;
-                    currTool = Tools.move;
+                    StopEditMode();
+                    StartMoveMode();
                     return;
                 }
 
                 if (hit.collider.GetComponentInParent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
                 {
-                    if (currTool == Tools.newPart)
+                    if (currTool is Tools.newPart)
                     {
-                        InstantiatePart(hit);
-                        currTool = Tools.move;
-                        IgnorePartRaycast();
+                        partToEdit.transform.parent = hit.transform.parent;
+                        StopNewPartMode();
+                        StartEditMode();
                         return;
+                    }
+                    else if (currTool is Tools.move)
+                    {
+                        partToEdit.transform.parent = hit.transform.parent;
+                        StopMoveMode();
+                        StartEditMode();
                     }
                 }
 
-                if (currTool == Tools.none)
+                if (currTool is Tools.none)
                 {
                     partToEdit = hit.collider.GetComponentInParent<TempPartData>().gameObject;
+                    print("too early");
                     StartEditMode();
                 }
             }
         }
-        else if (currTool == Tools.none)
+        else if (currTool is Tools.none)
         {
             UICast();
         }
-        else
+        else if (currTool is Tools.edit)
         {
             StopEditMode();
+            StartNoneMode();
         }
     }
 
@@ -236,39 +240,37 @@ public class BAS_Cursor : MonoBehaviour
     public void SetSelectedPart(string newPart)
     {
         selectedPart = newPart;
-        currTool = Tools.newPart;
+        StartNewPartMode();
     }
 
     public void BButton()
     {
-        if (usingRotGizmo)
+        if (currTool is Tools.rotGizmo)
         {
             partToEdit.transform.eulerAngles = oldRot;
             StopRotGizmo();
         }
         else if (currTool is Tools.newPart)
         {
-            currTool = Tools.none;
+            StartNoneMode();
         }
         else if (currTool is Tools.move or Tools.edit)
         {
-
-            rotGizmo?.Detach();
-
-            if ((partToEdit.GetComponentInChildren<WhichPartType>()?.type is not PartType.Torso && currTool is Tools.edit) || (currTool is Tools.move && oldPos == Vector3.zero))
+            if ((partToEdit.GetComponentInChildren<WhichPartType>()?.type is not PartType.Torso && currTool is Tools.edit) || (currTool is Tools.newPart))
             {
                 Destroy(partToEdit);
                 partList.Remove(partToEdit);
-                currTool = Tools.none;
 
-                //if (currTool is Tools.edit)
-                //{
+                if (currTool is Tools.edit)
+                {
                     StopEditMode();
-                //}
+                }
+
+                StartNoneMode();
                 return;
             }
 
-            if (currTool is Tools.move && oldPos != Vector3.zero)
+            if (currTool is Tools.move)
             {
                 partToEdit.transform.position = oldPos;
                 oldPos = Vector3.zero;
@@ -280,7 +282,7 @@ public class BAS_Cursor : MonoBehaviour
 
     public void MirrorPreview()
     {
-        if (movePart)
+        if (currTool is Tools.edit)
         {
             partToEdit.transform.localScale = new Vector3(partToEdit.transform.localScale.x * -1, partToEdit.transform.localScale.y, partToEdit.transform.localScale.z);
         }
@@ -288,12 +290,12 @@ public class BAS_Cursor : MonoBehaviour
 
     public void RightBumper()
     {
-        if (currTool == Tools.edit) Grow();
+        if (currTool is Tools.edit) Grow();
     }
 
     public void LeftBumper()
     {
-        if (currTool == Tools.edit) Shrink();
+        if (currTool is Tools.edit) Shrink();
     }
 
     private void Grow()
@@ -324,23 +326,13 @@ public class BAS_Cursor : MonoBehaviour
         }
     }
 
-    private void RotateRight()
-    {
-        partToEdit.transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
-    }
-
-    private void RotateLeft()
-    {
-        partToEdit.transform.Rotate(Vector3.up, -rotSpeed * Time.deltaTime);
-    }
-
     private void SetUpRotGizmo()
     {
         rotGizmo.gameObject.SetActive(true);
         rotGizmo.SetUpGizmo(partToEdit);
     }
 
-    private void InstantiatePart(RaycastHit hit)
+    private void InstantiatePart()
     {
         var monsterPartLoad = Resources.Load<GameObject>(selectedPart);
 
@@ -350,10 +342,10 @@ public class BAS_Cursor : MonoBehaviour
         }
         else
         {
+            Vector3 instPos = PartPreviewMath();
+
             GameObject monsterPart = Instantiate(monsterPartLoad);
-            monsterPart.transform.position = hit.point;
-            //editPart = true;
-            currTool = Tools.edit;
+            monsterPart.transform.position = instPos;
             partToEdit = monsterPart;
             ogScale = partToEdit.transform.localScale;
 
@@ -361,24 +353,7 @@ public class BAS_Cursor : MonoBehaviour
             {
                 CorrectLimbColliders(monsterPart);
             }
-            currPotentialParent = hit.transform;
-            partToEdit.transform.parent = currPotentialParent;
         }
-    }
-
-    private void StartRotGizmo()
-    {
-        usingRotGizmo = true;
-        currTool = Tools.rotate;
-        cursorArt.Change(Hands.closed);
-        oldRot = partToEdit.transform.eulerAngles;
-    }
-
-    private void StopRotGizmo()
-    {
-        usingRotGizmo = false;
-        currTool = Tools.edit;
-        cursorArt.Change(Hands.point);
     }
 
     private void RotateGizmo(Vector3 input)
@@ -450,23 +425,6 @@ public class BAS_Cursor : MonoBehaviour
 
     void IgnorePartRaycast()
     {
-        /*WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
-
-        foreach (WhichPartType col in partCols)
-        {
-            if (col.type is PartType.Head or PartType.Torso)
-            {
-                col.gameObject.layer = 2; //ignore raycast
-            }
-            else
-            {
-                foreach (Collider bbCol in col.GetComponentsInChildren<Collider>())
-                {
-                    bbCol.gameObject.layer = 2;
-                }
-            }
-        }*/
-
         foreach (Collider col in partToEdit?.GetComponentsInChildren<Collider>())
         {
             col.gameObject.layer = 2;
@@ -475,23 +433,6 @@ public class BAS_Cursor : MonoBehaviour
 
     void DontIgnorePartRaycast()
     {
-        /*WhichPartType[] partCols = partToEdit.GetComponentsInChildren<WhichPartType>();
-
-        foreach (WhichPartType col in partCols)
-        {
-
-            if (col.type is PartType.Head or PartType.Torso)
-            {
-                col.gameObject.layer = 0; //dont ignore raycast
-            }
-            else
-            {
-                foreach (Collider bbCol in col.GetComponentsInChildren<Collider>())
-                {
-                    bbCol.gameObject.layer = 0;
-                }
-            }
-        }*/
         foreach (Collider col in partToEdit.GetComponentsInChildren<Collider>())
         {
             col.gameObject.layer = 0;
@@ -564,31 +505,83 @@ public class BAS_Cursor : MonoBehaviour
         return false;
     }
 
+    #region tools
+    private void StartNoneMode()
+    {
+        currTool = Tools.none;
+    }
+    //
+    private void StartNewPartMode()
+    {
+        currTool = Tools.newPart;
+        InstantiatePart();
+        IgnorePartRaycast();
+    }
+    private void StopNewPartMode()
+    {
+
+    }
+    //
     private void StartEditMode()
     {
         currTool = Tools.edit;
-        //add gavins ui and turn ON (i still gotta do this)
-
-        SetUpRotGizmo();
         cursorArt.Change(Hands.point);
         editGizmos.SetActive(true);
     }
-
-    private void StartRotateMode()
-    {
-        SetUpRotGizmo();
-    }
-
-    private void StopRotateMode()
-    {
-
-    }
-
     private void StopEditMode()
     {
-        currTool = Tools.none;
-        rotGizmo?.Detach();
         cursorArt.Change(Hands.point);
         editGizmos.SetActive(false);
     }
+    //
+    private void StartMoveMode()
+    {
+        currTool = Tools.move;
+    }
+    private void StopMoveMode()
+    {
+
+    }
+    //
+    private void StartRecolorMode()
+    {
+        currTool = Tools.recolor;
+    }
+    private void StopRecolorMode()
+    {
+
+    }
+    //
+    private void StartScaleMode()
+    {
+        currTool = Tools.scale;
+    }
+    private void StopScaleMode()
+    {
+
+    }
+    //
+    public void StartRotateMode()
+    {
+        print("start rotate mode!");
+        currTool = Tools.rotate;
+        SetUpRotGizmo();
+    }
+    private void StopRotateMode()
+    {
+        rotGizmo.Detach();
+    }
+    //
+    private void StartRotGizmo()
+    {
+        currTool = Tools.rotGizmo;
+        cursorArt.Change(Hands.closed);
+        oldRot = partToEdit.transform.eulerAngles;
+    }
+
+    private void StopRotGizmo()
+    {
+        cursorArt.Change(Hands.point);
+    }
+    #endregion
 }

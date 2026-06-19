@@ -8,7 +8,6 @@ public enum Tools
     newPart,
     edit,
     move,
-    duplicate,
     recolor,
     scale,
     rotate,
