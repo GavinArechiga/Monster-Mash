@@ -11,6 +11,7 @@ public class monstroMiscVisuals : MonoBehaviour
 
     //effects
     public ParticleSystem burningEffect;
+    public ParticleSystem electricEffect;
 
     void Update()
     {
@@ -51,6 +52,16 @@ public class monstroMiscVisuals : MonoBehaviour
     public void stopFireEffect()
     {
         burningEffect.Stop();
+    }
+
+    public void playElectricEffect()
+    {
+        electricEffect.Play();
+    }
+
+    public void stopElectricEffect()
+    {
+        electricEffect.Stop();
     }
 
 

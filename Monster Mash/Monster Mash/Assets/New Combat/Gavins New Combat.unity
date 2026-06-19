@@ -737,8 +737,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05570d1dd0e2294aa42ef50b72effa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationHandler: {fileID: 0}
   hazardDropDown: 1
   selectedHazard: 
+  directLaunchTarget: {fileID: 0}
+  needsDirectLaunchTarget: 0
 --- !u!54 &369714587
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5138,11 +5141,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4530839509604072964, guid: 8486511465afa4740beb5afec96c17a8,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4530839509604072970, guid: 8486511465afa4740beb5afec96c17a8,
         type: 3}
       propertyPath: m_Name
@@ -5152,11 +5150,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5968063416065972203, guid: 8486511465afa4740beb5afec96c17a8,
-        type: 3}
-      propertyPath: animatedLights.Array.data[0].light
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8486511465afa4740beb5afec96c17a8, type: 3}
