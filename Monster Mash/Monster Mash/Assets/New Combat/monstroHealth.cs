@@ -16,9 +16,9 @@ public class monstroHealth : MonoBehaviour
     //hazard damage is built in to limit the traffic and back and forth needed for info that could just be sourced locally
     private int fireDamagePerSecond = 10;
     private bool isOnFire = false;
+    private bool enteredFireCollider = false;
     private int carDamage = 50;
     private int sharkDamage = 30;
-    private int toothDamage = 50;
     private int pressDamage = 50;
     private int electricityDamage = 20;
 
@@ -90,6 +90,7 @@ public class monstroHealth : MonoBehaviour
             {
                 StartCoroutine(takeFireDamage());
                 hazardHandler.playHazardAnimation();
+                enteredFireCollider = true;
             }
 
             if(hazardName == "car")
@@ -105,17 +106,10 @@ public class monstroHealth : MonoBehaviour
                 hazardHandler.playHazardAnimation();
             }
 
-            if (hazardName == "shark")
+            if (hazardName == "slice")
             {
                 locomotion.damageLaunch(launchPoint, false, reverseLaunchNeeded);
                 takeDamage(sharkDamage);
-                hazardHandler.playHazardAnimation();
-            }
-
-            if(hazardName == "teeth")
-            {
-                takeDamage(toothDamage);
-                locomotion.forceRespawn();//we put things like a respawn first through the locomotion script to stop all velocity and movement
                 hazardHandler.playHazardAnimation();
             }
 
@@ -150,6 +144,22 @@ public class monstroHealth : MonoBehaviour
             }
 
         }
+
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Hazard")
+        {
+            hazard hazardHandler = other.GetComponent<hazard>();
+            string hazardName = hazardHandler.selectedHazard;
+
+            if (hazardName == "fire")
+            {
+                enteredFireCollider = false;
+            }
+        }
     }
 
     IEnumerator takeFireDamage()
@@ -168,5 +178,18 @@ public class monstroHealth : MonoBehaviour
         takeDamage(fireDamagePerSecond);
         isOnFire = false;
         monstroMiscVis.stopFireEffect();
+        /*
+        if (enteredFireCollider)//they're still in the fire
+        {
+            StartCoroutine(takeFireDamage());
+            print("one more round of fire!");
+        }
+        else
+        {
+            isOnFire = false;
+            monstroMiscVis.stopFireEffect();
+        }
+        */
+        //I'll come back to this later, still not really sure if its a real issue that fire isn't reapplying while standing in the fire
     }
 }

@@ -8,9 +8,8 @@ public class hazard : MonoBehaviour
     {
         fire,
         car,
-        shark,//rename and replace with slice
-        teeth,//rename and replace with insta respawn
-        press,//remove and move everything to this one ^
+        slice,
+        press,
         trap,
         rubberBand,
         electricity,

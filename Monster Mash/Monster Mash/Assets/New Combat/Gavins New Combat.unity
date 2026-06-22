@@ -2691,7 +2691,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '6-15-26 Gavin Notes
+  m_text: '6-22-26 Gavin Notes
 
 
     Add controllers with any button, then click
@@ -2699,26 +2699,21 @@ MonoBehaviour:
     click on the appropriate button.
 
 
-    Hopeful Bug Fixes
+    What''s New:
 
-    - Hazard Collisions
+
+    - The Beastdome is
+    now fully playable! Jam packed with 5 stage events which cycle over time. While
+    I imagine them being random, I have made them go in order for easier testing.
+    These events include new hazard types like electric ropes and anti air launchers
+
 
     -
-    Knockback
+    Beastdome Stadium Camera follows players in the midst of battle!
 
-    - Player Containment and Safety Nets for returning them to Spawn
 
-    -
-    Stage Collisions and Slopes
-
-    - Gravity while falling off edges
-
-    - Player
-    Collider
-
-    - Respawning visuals
-
-'
+    - Elevators
+    have (hopefully) been fixed'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
