@@ -36,6 +36,8 @@ public class BAS_PartSelect : MonoBehaviour
 
     public void SelectTorso(int x)
     {
+        print("torso select");
+
         selectedPart = partPool.GetMonsterParts()[0][x];
 
         var monsterPartLoad = Resources.Load<GameObject>(selectedPart);

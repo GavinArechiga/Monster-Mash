@@ -78,6 +78,18 @@ public class BAS_Cursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currTool is not Tools.newPart && UICastCheck())
+        {
+            if (cursorArt.GetHand() is not Hands.open)
+            {
+                cursorArt.Change(Hands.open);
+            }
+        }
+        else if (currTool is Tools.none && cursorArt.GetHand() is not Hands.point)
+        {
+            cursorArt.Change(Hands.point);
+        }
+
         if (currTool is Tools.rotGizmo)
         {
             RotateGizmo(leftStickValue);
@@ -117,7 +129,7 @@ public class BAS_Cursor : MonoBehaviour
             else if (hit.collider.name == "Backdrop")
             {
                 Vector3 newPos = hit.point;
-                newPos.z = floatingZ;
+                //newPos.z = floatingZ;
                 partToEdit.transform.position = newPos;
             }
         }
@@ -201,7 +213,7 @@ public class BAS_Cursor : MonoBehaviour
                 }
             }
         }
-        else if (currTool is Tools.none)
+        else if (UICastCheck())
         {
             UICast();
         }
@@ -209,9 +221,23 @@ public class BAS_Cursor : MonoBehaviour
         {
             StopEditMode();
             StartNoneMode();
+            cursorArt.Change(Hands.point);
         }
     }
 
+
+    private bool UICastCheck()
+    {
+        GraphicRaycaster raycaster = FindObjectOfType<GraphicRaycaster>();
+        EventSystem eventSystem = EventSystem.current;
+        PointerEventData pointerData = new PointerEventData(eventSystem);
+        pointerData.position = cursor.position;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        raycaster.Raycast(pointerData, results);
+
+        return results.Count > 0;
+    }
     private void UICast()
     {
         GraphicRaycaster raycaster = FindObjectOfType<GraphicRaycaster>();
@@ -252,32 +278,26 @@ public class BAS_Cursor : MonoBehaviour
         }
         else if (currTool is Tools.newPart)
         {
+            partList.Remove(partToEdit);
+            Destroy(partToEdit);
+            partToEdit = null;
+            StopNewPartMode();
             StartNoneMode();
         }
-        else if (currTool is Tools.move or Tools.edit)
+        else if (currTool is Tools.edit)
         {
-            if ((partToEdit.GetComponentInChildren<WhichPartType>()?.type is not PartType.Torso && currTool is Tools.edit) || (currTool is Tools.newPart))
-            {
-                Destroy(partToEdit);
-                partList.Remove(partToEdit);
-
-                if (currTool is Tools.edit)
-                {
-                    StopEditMode();
-                }
-
-                StartNoneMode();
-                return;
-            }
-
-            if (currTool is Tools.move)
-            {
-                partToEdit.transform.position = oldPos;
-                oldPos = Vector3.zero;
-                DontIgnorePartRaycast();
-                StartEditMode();
-            }
+            StopEditMode();
+            StartNoneMode();
+            return;
         }
+        else if (currTool is Tools.move)
+        {
+            partToEdit.transform.position = oldPos;
+            oldPos = Vector3.zero;
+            DontIgnorePartRaycast();
+            StartEditMode();
+        }
+        
     }
 
     public void MirrorPreview()
@@ -342,10 +362,8 @@ public class BAS_Cursor : MonoBehaviour
         }
         else
         {
-            Vector3 instPos = PartPreviewMath();
 
             GameObject monsterPart = Instantiate(monsterPartLoad);
-            monsterPart.transform.position = instPos;
             partToEdit = monsterPart;
             ogScale = partToEdit.transform.localScale;
 
@@ -353,6 +371,8 @@ public class BAS_Cursor : MonoBehaviour
             {
                 CorrectLimbColliders(monsterPart);
             }
+
+            PreviewPart();
         }
     }
 
@@ -513,6 +533,7 @@ public class BAS_Cursor : MonoBehaviour
     //
     private void StartNewPartMode()
     {
+        cursorArt.Change(Hands.closed);
         currTool = Tools.newPart;
         InstantiatePart();
         IgnorePartRaycast();
