@@ -124,4 +124,9 @@ public class BAS_PartSelect : MonoBehaviour
         //turn on the meshcollider cuz i actually need that
         monsterPart.GetComponentInChildren<MeshCollider>().enabled = true;
     }
+
+    public void Hello()
+    {
+        print("Hello this button works");
+    }
 }
