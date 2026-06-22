@@ -11,6 +11,7 @@ public class monstroFightManager : MonoBehaviour
     private int respawnDelay = 1;
 
     private CinemachineTargetGroup cameraTargetGroup;
+    private stadiumCamera beastdomeCamera;//yes its super specific but it feels like the only way right now to find out when a monster is removed from the scene
 
     //this scripts goal is to take players loaded into the scene and place them on to spawn points
     //it will also tell player input handlers to switch to the monster action map
@@ -18,6 +19,7 @@ public class monstroFightManager : MonoBehaviour
     {
         monstroMonsters = FindObjectsByType<monstroInputHandler>(FindObjectsSortMode.None);
         cameraTargetGroup = FindFirstObjectByType<CinemachineTargetGroup>();
+        beastdomeCamera = FindFirstObjectByType<stadiumCamera>();
         turnOffAllMonsterVisuals();
         StartCoroutine(introDelay());
     }
@@ -77,6 +79,11 @@ public class monstroFightManager : MonoBehaviour
             cameraTargetGroup.AddMember(spawningMonster.transform, 1, 0.5f);
         }
 
+        if (beastdomeCamera != null)
+        {
+            beastdomeCamera.cameraTargets.Add(spawningMonster.transform);
+        }
+
         //change monster controls from UI to character movement
         spawningMonster.switchToMonsterControls();
     }
@@ -86,6 +93,11 @@ public class monstroFightManager : MonoBehaviour
         if (cameraTargetGroup != null)
         {
             cameraTargetGroup.RemoveMember(outOfBoundsMonster.transform);
+        }
+
+        if (beastdomeCamera != null)
+        {
+            beastdomeCamera.cameraTargets.Remove(outOfBoundsMonster.transform);
         }
 
         StartCoroutine(playRespawnPortal(outOfBoundsMonster));
@@ -106,6 +118,11 @@ public class monstroFightManager : MonoBehaviour
         if (cameraTargetGroup != null)
         {
             cameraTargetGroup.AddMember(respawningMonster.transform, 1, 0.5f);
+        }
+
+        if (beastdomeCamera != null)
+        {
+            beastdomeCamera.cameraTargets.Add(respawningMonster.transform);
         }
 
         yield return new WaitForSeconds(1.5f);

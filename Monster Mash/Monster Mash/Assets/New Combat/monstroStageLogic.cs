@@ -17,6 +17,7 @@ public class monstroStageLogic : MonoBehaviour
     public animationStarter[] animationEvents;
     private int animationNumber = -1;
     public int startDelayTime;
+    public int timeLengthOfEachEvent;
     public int timeBetweenEvents;
 
     private void Awake()
@@ -52,6 +53,7 @@ public class monstroStageLogic : MonoBehaviour
         }
 
         animationEvents[animationNumber].playAnimation();
+        yield return new WaitForSeconds(timeLengthOfEachEvent);
         yield return new WaitForSeconds(timeBetweenEvents);
         StartCoroutine(cycleTimer());
     }
@@ -74,6 +76,7 @@ public class monstroStageLogic : MonoBehaviour
             animationEvents[animationNumber].playAnimation();
         }
 
+        yield return new WaitForSeconds(timeLengthOfEachEvent);
         yield return new WaitForSeconds(timeBetweenEvents);
         StartCoroutine(randomCycleTimer());
     }

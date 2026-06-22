@@ -5,6 +5,7 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class monstroLocomotion : MonoBehaviour
 {
+
     //Walking and Running
     private CharacterController controller;
     private bool playerLock = true;
@@ -24,6 +25,7 @@ public class monstroLocomotion : MonoBehaviour
     private float immenseGravity = -400f;
     private float flightedGravity = -20f;
     private bool stuckOnWall;
+    private bool isGravityBlind;
 
     //Jumping and Flight
     private float jumpPower = 10f;
@@ -37,6 +39,9 @@ public class monstroLocomotion : MonoBehaviour
     //Hazards and Level Interaction
     public LayerMask trampolineMask;
     private bool isBouncing = false;
+    private dontDestroy playerDD;
+    private bool onMovingPlatform;
+    private Vector3 movingPlatformEnteredPosition;
 
     //
     public bool isStunLocked;
@@ -47,6 +52,12 @@ public class monstroLocomotion : MonoBehaviour
     private int HeavyLaunchPower = 100;
 
     public LayerMask outOfBounds;
+
+    private void Awake()
+    {
+        playerDD = this.GetComponent<dontDestroy>();
+    }
+
 
     private void OnEnable()
     {
@@ -91,6 +102,7 @@ public class monstroLocomotion : MonoBehaviour
         if (playerLock) return;
 
         isLanded = false;
+        isGravityBlind = false;
 
         if (wingedMonster == false)
         {
@@ -152,6 +164,13 @@ public class monstroLocomotion : MonoBehaviour
 
     private void applyGravity()
     {
+        if (isGravityBlind) // when on an elevator or moving platform, we freeze the gravity completely after parenting ourselves to it
+        {
+            //we do want to keep reapplying the local y position to make sure we dont have any accidental clipping through elevators
+            transform.localPosition = new Vector3(transform.localPosition.x, movingPlatformEnteredPosition.y, transform.localPosition.z);
+            return;
+        } 
+
         bool groundSphereDetected = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         bool slopeDetected = (Physics.Raycast(groundCheck.position, Vector3.down, groundDistance * 2, slopeMask));
         bool slopeSphereDetected = Physics.CheckSphere(groundCheck.position, groundDistance, slopeMask);
@@ -198,6 +217,12 @@ public class monstroLocomotion : MonoBehaviour
             if (isLanded == false)
             {
                 land();
+
+                if (onMovingPlatform)
+                {
+                    isGravityBlind = true;
+                    movingPlatformEnteredPosition = this.transform.localPosition;
+                }
             }
         }
         else
@@ -330,6 +355,40 @@ public class monstroLocomotion : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Moving Platform")
+        {
+            if (isGravityBlind == false)
+            {
+                if (onMovingPlatform == false)
+                {
+
+                    this.transform.parent = other.gameObject.transform;
+                    onMovingPlatform = true;
+                }
+
+                if (isGrounded && isLanded)
+                {
+                    isGravityBlind = true;
+                    movingPlatformEnteredPosition = this.transform.localPosition;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Moving Platform")
+        {
+            this.transform.SetParent(null);
+            playerDD.reassignDontDestroyStatus();
+            onMovingPlatform = false;
+            isGravityBlind = false;
+        }
+    }
+
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == trampolineMask)
@@ -348,6 +407,7 @@ public class monstroLocomotion : MonoBehaviour
             }
         }
     }
+    */
 
     #endregion
 
