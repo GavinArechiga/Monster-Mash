@@ -548,6 +548,7 @@ public class BAS_Cursor : MonoBehaviour
         currTool = Tools.edit;
         cursorArt.Change(Hands.point);
         editGizmos.SetActive(true);
+        SwapPartLayer(true);
     }
     private void StopEditMode()
     {
@@ -558,6 +559,7 @@ public class BAS_Cursor : MonoBehaviour
     private void StartMoveMode()
     {
         currTool = Tools.move;
+        SwapPartLayer(false);
     }
     private void StopMoveMode()
     {
@@ -605,4 +607,24 @@ public class BAS_Cursor : MonoBehaviour
         cursorArt.Change(Hands.point);
     }
     #endregion
+
+    private void SwapPartLayer(bool under)
+    {
+        int i = partToEdit.layer;
+
+        if (under && i != 20)
+        {
+            foreach (Transform child in partToEdit.transform)
+            {
+                child.gameObject.layer = 20;
+            }
+        }
+        else if (!under && i != 0)
+        {
+            foreach (Transform child in partToEdit.transform)
+            {
+                child.gameObject.layer = 0;
+            }
+        }
+    }
 }

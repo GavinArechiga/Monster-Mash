@@ -14,6 +14,7 @@ public class BAS_Camera : MonoBehaviour
     private float minFOV = 5f;
     private float zoomSpeed = 35f;
 
+    [SerializeField] private Camera uiCam;
     [SerializeField] private Camera mainCam;
     [SerializeField] private Camera rotCam;
 
@@ -44,14 +45,18 @@ public class BAS_Camera : MonoBehaviour
     public void CameraZoomIn()
     {
         float newFOV = mainCam.fieldOfView - (zoomSpeed * Time.deltaTime);
+        newFOV = Mathf.Max(newFOV, minFOV);
 
-        mainCam.fieldOfView = Mathf.Max(newFOV, minFOV);
+        mainCam.fieldOfView = newFOV;
+        uiCam.fieldOfView = newFOV;
     }
 
     public void CameraZoomOut()
     {
         float newFOV = mainCam.fieldOfView + (zoomSpeed * Time.deltaTime);
+        newFOV = Mathf.Min(newFOV, maxFOV);
 
-        mainCam.fieldOfView = Mathf.Min(newFOV, maxFOV);
+        mainCam.fieldOfView = newFOV;
+        uiCam.fieldOfView = newFOV;
     }
 }
