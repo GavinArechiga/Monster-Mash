@@ -62,6 +62,8 @@ public class BAS_Cursor : MonoBehaviour
 
     private float floatingZ = -0.5f;
 
+    [SerializeField] private GameObject confirmMenu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -89,23 +91,46 @@ public class BAS_Cursor : MonoBehaviour
         {
             cursorArt.Change(Hands.point);
         }
-
-        if (currTool is Tools.rotGizmo)
+        else if (currTool is Tools.rotGizmo)
         {
             RotateGizmo(leftStickValue);
             return;
         }
-
-        MoveCursor();
-
-        if (currTool is Tools.newPart or Tools.move)
+        else if (currTool is Tools.newPart or Tools.move)
         {
             PreviewPart();
         }
         else if (currTool is Tools.rotate)
-        { 
-            cursorArt.Change(RotGizmoRaycast() ? Hands.open : Hands.point);
+        {
+            RaycastHit hit;
+
+            if (RotGizmoRaycast(out hit))
+            {
+                cursorArt.Change(Hands.open);
+
+                string name = hit.collider.name;
+
+                if (name is "X Axis")
+                {
+                    rotGizmo.MakeTransparent("x", false);
+                }
+                else if (name is "Y Axis")
+                {
+                    rotGizmo.MakeTransparent("y", false);
+                }
+                else if (name is "Z Axis")
+                {
+                    rotGizmo.MakeTransparent("z", false);
+                }
+            }
+            else
+            {
+                cursorArt.Change(Hands.point);
+                rotGizmo.MakeTransparent("all", true);
+            }
         }
+
+        MoveCursor();
     }
 
     private void PreviewPart()
@@ -119,6 +144,8 @@ public class BAS_Cursor : MonoBehaviour
 
         if (Physics.Raycast(myRay, out hit, 1000f))
         {
+            //print("hit: " + hit.collider.gameObject);
+            //the collider detection is F'd right now because of the monster part colliders. i cant touch this until Gavin hands off to me :/
             if (hit.collider.GetComponent<WhichPartType>()?.type is PartType.Torso or PartType.Head)
             {
                 partToEdit.transform.position = hit.point;
@@ -287,6 +314,7 @@ public class BAS_Cursor : MonoBehaviour
         {
             partToEdit.transform.eulerAngles = oldRot;
             StopRotGizmo();
+            StartRotateMode();
         }
         else if (currTool is Tools.newPart)
         {
@@ -549,10 +577,11 @@ public class BAS_Cursor : MonoBehaviour
         currTool = Tools.newPart;
         InstantiatePart();
         IgnorePartRaycast();
+        confirmMenu.SetActive(true);
     }
     private void StopNewPartMode()
     {
-
+        confirmMenu.SetActive(false);
     }
     //
     private void StartEditMode()
@@ -574,11 +603,13 @@ public class BAS_Cursor : MonoBehaviour
         currTool = Tools.move;
         SwapPartLayer(false);
         IgnorePartRaycast();
+        confirmMenu.SetActive(true);
     }
     private void StopMoveMode()
     {
         DontIgnorePartRaycast();
         SwapPartLayer(true);
+        confirmMenu.SetActive(false);
     }
     //
     private void StartRecolorMode()
@@ -614,11 +645,35 @@ public class BAS_Cursor : MonoBehaviour
         currTool = Tools.rotGizmo;
         cursorArt.Change(Hands.closed);
         oldRot = partToEdit.transform.eulerAngles;
+        confirmMenu.SetActive(true);
+
+        //rotGizmo.MakeTransparent("all", true);
+
+        if (currAxis is "X Axis")
+        {
+            rotGizmo.MakeTransparent("x", false);
+            rotGizmo.MakeTransparent("y", true);
+            rotGizmo.MakeTransparent("z", true);
+        }
+        else if (currAxis is "Y Axis")
+        {
+            rotGizmo.MakeTransparent("x", true);
+            rotGizmo.MakeTransparent("y", false);
+            rotGizmo.MakeTransparent("z", true);
+        }
+        else if (currAxis is "Z Axis")
+        {
+            rotGizmo.MakeTransparent("x", true);
+            rotGizmo.MakeTransparent("y", true);
+            rotGizmo.MakeTransparent("z", false);
+        }
     }
 
     private void StopRotGizmo()
     {
         cursorArt.Change(Hands.point);
+        confirmMenu.SetActive(false);
+        rotGizmo.MakeTransparent("all", true);
     }
     #endregion
 
