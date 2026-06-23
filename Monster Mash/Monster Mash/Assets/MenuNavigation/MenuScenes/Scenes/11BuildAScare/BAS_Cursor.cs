@@ -151,16 +151,19 @@ public class BAS_Cursor : MonoBehaviour
 
     public void AButton()
     {
-        if (currTool is Tools.rotGizmo)
+        RaycastHit rotHit;
+        RaycastHit hit;
+
+        if (UICastCheck())
+        {
+            UICast();
+        }
+        else if (currTool is Tools.rotGizmo)
         {
             StopRotGizmo();
             StartRotateMode();
-            return;
         }
-
-        RaycastHit rotHit;
-        
-        if (currTool is Tools.rotate)
+        else if (currTool is Tools.rotate)
         {
             if (RotGizmoRaycast(out rotHit))
             {
@@ -172,10 +175,7 @@ public class BAS_Cursor : MonoBehaviour
                 }
             }
         }
-
-        RaycastHit hit;
-
-        if (PartRaycast(out hit))
+        else if (PartRaycast(out hit))
         {
             if (hit.collider.GetComponentInParent<WhichPartType>())
             {
@@ -208,14 +208,9 @@ public class BAS_Cursor : MonoBehaviour
                 if (currTool is Tools.none)
                 {
                     partToEdit = hit.collider.GetComponentInParent<TempPartData>().gameObject;
-                    print("too early");
                     StartEditMode();
                 }
             }
-        }
-        else if (UICastCheck())
-        {
-            UICast();
         }
         else if (currTool is Tools.edit)
         {
@@ -228,33 +223,50 @@ public class BAS_Cursor : MonoBehaviour
 
     private bool UICastCheck()
     {
-        GraphicRaycaster raycaster = FindObjectOfType<GraphicRaycaster>();
+        GraphicRaycaster[] raycasters = FindObjectsOfType<GraphicRaycaster>();
         EventSystem eventSystem = EventSystem.current;
         PointerEventData pointerData = new PointerEventData(eventSystem);
         pointerData.position = cursor.position;
 
         List<RaycastResult> results = new List<RaycastResult>();
-        raycaster.Raycast(pointerData, results);
 
-        return results.Count > 0;
+        foreach (GraphicRaycaster raycaster in raycasters)
+        {
+            raycaster.Raycast(pointerData, results);
+
+            foreach (RaycastResult result in results)
+            {
+                if (result.gameObject.GetComponent<Button>())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
     private void UICast()
     {
-        GraphicRaycaster raycaster = FindObjectOfType<GraphicRaycaster>();
+        GraphicRaycaster[] raycasters = FindObjectsOfType<GraphicRaycaster>();
         EventSystem eventSystem = EventSystem.current;
         PointerEventData pointerData = new PointerEventData(eventSystem);
         pointerData.position = cursor.position;
 
         List<RaycastResult> results = new List<RaycastResult>();
-        raycaster.Raycast(pointerData, results);
 
-        foreach (RaycastResult result in results)
+        foreach (GraphicRaycaster raycaster in raycasters)
         {
-            Button button = result.gameObject.GetComponent<Button>();
+            raycaster.Raycast(pointerData, results);
 
-            if (button != null)
+            foreach (RaycastResult result in results)
             {
-                button.onClick.Invoke();
+                Button button = result.gameObject.GetComponent<Button>();
+
+                if (button != null)
+                {
+                    button.onClick.Invoke();
+                    return;
+                }
             }
         }
     }
@@ -548,6 +560,7 @@ public class BAS_Cursor : MonoBehaviour
         currTool = Tools.edit;
         cursorArt.Change(Hands.point);
         editGizmos.SetActive(true);
+        DontIgnorePartRaycast();
         SwapPartLayer(true);
     }
     private void StopEditMode()
@@ -560,10 +573,12 @@ public class BAS_Cursor : MonoBehaviour
     {
         currTool = Tools.move;
         SwapPartLayer(false);
+        IgnorePartRaycast();
     }
     private void StopMoveMode()
     {
-
+        DontIgnorePartRaycast();
+        SwapPartLayer(true);
     }
     //
     private void StartRecolorMode()
@@ -586,7 +601,6 @@ public class BAS_Cursor : MonoBehaviour
     //
     public void StartRotateMode()
     {
-        print("start rotate mode!");
         currTool = Tools.rotate;
         SetUpRotGizmo();
     }
@@ -614,17 +628,21 @@ public class BAS_Cursor : MonoBehaviour
 
         if (under && i != 20)
         {
-            foreach (Transform child in partToEdit.transform)
-            {
-                child.gameObject.layer = 20;
-            }
+            SwapChildren(partToEdit.transform, 20);
         }
         else if (!under && i != 0)
         {
-            foreach (Transform child in partToEdit.transform)
-            {
-                child.gameObject.layer = 0;
-            }
+            SwapChildren(partToEdit.transform, 0);
+        }
+    }
+
+    private void SwapChildren(Transform target, int x)
+    {
+        foreach (Transform child in target)
+        {
+            child.gameObject.layer = x;
+
+            SwapChildren(child, x);
         }
     }
 }
