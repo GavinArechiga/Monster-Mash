@@ -8,7 +8,7 @@ public class monstroLocomotion : MonoBehaviour
 
     //Walking and Running
     private CharacterController controller;
-    private bool playerLock = true;
+    public bool playerLock = true;
     private float moveSpeed = 30f;
     private float walkSpeed = 10f;
     private float runSpeed = 30f;
@@ -43,7 +43,7 @@ public class monstroLocomotion : MonoBehaviour
     private bool onMovingPlatform;
     private Vector3 movingPlatformEnteredPosition;
 
-    //
+    //damage launching
     public bool isStunLocked;
     public bool isElectricLocked;
     private Vector3 launchDirection;
@@ -51,7 +51,18 @@ public class monstroLocomotion : MonoBehaviour
     private int lightLaunchPower = 50;
     private int HeavyLaunchPower = 100;
 
-    public LayerMask outOfBounds;
+    //attack movement
+    private monstroPartHandler monstroVisuals;
+    private bool attackLocked;
+    private bool rotationLocked;
+    private int attackMovementPower = 50;
+    private int lightAttackMovement = 50;
+    private int heavyAttackMovement = 100;
+    private Vector3 attackDirection;
+    private Vector3 attackInputVector = Vector2.zero;
+
+    //visual
+    public Transform characterRotator;
 
     private void Awake()
     {
@@ -62,6 +73,7 @@ public class monstroLocomotion : MonoBehaviour
     private void OnEnable()
     {
         controller = GetComponent<CharacterController>();
+        monstroVisuals = GetComponent<monstroPartHandler>();
         velocity.x = 0f;
         velocity.z = 0f;
         velocity.y = 0f;
@@ -71,6 +83,8 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = true;
         stuckOnWall = false;
         playerLock = true;
+        rotationLocked = false;
+        attackLocked = false;
         StartCoroutine(movementSpawnDelay());
     }
 
@@ -83,16 +97,43 @@ public class monstroLocomotion : MonoBehaviour
     public void movementInput(Vector2 direction)
     {
         if (playerLock) return;
+        if (isStunLocked) return;
+        if (isElectricLocked) return;
+        if (rotationLocked) return;
         inputVector = direction;
+
+
+        if (attackLocked) return;
 
         if ((direction.x > 0.35f || direction.x < -0.35f) || (direction.y > 0.35f || direction.y < -0.35f))
         {
-            moveSpeed = runSpeed;
+            if (moveSpeed != runSpeed)
+            {
+                moveSpeed = runSpeed;
+                monstroVisuals.run();
+            }
+        }
+        else if((direction.x > 0.1f || direction.x < -0.1f) || (direction.y > 0.1f || direction.y < -0.1f))
+        {
+            if (moveSpeed != walkSpeed)
+            {
+                moveSpeed = walkSpeed;
+                monstroVisuals.walk();
+            }
         }
         else
         {
-            moveSpeed = walkSpeed;
+            if (moveSpeed != 0)
+            {
+                moveSpeed = 0;
+                monstroVisuals.idle();
+            }
         }
+    }
+
+    public void attackDirectionInput(Vector2 direction)
+    {
+        attackInputVector = direction;
     }
 
     public void jumpInput()
@@ -100,6 +141,10 @@ public class monstroLocomotion : MonoBehaviour
         if (jumpsLeft == 0) return;
         if (flightedJumpPower == 0) return;
         if (playerLock) return;
+        if (isStunLocked) return;
+        if (isElectricLocked) return;
+        if (rotationLocked) return;
+        if (attackLocked) return;
 
         isLanded = false;
         isGravityBlind = false;
@@ -108,10 +153,18 @@ public class monstroLocomotion : MonoBehaviour
         {
             #region Jump and Double Jump - Non Winged Monsters
 
+            if (jumpsLeft == 2)
+            {
+                monstroVisuals.jump();
+            }
+            else
+            {
+                monstroVisuals.doubleJump();
+            }
+
             jumpsLeft = jumpsLeft - 1;
             velocity.y = 0f;
             velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
-
             #endregion
         }
         else
@@ -144,24 +197,68 @@ public class monstroLocomotion : MonoBehaviour
 
     void Update()
     {
+        /*
         if (playerLock == false && isElectricLocked == false)
         {
             if (isStunLocked == false)
             {
-                moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
-                moveDirection = transform.TransformDirection(moveDirection);
-                moveDirection *= moveSpeed;
-                controller.Move(moveDirection * Time.deltaTime);
+                if (attackLocked)
+                {
+                    controller.Move(moveDirection * attackMovementPower * Time.deltaTime);
+                }
+                else
+                {
+                    moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
+                    moveDirection = transform.TransformDirection(moveDirection);
+                    moveDirection *= moveSpeed;
+                    controller.Move(moveDirection * Time.deltaTime);
+                }
             }
             else
             {
                 controller.Move(launchDirection * launchPower * Time.deltaTime);
             }
         }
+        */
         applyGravity();
-        
+        applyCharacterRotation();
+        if (playerLock != false) return; //world has asked me to stop all controllers
+        if (isElectricLocked != false) return; //I have been electrocuted and im paralyzed
+
+        if (attackLocked && rotationLocked == false) //I am engaging an attack but the player hasn't confirmed a target by letting go of the button
+        {
+            //attackDirection = -characterRotator.forward;
+            //attackDirection = transform.TransformDirection(attackDirection);
+            moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
+            moveDirection = transform.TransformDirection(moveDirection);
+            return;
+        }
+
+
+        if (isStunLocked) //I have been punched and launched in a direction
+        {
+            controller.Move(launchDirection * launchPower * Time.deltaTime);
+            return;
+        }
+
+        if (attackLocked && rotationLocked) //I have engaged an attack and have confirmed an attack rotation
+        {
+            attackDirection = -characterRotator.forward;
+            attackDirection = transform.TransformDirection(attackDirection);
+            controller.Move(attackDirection * attackMovementPower * Time.deltaTime);
+            return;
+        }
+
+        //if all that is false and we're just moving around
+        moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
+        moveDirection = transform.TransformDirection(moveDirection);
+        moveDirection *= moveSpeed;
+        controller.Move(moveDirection * Time.deltaTime);
+
+
     }
 
+    #region Gravity
     private void applyGravity()
     {
         if (isGravityBlind) // when on an elevator or moving platform, we freeze the gravity completely after parenting ourselves to it
@@ -233,6 +330,7 @@ public class monstroLocomotion : MonoBehaviour
             {
                 isLanded = false;
                 velocity.y = 0f;
+                monstroVisuals.fall();
             }
 
             if (isFlying && (velocity.y == 0 || velocity.y < 0)) //falling with flight
@@ -275,6 +373,19 @@ public class monstroLocomotion : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Character Rotation
+    private void applyCharacterRotation()
+    {
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion intendedRotation = Quaternion.LookRotation(-moveDirection, Vector3.up);
+
+            characterRotator.transform.rotation = Quaternion.RotateTowards(characterRotator.transform.rotation, intendedRotation, 800 * Time.deltaTime);
+        }
+    }
+    #endregion
 
     private void land()
     {
@@ -285,6 +396,7 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = true;
         stuckOnWall = false;
         isStunLocked = false;
+        monstroVisuals.land();
     }
 
     public void forceRespawn()
@@ -303,6 +415,7 @@ public class monstroLocomotion : MonoBehaviour
         jumpsLeft = 2;
         flightedJumpPower = jumpPower;
         isFlying = false;
+        monstroVisuals.jump();
     }
 
     private void OnTriggerEnter(Collider other)//Level Triggers
@@ -388,34 +501,14 @@ public class monstroLocomotion : MonoBehaviour
         }
     }
 
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer == trampolineMask)
-        {
-            if (collision.gameObject.GetComponent<Animation>() != null)
-            {
-                Animation trampolineAnimation = collision.gameObject.GetComponent<Animation>();
-                trampolineAnimation.Stop();
-                trampolineAnimation.Play();
-            }
-            else if (collision.gameObject.GetComponentInParent<Animation>() != null)
-            {
-                Animation trampolineAnimation = collision.gameObject.GetComponentInParent<Animation>();
-                trampolineAnimation.Stop();
-                trampolineAnimation.Play();
-            }
-        }
-    }
-    */
-
     #endregion
 
-    #region Damage Launching
+    #region Damage Launching and Effects
     public void damageLaunch(Transform hitPoint, bool isHeavy, bool requiresReverseLaunch)
     {
         StopCoroutine(damageLaunchDelay());
         StopCoroutine(electricLaunchDelay());
+        StopCoroutine(attackMovementTimer());
 
         if (requiresReverseLaunch)
         {
@@ -430,6 +523,9 @@ public class monstroLocomotion : MonoBehaviour
         launchDirection.Normalize();
         velocity.x = 0;
         velocity.z = 0;
+        attackLocked = false;
+        rotationLocked = false;
+
 
         if (isHeavy)
         {
@@ -463,6 +559,7 @@ public class monstroLocomotion : MonoBehaviour
     {
         StopCoroutine(damageLaunchDelay());
         StopCoroutine(electricLaunchDelay());
+        StopCoroutine(attackMovementTimer());
 
         if (requiresReverseLaunch)
         {
@@ -477,6 +574,8 @@ public class monstroLocomotion : MonoBehaviour
         launchDirection.Normalize();
         velocity.x = 0;
         velocity.z = 0;
+        attackLocked = false;
+        rotationLocked = false;
 
         if (isHeavy)
         {
@@ -513,6 +612,7 @@ public class monstroLocomotion : MonoBehaviour
     {
         StopCoroutine(damageLaunchDelay());
         StopCoroutine(electricLaunchDelay());
+        StopCoroutine(attackMovementTimer());
 
         if (requiresReverseLaunch)
         {
@@ -527,11 +627,13 @@ public class monstroLocomotion : MonoBehaviour
         launchDirection.Normalize();
         velocity.x = 0;
         velocity.z = 0;
-        velocity.y = 0f;
+        velocity.y = 0;
         velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
         isFlying = false;
         jumpsLeft = 0;
         flightedJumpPower = 0;
+        attackLocked = false;
+        rotationLocked = false;
 
         if (isHeavy)
         {
@@ -543,6 +645,63 @@ public class monstroLocomotion : MonoBehaviour
         }
 
         isStunLocked = true;
+    }
+
+    #endregion
+
+    #region Attack Movement
+
+    public void attackEngaged()
+    {
+        attackLocked = true;
+        rotationLocked = false;
+        velocity.x = 0;
+        velocity.z = 0;
+    }
+
+    public void attackMovementConfirmed(bool isHeavy, bool needsMovement)
+    {
+        velocity.x = 0;
+        velocity.z = 0;
+        attackLocked = true;
+        rotationLocked = true;
+        if (needsMovement)
+        {
+            if (isHeavy)
+            {
+                attackMovementPower = heavyAttackMovement;
+            }
+            else
+            {
+                attackMovementPower = lightAttackMovement;
+            }
+        }
+        else
+        {
+            attackMovementPower = 0;
+        }
+
+        StartCoroutine(attackMovementTimer());
+    }
+
+    IEnumerator attackMovementTimer()
+    {
+        if (attackMovementPower == heavyAttackMovement)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        attackLocked = false;
+        rotationLocked = false;
+        velocity.x = 0;
+        velocity.z = 0;
+        velocity.y = 0;
+        moveSpeed = 0;
+        inputVector = Vector3.zero;
+        monstroVisuals.idle();
     }
 
     #endregion
