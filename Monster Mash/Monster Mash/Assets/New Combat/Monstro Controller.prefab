@@ -83,6 +83,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2420731780035755925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7059590689308201318}
+  m_Layer: 13
+  m_Name: Character Rotator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7059590689308201318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2420731780035755925}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4530839509604072962}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3037487381813557964
 GameObject:
   m_ObjectHideFlags: 0
@@ -44172,6 +44203,7 @@ GameObject:
   - component: {fileID: 4530839509604072967}
   - component: {fileID: 1516043871922068913}
   - component: {fileID: 4530839509604072968}
+  - component: {fileID: 753867557221236637}
   - component: {fileID: 8603333251107464328}
   - component: {fileID: 466257913079299193}
   m_Layer: 13
@@ -44197,6 +44229,7 @@ Transform:
   - {fileID: 2028655204938637957}
   - {fileID: 7789399991020669479}
   - {fileID: 7625045838310686771}
+  - {fileID: 7059590689308201318}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44215,7 +44248,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4530839509604072970}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -44347,9 +44380,133 @@ MonoBehaviour:
     m_ActionId: 192198a7-152a-4f3a-8200-ae2926402636
     m_ActionName: Monstro UI/New action
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: a1921a55-ece7-4d94-b7ed-47731fe52e12
     m_ActionName: Monstro Movement/Pause
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnButtonEast
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 23060d77-3c29-4c3e-8b7f-5ed547471a0f
+    m_ActionName: Monstro Movement/Button East[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnButtonWest
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d4c6c38b-3435-44ee-a80a-53ebef79ec71
+    m_ActionName: Monstro Movement/Button West[/XInputControllerWindows/buttonWest]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnButtonNorth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0612fe75-9be0-4fb0-9420-a4c42e568f45
+    m_ActionName: Monstro Movement/Button North[/XInputControllerWindows/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnLeftBumper
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 19a6fce4-30be-44d0-a604-108415a73eb5
+    m_ActionName: Monstro Movement/Left Bumper[/XInputControllerWindows/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnRightBumper
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ed14a324-0f4b-4546-8dbd-f4e526ff82fc
+    m_ActionName: Monstro Movement/Right Shoulder[/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnLeftTrigger
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ca35cd4a-e1e6-4b8b-b928-27b5d58d79d4
+    m_ActionName: Monstro Movement/Left Trigger[/XInputControllerWindows/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnRightTigger
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4025e467-67be-4c61-8d94-44e47c649465
+    m_ActionName: Monstro Movement/Right Trigger[/XInputControllerWindows/rightTrigger]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Monstro UI
@@ -44380,6 +44537,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f956870b1f1f74541b7e278edd53ae43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mappedMonstroParts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1516043871922068913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44407,6 +44572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 248250487eab85748b2547fb479cb1dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLock: 1
   groundCheck: {fileID: 6125250477806772196}
   groundMask:
     serializedVersion: 2
@@ -44420,9 +44586,20 @@ MonoBehaviour:
     m_Bits: 2048
   isStunLocked: 0
   isElectricLocked: 0
-  outOfBounds:
-    serializedVersion: 2
-    m_Bits: 4096
+  characterRotator: {fileID: 7059590689308201318}
+--- !u!114 &753867557221236637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530839509604072970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db37c676ff45824b8ae77c04524f24c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterRotator: {fileID: 7059590689308201318}
 --- !u!114 &8603333251107464328
 MonoBehaviour:
   m_ObjectHideFlags: 0

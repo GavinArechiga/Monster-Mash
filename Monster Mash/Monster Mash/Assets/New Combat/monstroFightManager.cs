@@ -29,7 +29,9 @@ public class monstroFightManager : MonoBehaviour
         for (int i = 0; i < monstroMonsters.Length; i++)
         {
             //this is a temp visual enabler and disabler because james is annoying me lol
-            monstroMonsters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+            //monstroMonsters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
+            monstroMonsters[i].gameObject.GetComponent<monstroPartHandler>().hideMonster();
             monstroMonsters[i].gameObject.GetComponent<monstroMiscVisuals>().generatePlayerRing();
         }
     }
@@ -70,7 +72,10 @@ public class monstroFightManager : MonoBehaviour
         spawningMonster.transform.position = playerSpawnPoint.transform.position;
 
         //this is a temp visual enabler and disabler because james is annoying me lol
-        spawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+
+        //spawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        spawningMonster.gameObject.GetComponent<monstroPartHandler>().showMonster();
+        spawningMonster.gameObject.GetComponent<monstroPartHandler>().startMonsterAnimations();
         spawningMonster.gameObject.GetComponent<monstroMiscVisuals>().showPlayerRing();
 
         //add them to camera target group
@@ -106,7 +111,9 @@ public class monstroFightManager : MonoBehaviour
     IEnumerator playRespawnPortal(GameObject respawningMonster)
     {
         //this is a temp visual enabler and disabler because james is annoying me lol
-        respawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+        //respawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        respawningMonster.gameObject.GetComponent<monstroPartHandler>().hideMonster();
         respawningMonster.gameObject.GetComponent<monstroMiscVisuals>().hidePlayerRing();
         respawningMonster.GetComponent<monstroLocomotion>().enabled = false;
         GameObject playerSpawnPoint = GameObject.Find(respawningMonster.name + " Spawn");
@@ -126,7 +133,9 @@ public class monstroFightManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1.5f);
-        respawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+
+        //respawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        respawningMonster.gameObject.GetComponent<monstroPartHandler>().showMonster();
         respawningMonster.gameObject.GetComponent<monstroMiscVisuals>().showPlayerRing();
         respawningMonster.GetComponent<monstroLocomotion>().enabled = true;
     }

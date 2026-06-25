@@ -7,6 +7,7 @@ public class tempSceneLoader : MonoBehaviour
 {
     public GameObject[] flightButtons;
     public GameObject[] nonFlightButtons;
+    private monstroPartHandler player1;
 
     public void loadBlockParty()
     {
@@ -52,5 +53,11 @@ public class tempSceneLoader : MonoBehaviour
             nonFlightButtons[playerNumber - 1].SetActive(false);
             flightButtons[playerNumber - 1].SetActive(true);
         }
+    }
+
+    public void attachMonsterPlayer1(Transform monsterPartHolder)
+    {
+        player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
+        player1.assignMonsterPartHolder(monsterPartHolder);
     }
 }
