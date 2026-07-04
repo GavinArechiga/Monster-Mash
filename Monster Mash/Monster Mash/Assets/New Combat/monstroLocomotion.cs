@@ -10,8 +10,9 @@ public class monstroLocomotion : MonoBehaviour
     private CharacterController controller;
     public bool playerLock = true;
     private float moveSpeed = 30f;
-    private float walkSpeed = 10f;
-    private float runSpeed = 30f;
+    private float walkSpeed = 20f;
+    private float runSpeed = 40f;
+    bool needsMovementAnimationRefresh = false;
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 inputVector = Vector2.zero;
 
@@ -59,11 +60,16 @@ public class monstroLocomotion : MonoBehaviour
     private int lightAttackMovement = 50;
     private int heavyAttackMovement = 100;
     private Vector3 attackDirection;
-    private Vector3 attackInputVector = Vector2.zero;
 
     //visual
     public Transform characterRotator;
 
+    //Status Effects
+    private bool onFire = false;
+    private float fieryMoveSpeed = 60f;
+    private Vector3 fieryRunDirection;
+
+    #region Spawn, Respawn, and Awakening Functions
     private void Awake()
     {
         playerDD = this.GetComponent<dontDestroy>();
@@ -74,10 +80,12 @@ public class monstroLocomotion : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         monstroVisuals = GetComponent<monstroPartHandler>();
+        resetCharacterRotation();
         velocity.x = 0f;
         velocity.z = 0f;
         velocity.y = 0f;
         jumpsLeft = 2;
+        moveSpeed = 0;
         flightedJumpPower = jumpPower;
         isFlying = false;
         isLanded = true;
@@ -85,6 +93,9 @@ public class monstroLocomotion : MonoBehaviour
         playerLock = true;
         rotationLocked = false;
         attackLocked = false;
+        isStunLocked = false;
+        isElectricLocked = false;
+        onFire = false;
         StartCoroutine(movementSpawnDelay());
     }
 
@@ -94,6 +105,15 @@ public class monstroLocomotion : MonoBehaviour
         playerLock = false;
     }
 
+    public void forceRespawn()
+    {
+        monstroFightManager fightManager = Object.FindFirstObjectByType<monstroFightManager>();
+        fightManager.respawnPlayer(this.gameObject);
+        velocity.y = 0f;
+    }
+    #endregion
+
+    #region Joystick Based Movement
     public void movementInput(Vector2 direction)
     {
         if (playerLock) return;
@@ -103,26 +123,37 @@ public class monstroLocomotion : MonoBehaviour
         inputVector = direction;
 
 
-        if (attackLocked) return;
+        if (attackLocked) return;//this happens after getting the input vector so that we can still aim while in a heavy stance
 
-        if ((direction.x > 0.35f || direction.x < -0.35f) || (direction.y > 0.35f || direction.y < -0.35f))
+        if (onFire)
         {
-            if (moveSpeed != runSpeed)
+            moveSpeed = fieryMoveSpeed;
+            return;
+        }
+
+        if ((direction.x > 0.4f || direction.x < -0.4f) || (direction.y > 0.4f || direction.y < -0.4f))
+        {
+
+            if (moveSpeed != runSpeed || needsMovementAnimationRefresh)
             {
                 moveSpeed = runSpeed;
                 monstroVisuals.run();
+                needsMovementAnimationRefresh = false;
             }
         }
-        else if((direction.x > 0.1f || direction.x < -0.1f) || (direction.y > 0.1f || direction.y < -0.1f))
+        else if((direction.x > 0.15f || direction.x < -0.15f) || (direction.y > 0.15f || direction.y < -0.15f))
         {
-            if (moveSpeed != walkSpeed)
+
+            if (moveSpeed != walkSpeed || needsMovementAnimationRefresh)
             {
                 moveSpeed = walkSpeed;
                 monstroVisuals.walk();
+                needsMovementAnimationRefresh = false;
             }
         }
         else
         {
+
             if (moveSpeed != 0)
             {
                 moveSpeed = 0;
@@ -131,10 +162,9 @@ public class monstroLocomotion : MonoBehaviour
         }
     }
 
-    public void attackDirectionInput(Vector2 direction)
-    {
-        attackInputVector = direction;
-    }
+    #endregion
+
+    #region Button South Input - Jump and Flight
 
     public void jumpInput()
     {
@@ -194,32 +224,10 @@ public class monstroLocomotion : MonoBehaviour
             #endregion
         }
     }
+    #endregion
 
     void Update()
     {
-        /*
-        if (playerLock == false && isElectricLocked == false)
-        {
-            if (isStunLocked == false)
-            {
-                if (attackLocked)
-                {
-                    controller.Move(moveDirection * attackMovementPower * Time.deltaTime);
-                }
-                else
-                {
-                    moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
-                    moveDirection = transform.TransformDirection(moveDirection);
-                    moveDirection *= moveSpeed;
-                    controller.Move(moveDirection * Time.deltaTime);
-                }
-            }
-            else
-            {
-                controller.Move(launchDirection * launchPower * Time.deltaTime);
-            }
-        }
-        */
         applyGravity();
         applyCharacterRotation();
         if (playerLock != false) return; //world has asked me to stop all controllers
@@ -227,8 +235,6 @@ public class monstroLocomotion : MonoBehaviour
 
         if (attackLocked && rotationLocked == false) //I am engaging an attack but the player hasn't confirmed a target by letting go of the button
         {
-            //attackDirection = -characterRotator.forward;
-            //attackDirection = transform.TransformDirection(attackDirection);
             moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
             moveDirection = transform.TransformDirection(moveDirection);
             return;
@@ -246,6 +252,15 @@ public class monstroLocomotion : MonoBehaviour
             attackDirection = -characterRotator.forward;
             attackDirection = transform.TransformDirection(attackDirection);
             controller.Move(attackDirection * attackMovementPower * Time.deltaTime);
+            return;
+        }
+
+        if (onFire) //I have been set on fire and am running non stop in the forward direction
+        {
+            moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
+            fieryRunDirection = transform.TransformDirection(-characterRotator.forward);
+            fieryRunDirection *= moveSpeed;
+            controller.Move(fieryRunDirection * Time.deltaTime);
             return;
         }
 
@@ -373,19 +388,6 @@ public class monstroLocomotion : MonoBehaviour
             }
         }
     }
-    #endregion
-
-    #region Character Rotation
-    private void applyCharacterRotation()
-    {
-        if (moveDirection != Vector3.zero)
-        {
-            Quaternion intendedRotation = Quaternion.LookRotation(-moveDirection, Vector3.up);
-
-            characterRotator.transform.rotation = Quaternion.RotateTowards(characterRotator.transform.rotation, intendedRotation, 800 * Time.deltaTime);
-        }
-    }
-    #endregion
 
     private void land()
     {
@@ -396,15 +398,37 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = true;
         stuckOnWall = false;
         isStunLocked = false;
+        needsMovementAnimationRefresh = true;
         monstroVisuals.land();
     }
+    #endregion
 
-    public void forceRespawn()
+    #region Character Rotation
+    private void applyCharacterRotation()
     {
-        monstroFightManager fightManager = Object.FindFirstObjectByType<monstroFightManager>();
-        fightManager.respawnPlayer(this.gameObject);
-        velocity.y = 0f;
+        if (isStunLocked && launchPower == HeavyLaunchPower)
+        {
+            Quaternion intendedRotation = Quaternion.LookRotation(launchDirection, Vector3.up);
+
+            characterRotator.transform.rotation = Quaternion.RotateTowards(characterRotator.transform.rotation, intendedRotation, 800 * Time.deltaTime);
+            return;
+        }
+
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion intendedRotation = Quaternion.LookRotation(-moveDirection, Vector3.up);
+
+            characterRotator.transform.rotation = Quaternion.RotateTowards(characterRotator.transform.rotation, intendedRotation, 800 * Time.deltaTime);
+        }
     }
+
+    private void resetCharacterRotation()
+    {
+        moveDirection = Vector3.zero;
+        inputVector = Vector3.zero;
+        characterRotator.transform.rotation = Quaternion.identity;
+    }
+    #endregion
 
     #region Level Interactions
 
@@ -523,6 +547,7 @@ public class monstroLocomotion : MonoBehaviour
         launchDirection.Normalize();
         velocity.x = 0;
         velocity.z = 0;
+        inputVector = Vector3.zero;
         attackLocked = false;
         rotationLocked = false;
 
@@ -530,10 +555,12 @@ public class monstroLocomotion : MonoBehaviour
         if (isHeavy)
         {
             launchPower = HeavyLaunchPower;
+            monstroVisuals.heavyHit();
         }
         else
         {
             launchPower = lightLaunchPower;
+            monstroVisuals.lightHit();
         }
 
         StartCoroutine(damageLaunchDelay());
@@ -553,6 +580,9 @@ public class monstroLocomotion : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         isStunLocked = false;
+        velocity.x = 0;
+        velocity.z = 0;
+        inputVector = Vector3.zero;
     }
 
     public void electricDamageLaunch(Transform hitPoint, bool isHeavy, bool requiresReverseLaunch)
@@ -574,6 +604,7 @@ public class monstroLocomotion : MonoBehaviour
         launchDirection.Normalize();
         velocity.x = 0;
         velocity.z = 0;
+        inputVector = Vector3.zero;
         attackLocked = false;
         rotationLocked = false;
 
@@ -599,13 +630,18 @@ public class monstroLocomotion : MonoBehaviour
 
         if (launchPower == HeavyLaunchPower)
         {
+            monstroVisuals.heavyHit();
             yield return new WaitForSeconds(0.2f);
         }
         else
         {
+            monstroVisuals.lightHit();
             yield return new WaitForSeconds(0.1f);
         }
         isStunLocked = false;
+        velocity.x = 0;
+        velocity.z = 0;
+        inputVector = Vector3.zero;
     }
 
     public void antiAirDamageLaunch(Transform hitPoint, bool isHeavy, bool requiresReverseLaunch)
@@ -638,13 +674,28 @@ public class monstroLocomotion : MonoBehaviour
         if (isHeavy)
         {
             launchPower = HeavyLaunchPower * 2;
+            monstroVisuals.heavyHit();
         }
         else
         {
             launchPower = lightLaunchPower;
+            monstroVisuals.lightHit();
         }
 
         isStunLocked = true;
+    }
+
+    public void fieryRun()
+    {
+        onFire = true;
+    }
+
+    public void endFieryRun()
+    {
+        onFire = false;
+        velocity.x = 0;
+        velocity.z = 0;
+        inputVector = Vector3.zero;
     }
 
     #endregion
@@ -699,7 +750,10 @@ public class monstroLocomotion : MonoBehaviour
         velocity.x = 0;
         velocity.z = 0;
         velocity.y = 0;
-        moveSpeed = 0;
+        if(onFire == false)
+        {
+            moveSpeed = 0;
+        }
         inputVector = Vector3.zero;
         monstroVisuals.idle();
     }

@@ -80,6 +80,12 @@ public class monstroPart : MonoBehaviour
     public MeshRenderer[] myMeshes;
     public SkinnedMeshRenderer[] mySkinnedMeshes;
     public SpriteRenderer[] mySpriteRenderers;
+    public MeshRenderer[] myDamageMeshes;
+    public SkinnedMeshRenderer[] myDamageSkinnedMeshes;
+    public GameObject breakawayColliders;
+
+    private bool isAttacking = false;
+    private bool isRemoved = false;
 
     public void createNewAnimator() // this works, Im really just looking to make sure all the transitions feel good before a mass roll out
     {
@@ -118,6 +124,8 @@ public class monstroPart : MonoBehaviour
 
     public void hideMonster()
     {
+        if (isRemoved) return;
+
         if (myMeshes.Length != 0)
         {
             for (int i = 0; i < myMeshes.Length; i++)
@@ -145,6 +153,8 @@ public class monstroPart : MonoBehaviour
 
     public void showMonster()
     {
+        if (isRemoved) return;
+
         if (myMeshes.Length != 0)
         {
             for (int i = 0; i < myMeshes.Length; i++)
@@ -170,93 +180,234 @@ public class monstroPart : MonoBehaviour
         }
     }
 
+    public void showDamageVisual()
+    {
+        if (isRemoved) return;
+
+        if (myDamageMeshes.Length != 0)
+        {
+            for (int i = 0; i < myDamageMeshes.Length; i++)
+            {
+                myDamageMeshes[i].enabled = true;
+            }
+        }
+
+        if (myDamageSkinnedMeshes.Length != 0)
+        {
+            for (int i = 0; i < myDamageSkinnedMeshes.Length; i++)
+            {
+                myDamageSkinnedMeshes[i].enabled = true;
+            }
+        }
+
+    }
+
+    public void hideDamageVisual()
+    {
+        if (isRemoved) return;
+
+        if (myDamageMeshes.Length != 0)
+        {
+            for (int i = 0; i < myDamageMeshes.Length; i++)
+            {
+                myDamageMeshes[i].enabled = false;
+            }
+        }
+
+        if (myDamageSkinnedMeshes.Length != 0)
+        {
+            for (int i = 0; i < myDamageSkinnedMeshes.Length; i++)
+            {
+                myDamageSkinnedMeshes[i].enabled = false;
+            }
+        }
+    }
+
+    public void removeThisPart()
+    {
+        if (breakawayColliders == null) return;
+        if (isRemoved) return;
+
+        stopAnimations();
+        isRemoved = true;
+        this.transform.parent = null;
+        breakawayColliders.SetActive(true);
+        this.GetComponent<Rigidbody>().isKinematic = false;
+        //note that in full implimentation, the part's true scale has to be reapplied in case it ends up squished from damage animations
+    }
+
+    //these functions stop attacking limbs from stopping mid attack while landing or falling
+    //these are mainly called from above in the input handler but we also call these here when damage animations are required
+    public void lockAttackAnimation()
+    {
+        isAttacking = true;
+    }
+
+    public void unlockAttackAnimation()
+    {
+        isAttacking = false;
+    }
+
     public void playIdle()
     {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
         cleanAnimations();
 
-        if (monstroPartAnimator == null) return;
-
+        monstroPartAnimator.SetBool("isRunning", false);
+        monstroPartAnimator.SetBool("isWalking", false);
         monstroPartAnimator.SetTrigger("idle");
     }
 
     public void playWalk()
     {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
         cleanAnimations();
 
-        if (monstroPartAnimator == null) return;
-
+        monstroPartAnimator.SetBool("isWalking", true);
+        monstroPartAnimator.SetBool("isRunning", false);
         monstroPartAnimator.SetTrigger("walk");
     }
 
     public void playRun()
     {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
         cleanAnimations();
 
-        if (monstroPartAnimator == null) return;
-
+        monstroPartAnimator.SetBool("isRunning", true);
+        monstroPartAnimator.SetBool("isWalking", false);
         monstroPartAnimator.SetTrigger("run");
     }
 
     public void playJump()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("jump");
     }
 
     public void playDoubleJump()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("double jump");
     }
 
     public void playFall()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isAttacking) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("fall");
     }
 
     public void playLand()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isAttacking) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("land");
     }
 
     public void playWindUp()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("wind up");
     }
 
     public void playLightAttack()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("light attack");
     }
 
     public void playHeavyAttack()
     {
-        cleanAnimations();
-
         if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        cleanAnimations();
 
         monstroPartAnimator.SetTrigger("heavy attack");
     }
+
+    public void playBrace()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        cleanAnimations();
+
+        monstroPartAnimator.SetTrigger("brace");
+    }
+
+    public void playLightHit()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+
+        cleanAnimations();
+        unlockAttackAnimation();
+
+        monstroPartAnimator.SetTrigger("light hit");
+    }
+
+    public void playHeavyHit()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+
+        cleanAnimations();
+        unlockAttackAnimation();
+
+        monstroPartAnimator.SetTrigger("heavy hit");
+    }
+
+    public void playBurningReaction()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+
+        cleanAnimations();
+
+        monstroPartAnimator.SetBool("onFire", true);
+        monstroPartAnimator.SetTrigger("burning");
+    }
+
+    public void playElectrocutionReaction()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+
+        cleanAnimations();
+
+        monstroPartAnimator.SetTrigger("electrocution");
+    }
+
+    public void endStatusEffectReaction()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+
+        cleanAnimations();
+
+        monstroPartAnimator.SetBool("onFire", false);
+        monstroPartAnimator.SetTrigger("remove status");
+    }
+
+
 }
