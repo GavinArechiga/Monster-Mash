@@ -12,6 +12,7 @@ public class monstroFightManager : MonoBehaviour
 
     private CinemachineTargetGroup cameraTargetGroup;
     private stadiumCamera beastdomeCamera;//yes its super specific but it feels like the only way right now to find out when a monster is removed from the scene
+    public CinemachineVirtualCamera damageCam;
 
     //this scripts goal is to take players loaded into the scene and place them on to spawn points
     //it will also tell player input handlers to switch to the monster action map
@@ -54,6 +55,7 @@ public class monstroFightManager : MonoBehaviour
     {
         //reset data
         spawningMonster.gameObject.GetComponent<monstroHealth>().resetHealth();
+        spawningMonster.GetComponent<monstroLocomotion>().enabled = false;
 
         //grab spawn point
         GameObject playerSpawnPoint = GameObject.Find(spawningMonster.name + " Spawn");
@@ -74,8 +76,9 @@ public class monstroFightManager : MonoBehaviour
         //this is a temp visual enabler and disabler because james is annoying me lol
 
         //spawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        spawningMonster.GetComponent<monstroLocomotion>().enabled = true;
         spawningMonster.gameObject.GetComponent<monstroPartHandler>().showMonster();
-        spawningMonster.gameObject.GetComponent<monstroPartHandler>().startMonsterAnimations();
+        spawningMonster.gameObject.GetComponent<monstroPartHandler>().startMonstroAnimations();
         spawningMonster.gameObject.GetComponent<monstroMiscVisuals>().showPlayerRing();
 
         //add them to camera target group
@@ -139,4 +142,26 @@ public class monstroFightManager : MonoBehaviour
         respawningMonster.gameObject.GetComponent<monstroMiscVisuals>().showPlayerRing();
         respawningMonster.GetComponent<monstroLocomotion>().enabled = true;
     }
+
+    public void focusDamageCam()
+    {
+        damageCam.Priority = 20;
+        Time.timeScale = 0.2f;
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+        StartCoroutine(damageCamTimer());
+    }
+
+    IEnumerator damageCamTimer()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        unfocusDamageCam();
+    }
+
+    public void unfocusDamageCam()
+    {
+        damageCam.Priority = 0;
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+    }
+
 }

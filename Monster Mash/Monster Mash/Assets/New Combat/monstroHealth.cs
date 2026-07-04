@@ -5,6 +5,7 @@ using UnityEngine;
 public class monstroHealth : MonoBehaviour
 {
     private monstroLocomotion locomotion;
+    private monstroPartHandler monstroVisuals;
     private monstroMiscVisuals monstroMiscVis;
     public int health = 200;
     private int healthPerPart = 200;
@@ -25,11 +26,13 @@ public class monstroHealth : MonoBehaviour
     private void Awake()
     {
         locomotion = GetComponent<monstroLocomotion>();
+        monstroVisuals = GetComponent<monstroPartHandler>();
         monstroMiscVis = GetComponent<monstroMiscVisuals>();
     }
 
     public void resetHealth()
     {
+        mappedParts = monstroVisuals.numberOfMappedParts;
         partsLeft = mappedParts;
         health = healthPerPart * partsLeft;
     }
@@ -55,20 +58,31 @@ public class monstroHealth : MonoBehaviour
 
     private void loseMonsterPart()
     {
-        print("lost a monster part!");
+        //print("lost a monster part!");
+        monstroVisuals.removeRandomPart();
         partsLeft = partsLeft - 1;
+        monstroMiscVis.playLostLimbEffect();
     }
 
     private void totalDestruction()
     {
-        print("I have been destroyed!");
+        //print("I have been destroyed!");
+        locomotion.enabled = false;
         health = 0;
+        monstroFightManager fightManager = FindFirstObjectByType<monstroFightManager>();
+        fightManager.focusDamageCam();
+        monstroMiscVis.playDestroyedMonsterEffect();
+        StartCoroutine(destructionDelay());
+    }
+
+    IEnumerator destructionDelay()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        monstroVisuals.destroyMonster();
     }
 
     private void OnTriggerEnter(Collider other)//Damage Triggers
     {
-        //note, to return to the last version, plug in other instead of launch point
-        //Vector3 exactHitPoint = other.ClosestPointOnBounds(other.transform.position);
 
         if (other.gameObject.tag == "Hazard") //Hazards just need a trigger box, the hazard tag, and a hazard script
         {
@@ -115,8 +129,8 @@ public class monstroHealth : MonoBehaviour
 
             if (hazardName == "press")
             {
-                takeDamage(pressDamage);
                 locomotion.forceRespawn();
+                takeDamage(pressDamage);
                 hazardHandler.playHazardAnimation();
             }
 
@@ -131,8 +145,11 @@ public class monstroHealth : MonoBehaviour
 
             if (hazardName == "electricity")
             {
+                if (locomotion.isElectricLocked) return;
+
                 locomotion.electricDamageLaunch(launchPoint, true, reverseLaunchNeeded);
                 takeDamage(electricityDamage);
+                monstroVisuals.electrocutionReaction();
                 monstroMiscVis.playElectricEffect();
                 hazardHandler.playHazardAnimation();
             }
@@ -166,7 +183,9 @@ public class monstroHealth : MonoBehaviour
     {
         //fire will inflict 50 damage overall over 4 seconds
         isOnFire = true;
+        monstroVisuals.burningReaction();
         monstroMiscVis.playFireEffect();
+        locomotion.fieryRun();
         takeDamage(fireDamagePerSecond);
         yield return new WaitForSeconds(1);
         takeDamage(fireDamagePerSecond);
@@ -178,6 +197,8 @@ public class monstroHealth : MonoBehaviour
         takeDamage(fireDamagePerSecond);
         isOnFire = false;
         monstroMiscVis.stopFireEffect();
+        monstroVisuals.endStatusEffect();
+        locomotion.endFieryRun();
         /*
         if (enteredFireCollider)//they're still in the fire
         {

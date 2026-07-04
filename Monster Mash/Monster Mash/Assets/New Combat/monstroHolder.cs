@@ -28,12 +28,12 @@ public class monstroHolder : MonoBehaviour
         monstroHolderAnimator.SetTrigger("double jump");
     }
 
-    public void playHeavyDamage()
+    public void playHeavyHit()
     {
         cleanAnimations();
 
         if (monstroHolderAnimator == null) return;
 
-        monstroHolderAnimator.SetTrigger("heavy damage");
+        monstroHolderAnimator.SetTrigger("heavy hit");
     }
 }

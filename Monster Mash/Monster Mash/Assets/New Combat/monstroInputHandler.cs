@@ -16,7 +16,7 @@ public class monstroInputHandler : MonoBehaviour
     private bool attackStarted = false;
     private bool attackCooled = true;
     private float heavyAttackCooldownTime = 0.5f;
-    private float lightAttackCooldownTime = 0.3f;
+    private float lightAttackCooldownTime = 0.2f;
 
     private void Awake()
     {
@@ -47,10 +47,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnButtonEast(CallbackContext context)
     {
         int buttonIndex = 0;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -66,10 +67,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnButtonWest(CallbackContext context)
     {
         int buttonIndex = 1;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -85,10 +87,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnButtonNorth(CallbackContext context)
     {
         int buttonIndex = 2;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -104,10 +107,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnLeftBumper(CallbackContext context)
     {
         int buttonIndex = 3;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -123,10 +127,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnRightBumper(CallbackContext context)
     {
         int buttonIndex = 4;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -142,10 +147,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnLeftTrigger(CallbackContext context)
     {
         int buttonIndex = 5;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -161,10 +167,11 @@ public class monstroInputHandler : MonoBehaviour
     public void OnRightTigger(CallbackContext context)
     {
         int buttonIndex = 6;
-        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (mappedMonstroParts[buttonIndex] == null) return;
-        if (attackCooled == false) return;
-        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;
+        if (mappedMonstroParts[buttonIndex] == null) return;//there was never a part assigned to the button
+        if (partHandler.availableAttackingParts.Contains(mappedMonstroParts[buttonIndex]) == false) return;//the part has likely been removed
+        if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;//the player is stuck in a damage animation
+        if (attackCooled == false) return;//attack is still in a cooldown phase
+        if (currentlyAttackingPart != null && currentlyAttackingPart != mappedMonstroParts[buttonIndex]) return;//a different part is still going through its attack
 
         if (context.started)
         {
@@ -182,7 +189,8 @@ public class monstroInputHandler : MonoBehaviour
         attackStarted = true;
         StartCoroutine(buttonPressTimer());
         currentlyAttackingPart = mappedMonstroParts[mappedButton];
-        partHandler.windUp(mappedMonstroParts[mappedButton]);
+        partHandler.windUp(currentlyAttackingPart);
+        partHandler.lockAttackAnimation(currentlyAttackingPart);
         locomotion.attackEngaged();
     }
 
@@ -190,7 +198,6 @@ public class monstroInputHandler : MonoBehaviour
     {
         StopCoroutine(buttonPressTimer());
         StartCoroutine(attackCooldown());
-        currentlyAttackingPart = null;
         bool needsAttackMovement = false;
 
         if (attackMarkedHeavy)
@@ -233,6 +240,8 @@ public class monstroInputHandler : MonoBehaviour
             yield return new WaitForSeconds(lightAttackCooldownTime);
         }
 
+        partHandler.unlockAttackAnimation(currentlyAttackingPart);
+        currentlyAttackingPart = null;
         attackCooled = true;
     }
 
