@@ -12,6 +12,7 @@ public class monstroHealth : MonoBehaviour
     public int mappedParts = 1;
     private int partsLeft = 1;
     public Transform launchPoint;
+    public Collider hurtBox;
 
     //built in damage from hazards
     //hazard damage is built in to limit the traffic and back and forth needed for info that could just be sourced locally
@@ -68,15 +69,18 @@ public class monstroHealth : MonoBehaviour
     {
         //print("I have been destroyed!");
         locomotion.enabled = false;
+        hurtBox.enabled = false;
+        GetComponent<CharacterController>().enabled = false;
         health = 0;
         monstroFightManager fightManager = FindFirstObjectByType<monstroFightManager>();
-        fightManager.focusDamageCam();
-        monstroMiscVis.playDestroyedMonsterEffect();
+        fightManager.focusDamageCam(this.transform);
         StartCoroutine(destructionDelay());
     }
 
     IEnumerator destructionDelay()
     {
+        yield return new WaitForSecondsRealtime(0.5f);
+        monstroMiscVis.playDestroyedMonsterEffect();
         yield return new WaitForSecondsRealtime(1f);
         monstroVisuals.destroyMonster();
     }

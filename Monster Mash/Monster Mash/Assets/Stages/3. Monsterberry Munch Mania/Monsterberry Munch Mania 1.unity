@@ -1433,6 +1433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnimationHandler: {fileID: 2101830470}
   myAnimationClip: {fileID: 0}
+  isTrampolineAnimation: 0
 --- !u!1 &6617707
 GameObject:
   m_ObjectHideFlags: 0
@@ -15858,13 +15859,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShowDebugText: 0
   m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
+  m_IgnoreTimeScale: 1
   m_WorldUpOverride: {fileID: 0}
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 2
+    m_Time: 0.5
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -35392,6 +35393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnimationHandler: {fileID: 1651908589}
   myAnimationClip: {fileID: 0}
+  isTrampolineAnimation: 0
 --- !u!1 &259979328
 GameObject:
   m_ObjectHideFlags: 0
@@ -86090,6 +86092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnimationHandler: {fileID: 240340796}
   myAnimationClip: {fileID: 0}
+  isTrampolineAnimation: 0
 --- !u!1 &479842351
 GameObject:
   m_ObjectHideFlags: 0
@@ -111860,6 +111863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnimationHandler: {fileID: 865421637}
   myAnimationClip: {fileID: 0}
+  isTrampolineAnimation: 0
 --- !u!1 &602652766
 GameObject:
   m_ObjectHideFlags: 0
@@ -156303,6 +156307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnimationHandler: {fileID: 1973539298}
   myAnimationClip: {fileID: 0}
+  isTrampolineAnimation: 0
 --- !u!1 &852216257
 GameObject:
   m_ObjectHideFlags: 0
@@ -416583,6 +416588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnimationHandler: {fileID: 906083382}
   myAnimationClip: {fileID: 0}
+  isTrampolineAnimation: 0
 --- !u!1 &1902013109
 GameObject:
   m_ObjectHideFlags: 0
