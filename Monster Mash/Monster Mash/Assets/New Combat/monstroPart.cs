@@ -229,11 +229,22 @@ public class monstroPart : MonoBehaviour
         if (isRemoved) return;
 
         stopAnimations();
+        showMonster();
+        hideDamageVisual();
         isRemoved = true;
         this.transform.parent = null;
         breakawayColliders.SetActive(true);
         this.GetComponent<Rigidbody>().isKinematic = false;
+        StartCoroutine(dissolveDelay());
         //note that in full implimentation, the part's true scale has to be reapplied in case it ends up squished from damage animations
+    }
+
+    IEnumerator dissolveDelay()
+    {
+        yield return new WaitForSeconds(3);
+        this.GetComponent<Rigidbody>().isKinematic = true;
+        breakawayColliders.SetActive(false);
+        monstroPartAnimator.SetTrigger("dissolve");
     }
 
     //these functions stop attacking limbs from stopping mid attack while landing or falling
@@ -408,6 +419,4 @@ public class monstroPart : MonoBehaviour
         monstroPartAnimator.SetBool("onFire", false);
         monstroPartAnimator.SetTrigger("remove status");
     }
-
-
 }

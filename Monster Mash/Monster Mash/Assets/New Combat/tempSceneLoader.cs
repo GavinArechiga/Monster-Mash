@@ -8,6 +8,22 @@ public class tempSceneLoader : MonoBehaviour
     public GameObject[] flightButtons;
     public GameObject[] nonFlightButtons;
     private monstroPartHandler player1;
+    public GameObject testRoomEnabler;
+    public GameObject stageButtons;
+    public GameObject monsterHolderButton;
+    public GameObject playerJoinMessage;
+
+    public void player1Join()
+    {
+        playerJoinMessage.SetActive(true);
+        monsterHolderButton.SetActive(true);
+    }
+
+    public void monsterSelected()
+    {
+        monsterHolderButton.SetActive(false);
+        stageButtons.SetActive(true);
+    }
 
     public void loadBlockParty()
     {
@@ -27,6 +43,11 @@ public class tempSceneLoader : MonoBehaviour
     public void loadBeastdome()
     {
         SceneManager.LoadScene(4);
+    }
+
+    public void loadTestRoom()
+    {
+        testRoomEnabler.SetActive(true);
     }
 
     public void givePlayerFlight(int playerNumber)
@@ -59,5 +80,6 @@ public class tempSceneLoader : MonoBehaviour
     {
         player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
         player1.assignMonstroPartHolder(monsterPartHolder);
+        monsterSelected();
     }
 }

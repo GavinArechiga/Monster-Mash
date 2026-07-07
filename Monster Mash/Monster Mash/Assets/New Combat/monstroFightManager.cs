@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering;
 
 public class monstroFightManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class monstroFightManager : MonoBehaviour
     private CinemachineTargetGroup cameraTargetGroup;
     private stadiumCamera beastdomeCamera;//yes its super specific but it feels like the only way right now to find out when a monster is removed from the scene
     public CinemachineVirtualCamera damageCam;
+    public Animator damageCamScreenEffect;
+    
 
     //this scripts goal is to take players loaded into the scene and place them on to spawn points
     //it will also tell player input handlers to switch to the monster action map
@@ -143,17 +146,20 @@ public class monstroFightManager : MonoBehaviour
         respawningMonster.GetComponent<monstroLocomotion>().enabled = true;
     }
 
-    public void focusDamageCam()
+    public void focusDamageCam(Transform destroyedMonster)
     {
-        damageCam.Priority = 20;
+        damageCam.Follow = destroyedMonster;
+        damageCam.LookAt = destroyedMonster;
+        damageCam.Priority = 100;
         Time.timeScale = 0.2f;
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
+        damageCamScreenEffect.SetTrigger("play");
         StartCoroutine(damageCamTimer());
     }
 
     IEnumerator damageCamTimer()
     {
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(3f);
         unfocusDamageCam();
     }
 
@@ -162,6 +168,7 @@ public class monstroFightManager : MonoBehaviour
         damageCam.Priority = 0;
         Time.timeScale = 1f;
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
+        damageCamScreenEffect.ResetTrigger("play");
     }
 
 }
