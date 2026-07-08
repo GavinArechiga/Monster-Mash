@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8824124411310390822
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
+  m_Name: PaniniProjection
+  m_EditorClassIdentifier: 
+  active: 1
+  distance:
+    m_OverrideState: 1
+    m_Value: 1
+  cropToFit:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-6524442451824196527
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -56,7 +75,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: 0.394
   xMultiplier:
     m_OverrideState: 0
     m_Value: 1
@@ -93,7 +112,7 @@ MonoBehaviour:
     m_Value: 0.339
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.174
+    m_Value: 0.412
   rounded:
     m_OverrideState: 1
     m_Value: 1
@@ -138,9 +157,12 @@ MonoBehaviour:
   - {fileID: 2724093833889949791}
   - {fileID: -3316016350901110648}
   - {fileID: -44221673252949036}
-  - {fileID: 7831820591385067718}
   - {fileID: -6524442451824196527}
   - {fileID: -266413707997350017}
+  - {fileID: -8824124411310390822}
+  - {fileID: 7838087562216921697}
+  - {fileID: 9103855793771621647}
+  - {fileID: 8565155059395179690}
 --- !u!114 &2724093833889949791
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -157,7 +179,7 @@ MonoBehaviour:
   intensity:
     m_OverrideState: 1
     m_Value: 0.317
---- !u!114 &7831820591385067718
+--- !u!114 &7838087562216921697
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,22 +188,102 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
-  m_Name: ColorAdjustments
+  m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
+  m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
   active: 1
-  postExposure:
-    m_OverrideState: 1
-    m_Value: 1
-  contrast:
-    m_OverrideState: 1
-    m_Value: -25
-  colorFilter:
+  lift:
     m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  hueShift:
+    m_Value: {x: 1, y: 1, z: 1, w: -0.016233891}
+  gamma:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0.4220779}
+  gain:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0.30844152}
+--- !u!114 &8565155059395179690
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
+  m_Name: DepthOfField
+  m_EditorClassIdentifier: 
+  active: 1
+  mode:
+    m_OverrideState: 1
+    m_Value: 2
+  gaussianStart:
+    m_OverrideState: 0
+    m_Value: 10
+  gaussianEnd:
+    m_OverrideState: 0
+    m_Value: 30
+  gaussianMaxRadius:
+    m_OverrideState: 0
+    m_Value: 1
+  highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
-  saturation:
+  focusDistance:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 16.94
+  aperture:
+    m_OverrideState: 1
+    m_Value: 1.1
+  focalLength:
+    m_OverrideState: 1
+    m_Value: 65
+  bladeCount:
+    m_OverrideState: 0
+    m_Value: 4
+  bladeCurvature:
+    m_OverrideState: 0
+    m_Value: 1
+  bladeRotation:
+    m_OverrideState: 0
+    m_Value: 0
+--- !u!114 &9103855793771621647
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdfbdbb87d3286943a057f7791b43141, type: 3}
+  m_Name: ChannelMixer
+  m_EditorClassIdentifier: 
+  active: 1
+  redOutRedIn:
+    m_OverrideState: 0
+    m_Value: 100
+  redOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 0
+  redOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 0
+  greenOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  greenOutGreenIn:
+    m_OverrideState: 1
+    m_Value: 123
+  greenOutBlueIn:
+    m_OverrideState: 1
+    m_Value: -21
+  blueOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 100
