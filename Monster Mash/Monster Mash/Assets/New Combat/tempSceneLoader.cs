@@ -76,8 +76,17 @@ public class tempSceneLoader : MonoBehaviour
         }
     }
 
-    public void attachMonsterPlayer1(Transform monsterPartHolder)
+    public void attachMonster1Player(Transform monsterPartHolder)
     {
+        monsterPartHolder.gameObject.SetActive(true);
+        player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
+        player1.assignMonstroPartHolder(monsterPartHolder);
+        monsterSelected();
+    }
+
+    public void attachMonster2Player(Transform monsterPartHolder)
+    {
+        monsterPartHolder.gameObject.SetActive(true);
         player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
         player1.assignMonstroPartHolder(monsterPartHolder);
         monsterSelected();

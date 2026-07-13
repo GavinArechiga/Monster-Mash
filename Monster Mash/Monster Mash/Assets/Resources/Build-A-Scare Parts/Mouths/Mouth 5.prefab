@@ -515,7 +515,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8982890767793866470}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 28.46888, y: -19.649757, z: -48.011284}
+  m_LocalEulerAnglesHint: {x: 0.000010000438, y: -1.427912, z: 0.000000017554141}
 --- !u!1 &8982890766401584474
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,7 +546,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8982890767793866470}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 20.302435, y: 21.450794, z: 7.980667}
+  m_LocalEulerAnglesHint: {x: 0, y: 1.2722218e-14, z: 0}
 --- !u!1 &8982890766646235155
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,7 +688,7 @@ Animator:
   m_GameObject: {fileID: 8982890766692083436}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: eb7f296f0087b8840a561c5855ca1e01, type: 2}
+  m_Controller: {fileID: 9100000, guid: bde9a113139727442bbf70cbfce1e53b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -713,19 +713,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monstroPartDropDown: 8
   lightAttackTypeDropDown: 2
+  lightAttackDamage: 0
   heavyAttackTypeDropDown: 3
+  heavyStatusEffectDropDown: 0
+  heavyAttackDamage: 0
   bodyPlacementDropDown: 0
-  monstroPartAnimator: {fileID: 8982890766692083411}
-  idleAnimation: {fileID: 0}
-  runAnimation: {fileID: 0}
-  walkAnimation: {fileID: 0}
-  fallAnimation: {fileID: 0}
-  jumpAnimation: {fileID: 0}
-  doubleJumpAnimation: {fileID: 0}
-  landAnimation: {fileID: 0}
-  windUpAnimation: {fileID: 0}
-  lightAttackAnimation: {fileID: 0}
-  heavyAttackAnimation: {fileID: 0}
+  animationControllerTemplate: {fileID: 9100000, guid: 237abf96ed9a51143a93cf35aefa8266,
+    type: 2}
+  animationSystem:
+    staticAnimation: {fileID: 7400000, guid: 8bba00b6a26a2e24a9b5180dafde48cc, type: 2}
+    idleAnimation: {fileID: 7400000, guid: e668c6492a3550146ab5ffa86514d105, type: 2}
+    runAnimation: {fileID: 0}
+    walkAnimation: {fileID: 0}
+    fallAnimation: {fileID: 7400000, guid: a7a97b4fe0b29ab409ff44ed38997b31, type: 2}
+    jumpAnimation: {fileID: 7400000, guid: 6bb6af76561d12e4299f43f00b4555c5, type: 2}
+    doubleJumpAnimation: {fileID: 7400000, guid: 6bb6af76561d12e4299f43f00b4555c5,
+      type: 2}
+    landAnimation: {fileID: 7400000, guid: 3d41279456333424fb2b927ed873530e, type: 2}
+    windUpAnimation: {fileID: 7400000, guid: 8415f197391555340ae47d23caf2d980, type: 2}
+    lightAttackAnimation: {fileID: 7400000, guid: a2634c8cc4bb25d409126cba187da7b3,
+      type: 2}
+    altLightAttackAnimation: {fileID: 0}
+    heavyAttackAnimation: {fileID: 7400000, guid: 78ad93582e56c9d4382c77d48b2673a4,
+      type: 2}
+    braceAnimation: {fileID: 7400000, guid: 997f6620806143240a435b77affb2db7, type: 2}
+    altBraceAnimation: {fileID: 0}
+    lightHitAnimation: {fileID: 7400000, guid: 3239541a046fd934586cef49077d4691, type: 2}
+    heavyHitAnimation: {fileID: 7400000, guid: 3239541a046fd934586cef49077d4691, type: 2}
+    dissolveAnimation: {fileID: 7400000, guid: fd5022b50bcd68f49bfb0b8bb8c408f6, type: 2}
+    burningAnimation: {fileID: 7400000, guid: a7a97b4fe0b29ab409ff44ed38997b31, type: 2}
+    electrocutionAnimation: {fileID: 7400000, guid: 997f6620806143240a435b77affb2db7,
+      type: 2}
   myMeshes: []
   mySkinnedMeshes:
   - {fileID: 8982890766646235157}
@@ -786,7 +804,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8982890767158906340}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.0000025356908, y: 14.688813, z: 0.000009673173}
+  m_LocalEulerAnglesHint: {x: -0.008060463, y: 14.267, z: -37.86227}
 --- !u!1 &8982890767014947053
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,7 +925,7 @@ Transform:
   - {fileID: 8982890766923249349}
   m_Father: {fileID: 8982890767466551019}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -13.627881, y: 10.087195, z: 44.470684}
+  m_LocalEulerAnglesHint: {x: -20.12613, y: 12.471301, z: 26.925892}
 --- !u!1 &8982890767284844413
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,7 +956,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8982890767793866470}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -25.307867}
+  m_LocalEulerAnglesHint: {x: -1.3703552, y: 1.0842144, z: 4.874722}
 --- !u!1 &8982890767301929396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,7 +1076,7 @@ Transform:
   - {fileID: 8982890767158906340}
   m_Father: {fileID: 8982890767793866470}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -25.33403}
+  m_LocalEulerAnglesHint: {x: 1.716, y: 4.682, z: -45.779}
 --- !u!1 &8982890767612692029
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,7 +1107,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8982890767793866470}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 22.65485}
+  m_LocalEulerAnglesHint: {x: -2.306, y: -2.743009, z: -11.052881}
 --- !u!1 &8982890767793866471
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1133,7 @@ Transform:
   m_GameObject: {fileID: 8982890767793866471}
   m_LocalRotation: {x: 0.114044435, y: 0.69784933, z: 0.11404446, w: 0.6978496}
   m_LocalPosition: {x: 0, y: 0.10699999, z: -0.039521813}
-  m_LocalScale: {x: 1.0898378, y: 1.6924105, z: 1.769}
+  m_LocalScale: {x: 1.0898378, y: 1.69241, z: 1.769}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8982890766401584477}
@@ -1157,7 +1175,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8982890767793866470}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 1.2771803, y: -7.3491063, z: 103.53053}
+  m_LocalEulerAnglesHint: {x: 45.824165, y: 5.972, z: 110.139}
 --- !u!1 &8982890768264479668
 GameObject:
   m_ObjectHideFlags: 0
