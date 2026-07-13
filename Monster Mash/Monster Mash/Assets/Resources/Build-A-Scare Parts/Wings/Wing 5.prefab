@@ -408,19 +408,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monstroPartDropDown: 6
   lightAttackTypeDropDown: 0
+  lightAttackDamage: 0
   heavyAttackTypeDropDown: 0
+  heavyStatusEffectDropDown: 0
+  heavyAttackDamage: 0
   bodyPlacementDropDown: 0
-  monstroPartAnimator: {fileID: 6531784585451875208}
-  idleAnimation: {fileID: 0}
-  runAnimation: {fileID: 0}
-  walkAnimation: {fileID: 0}
-  fallAnimation: {fileID: 0}
-  jumpAnimation: {fileID: 0}
-  doubleJumpAnimation: {fileID: 0}
-  landAnimation: {fileID: 0}
-  windUpAnimation: {fileID: 0}
-  lightAttackAnimation: {fileID: 0}
-  heavyAttackAnimation: {fileID: 0}
+  animationControllerTemplate: {fileID: 9100000, guid: 237abf96ed9a51143a93cf35aefa8266,
+    type: 2}
+  animationSystem:
+    staticAnimation: {fileID: 7400000, guid: 9b26884ebdc73244786e1ec30deb3245, type: 2}
+    idleAnimation: {fileID: 7400000, guid: ecfa8c282d3351e46971e83dbe657143, type: 2}
+    runAnimation: {fileID: 7400000, guid: f74dfcd1aa0c53a48b17b0b2924bb4b8, type: 2}
+    walkAnimation: {fileID: 7400000, guid: f74dfcd1aa0c53a48b17b0b2924bb4b8, type: 2}
+    fallAnimation: {fileID: 7400000, guid: 3722138e0e0b03d4193a5aac6051b636, type: 2}
+    jumpAnimation: {fileID: 7400000, guid: 129718d2ab4d6cd40a8de6064326e0fc, type: 2}
+    doubleJumpAnimation: {fileID: 7400000, guid: e4fdec859c10fad45805a2c4bed909b1,
+      type: 2}
+    landAnimation: {fileID: 7400000, guid: 3a2d791307c7d264a906167ea2e562f1, type: 2}
+    windUpAnimation: {fileID: 0}
+    lightAttackAnimation: {fileID: 0}
+    altLightAttackAnimation: {fileID: 0}
+    heavyAttackAnimation: {fileID: 0}
+    braceAnimation: {fileID: 7400000, guid: e96d8bd9b788a0a4a8c1f0cf010bdb66, type: 2}
+    lightHitAnimation: {fileID: 7400000, guid: f5bac2379c1ada041a85582172d06290, type: 2}
+    heavyHitAnimation: {fileID: 7400000, guid: f5bac2379c1ada041a85582172d06290, type: 2}
+    dissolveAnimation: {fileID: 7400000, guid: 7e8efeeed9bf1a6488d8a837c12dec6d, type: 2}
+    burningAnimation: {fileID: 7400000, guid: 3722138e0e0b03d4193a5aac6051b636, type: 2}
+    electrocutionAnimation: {fileID: 7400000, guid: e96d8bd9b788a0a4a8c1f0cf010bdb66,
+      type: 2}
   myMeshes: []
   mySkinnedMeshes:
   - {fileID: 4631642879300388908}

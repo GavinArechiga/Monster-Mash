@@ -78,12 +78,15 @@ public class monstroPartHandler : MonoBehaviour
             numberOfMappedParts++;
         }
 
-        //generateAnimators();
+        generateAnimators();
     }
 
     public void generateAnimators()
     {
-        myInputHandler.mappedMonstroParts[0].createNewAnimator();
+        for (int i = 0; i < myMonstroParts.Length; i++)
+        {
+            myMonstroParts[i].createNewAnimator();
+        }
     }
 
     public void startMonstroAnimations()
@@ -221,9 +224,19 @@ public class monstroPartHandler : MonoBehaviour
             else
             {
 
-                if (myMonstroParts[i] != attackingPart)
+                if (attackingPart.transform.localScale.x < 0)
                 {
-                    myMonstroParts[i].playBrace();
+                    if (myMonstroParts[i] != attackingPart)
+                    {
+                        myMonstroParts[i].playLeftBrace();
+                    }
+                }
+                else
+                {
+                    if (myMonstroParts[i] != attackingPart)
+                    {
+                        myMonstroParts[i].playRightBrace();
+                    }
                 }
             }
         }

@@ -1225,21 +1225,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monstroPartDropDown: 3
   lightAttackTypeDropDown: 2
+  lightAttackDamage: 0
   heavyAttackTypeDropDown: 1
+  heavyStatusEffectDropDown: 0
+  heavyAttackDamage: 0
   bodyPlacementDropDown: 0
-  monstroPartAnimator: {fileID: 9175760814968808897}
-  idleAnimation: {fileID: 7400000, guid: 367df9cc9eb4ef74daa6578e538e20cf, type: 2}
-  runAnimation: {fileID: 7400000, guid: e0916cc46b09cdb4e85fadc11431141a, type: 2}
-  walkAnimation: {fileID: 7400000, guid: e0916cc46b09cdb4e85fadc11431141a, type: 2}
-  fallAnimation: {fileID: 7400000, guid: c4f2fcfe97d9ca943af85150cd9a9f83, type: 2}
-  jumpAnimation: {fileID: 7400000, guid: a44b82a42b654844c819b604e5d995f9, type: 2}
-  doubleJumpAnimation: {fileID: 7400000, guid: a928161a14567384ebd0795b94c84a57, type: 2}
-  landAnimation: {fileID: 7400000, guid: ab9771aeb14c7964fb544cfa6ed6f835, type: 2}
-  windUpAnimation: {fileID: 7400000, guid: db15eeb52f7e21545a529ccdaac073a7, type: 2}
-  lightAttackAnimation: {fileID: 7400000, guid: 0c858ee22db52044fab8fb7cdf6ab72d,
+  animationControllerTemplate: {fileID: 9100000, guid: 237abf96ed9a51143a93cf35aefa8266,
     type: 2}
-  heavyAttackAnimation: {fileID: 7400000, guid: 6317fbd3f3a7eb3468d4ff6207cd66cb,
-    type: 2}
+  animationSystem:
+    staticAnimation: {fileID: 7400000, guid: 71355bec4435c9f4ca093bb0a1aab534, type: 2}
+    idleAnimation: {fileID: 7400000, guid: 367df9cc9eb4ef74daa6578e538e20cf, type: 2}
+    runAnimation: {fileID: 0}
+    walkAnimation: {fileID: 0}
+    fallAnimation: {fileID: 7400000, guid: c4f2fcfe97d9ca943af85150cd9a9f83, type: 2}
+    jumpAnimation: {fileID: 7400000, guid: a44b82a42b654844c819b604e5d995f9, type: 2}
+    doubleJumpAnimation: {fileID: 7400000, guid: a928161a14567384ebd0795b94c84a57,
+      type: 2}
+    landAnimation: {fileID: 7400000, guid: ab9771aeb14c7964fb544cfa6ed6f835, type: 2}
+    windUpAnimation: {fileID: 7400000, guid: db15eeb52f7e21545a529ccdaac073a7, type: 2}
+    lightAttackAnimation: {fileID: 7400000, guid: 0c858ee22db52044fab8fb7cdf6ab72d,
+      type: 2}
+    altLightAttackAnimation: {fileID: 0}
+    heavyAttackAnimation: {fileID: 7400000, guid: 6317fbd3f3a7eb3468d4ff6207cd66cb,
+      type: 2}
+    braceAnimation: {fileID: 7400000, guid: 6176cd5bd9d73664ca3007cae5c409ce, type: 2}
+    lightHitAnimation: {fileID: 7400000, guid: 782dcf37bbb18ca4d95d090f666456f1, type: 2}
+    heavyHitAnimation: {fileID: 7400000, guid: 782dcf37bbb18ca4d95d090f666456f1, type: 2}
+    dissolveAnimation: {fileID: 7400000, guid: 76b0f3d3d502be24db9e9528f9a52d03, type: 2}
+    burningAnimation: {fileID: 7400000, guid: c4f2fcfe97d9ca943af85150cd9a9f83, type: 2}
+    electrocutionAnimation: {fileID: 7400000, guid: 6176cd5bd9d73664ca3007cae5c409ce,
+      type: 2}
   myMeshes: []
   mySkinnedMeshes:
   - {fileID: 3973399331222626669}

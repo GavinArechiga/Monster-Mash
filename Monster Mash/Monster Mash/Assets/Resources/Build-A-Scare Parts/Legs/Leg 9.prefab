@@ -265,19 +265,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monstroPartDropDown: 4
   lightAttackTypeDropDown: 1
+  lightAttackDamage: 0
   heavyAttackTypeDropDown: 1
+  heavyStatusEffectDropDown: 0
+  heavyAttackDamage: 0
   bodyPlacementDropDown: 0
-  monstroPartAnimator: {fileID: 693267535654581827}
-  idleAnimation: {fileID: 0}
-  runAnimation: {fileID: 0}
-  walkAnimation: {fileID: 0}
-  fallAnimation: {fileID: 0}
-  jumpAnimation: {fileID: 0}
-  doubleJumpAnimation: {fileID: 0}
-  landAnimation: {fileID: 0}
-  windUpAnimation: {fileID: 0}
-  lightAttackAnimation: {fileID: 0}
-  heavyAttackAnimation: {fileID: 0}
+  animationControllerTemplate: {fileID: 9100000, guid: 237abf96ed9a51143a93cf35aefa8266,
+    type: 2}
+  animationSystem:
+    staticAnimation: {fileID: 7400000, guid: 7235ffc0b98bfa94eb23281456eeeb37, type: 2}
+    idleAnimation: {fileID: 7400000, guid: 730c18075abc1dc43b642578b34667e0, type: 2}
+    runAnimation: {fileID: 7400000, guid: b4b7a928bba01fb46974626fbf825aa4, type: 2}
+    walkAnimation: {fileID: 7400000, guid: 4fac0c4e6b062874f8c974f5911479d9, type: 2}
+    fallAnimation: {fileID: 7400000, guid: ea1b891e66c4ee24cbcef3c2cb65f2d0, type: 2}
+    jumpAnimation: {fileID: 7400000, guid: d52737dc60019eb49a876d990e6d6bf6, type: 2}
+    doubleJumpAnimation: {fileID: 7400000, guid: ec852ed7551720a439df2e7d46da527d,
+      type: 2}
+    landAnimation: {fileID: 7400000, guid: 44788013a0bc5014d8a86b700322e622, type: 2}
+    windUpAnimation: {fileID: 7400000, guid: 75aac17480d783f47803c5bcaa133029, type: 2}
+    lightAttackAnimation: {fileID: 7400000, guid: b51157e64f59a5e44ab68997e2902802,
+      type: 2}
+    altLightAttackAnimation: {fileID: 0}
+    heavyAttackAnimation: {fileID: 7400000, guid: be9033921197f8142a4efcf1d9d04ddb,
+      type: 2}
+    braceAnimation: {fileID: 7400000, guid: e593e699c7db48148bd0957968cd308d, type: 2}
+    altBraceAnimation: {fileID: 7400000, guid: f51af4c44e886ee4583c8bb8a0897f49, type: 2}
+    lightHitAnimation: {fileID: 7400000, guid: ec852ed7551720a439df2e7d46da527d, type: 2}
+    heavyHitAnimation: {fileID: 7400000, guid: ec852ed7551720a439df2e7d46da527d, type: 2}
+    dissolveAnimation: {fileID: 7400000, guid: 151c50c0260a38e4da96ca077b960258, type: 2}
+    burningAnimation: {fileID: 7400000, guid: b4b7a928bba01fb46974626fbf825aa4, type: 2}
+    electrocutionAnimation: {fileID: 7400000, guid: ec852ed7551720a439df2e7d46da527d,
+      type: 2}
   myMeshes: []
   mySkinnedMeshes:
   - {fileID: 871497753395641675}
@@ -772,7 +790,7 @@ Transform:
   m_GameObject: {fileID: 7541498624585274755}
   m_LocalRotation: {x: -0, y: -0.0013213753, z: -0, w: 0.99999917}
   m_LocalPosition: {x: 0, y: -2.2808836, z: 0.42466193}
-  m_LocalScale: {x: 24.457855, y: 24.457846, z: 24.457855}
+  m_LocalScale: {x: -24.45786, y: 24.457846, z: 24.457855}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2808930092276170155}

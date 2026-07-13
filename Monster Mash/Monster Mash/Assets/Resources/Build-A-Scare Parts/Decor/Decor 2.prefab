@@ -73,19 +73,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monstroPartDropDown: 10
   lightAttackTypeDropDown: 0
+  lightAttackDamage: 0
   heavyAttackTypeDropDown: 0
+  heavyStatusEffectDropDown: 0
+  heavyAttackDamage: 0
   bodyPlacementDropDown: 0
-  monstroPartAnimator: {fileID: 724654338358135440}
-  idleAnimation: {fileID: 0}
-  runAnimation: {fileID: 0}
-  walkAnimation: {fileID: 0}
-  fallAnimation: {fileID: 0}
-  jumpAnimation: {fileID: 0}
-  doubleJumpAnimation: {fileID: 0}
-  landAnimation: {fileID: 0}
-  windUpAnimation: {fileID: 0}
-  lightAttackAnimation: {fileID: 0}
-  heavyAttackAnimation: {fileID: 0}
+  animationControllerTemplate: {fileID: 9100000, guid: 237abf96ed9a51143a93cf35aefa8266,
+    type: 2}
+  animationSystem:
+    staticAnimation: {fileID: 7400000, guid: feadedce450745f44b99434472e9d392, type: 2}
+    idleAnimation: {fileID: 7400000, guid: fa96ceb623d045c42a4c31bd3dc1df9d, type: 2}
+    runAnimation: {fileID: 0}
+    walkAnimation: {fileID: 0}
+    fallAnimation: {fileID: 0}
+    jumpAnimation: {fileID: 0}
+    doubleJumpAnimation: {fileID: 0}
+    landAnimation: {fileID: 0}
+    windUpAnimation: {fileID: 0}
+    lightAttackAnimation: {fileID: 0}
+    altLightAttackAnimation: {fileID: 0}
+    heavyAttackAnimation: {fileID: 0}
+    braceAnimation: {fileID: 0}
+    lightHitAnimation: {fileID: 0}
+    heavyHitAnimation: {fileID: 0}
+    dissolveAnimation: {fileID: 0}
+    burningAnimation: {fileID: 0}
+    electrocutionAnimation: {fileID: 0}
   myMeshes: []
   mySkinnedMeshes:
   - {fileID: 724654339073753360}

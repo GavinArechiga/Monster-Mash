@@ -1,9 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class monstroPart : MonoBehaviour
-{   
+{
     public enum typesOfMonstroPart
     {
         none,
@@ -18,29 +17,6 @@ public class monstroPart : MonoBehaviour
         horn,
         decor
     }
-
-    public typesOfMonstroPart monstroPartDropDown = new typesOfMonstroPart();
-
-    public enum typesOfLightAttack
-    {
-        none,
-        physical,
-        projectile,
-        AOE
-    }
-
-    public typesOfLightAttack lightAttackTypeDropDown = new typesOfLightAttack();
-
-    public enum typesOfHeavyAttack
-    {
-        none,
-        physical,
-        projectile,
-        AOE
-    }
-
-    public typesOfHeavyAttack heavyAttackTypeDropDown = new typesOfHeavyAttack();
-
     public enum typesOfBodyPlacement
     {
         none,
@@ -62,21 +38,71 @@ public class monstroPart : MonoBehaviour
         topHead
     }
 
+    public enum typesOfLightAttack
+    {
+        none,
+        physical,
+        projectile,
+        AOE
+    }
+
+    public enum typesOfHeavyAttack
+    {
+        none,
+        physical,
+        projectile,
+        AOE
+    }
+
+    public enum typesOfHeavyStatusEffect
+    {
+        none, 
+        burning,
+        electrocution
+    }
+
+    [System.Serializable]
+    public class animationList
+    {
+        public AnimationClip staticAnimation;
+        public AnimationClip idleAnimation;
+        public AnimationClip runAnimation;
+        public AnimationClip walkAnimation;
+        public AnimationClip fallAnimation;
+        public AnimationClip jumpAnimation;
+        public AnimationClip doubleJumpAnimation;
+        public AnimationClip landAnimation;
+        public AnimationClip windUpAnimation;
+        public AnimationClip lightAttackAnimation;
+        public AnimationClip altLightAttackAnimation;
+        public AnimationClip heavyAttackAnimation;
+        public AnimationClip braceAnimation;
+        public AnimationClip altBraceAnimation;
+        public AnimationClip lightHitAnimation;
+        public AnimationClip heavyHitAnimation;
+        public AnimationClip dissolveAnimation;
+        public AnimationClip burningAnimation;
+        public AnimationClip electrocutionAnimation;
+    }
+
+    [Header("Monstro Part Info")]
+    public typesOfMonstroPart monstroPartDropDown = new typesOfMonstroPart();
+    public typesOfLightAttack lightAttackTypeDropDown = new typesOfLightAttack();
+    public int lightAttackDamage;
+    public typesOfHeavyAttack heavyAttackTypeDropDown = new typesOfHeavyAttack();
+    public typesOfHeavyStatusEffect heavyStatusEffectDropDown = new typesOfHeavyStatusEffect();
+    public int heavyAttackDamage;
     public typesOfBodyPlacement bodyPlacementDropDown = new typesOfBodyPlacement();
+    private bool isAttacking = false;
+    private bool isRemoved = false;
 
-
-    public Animator monstroPartAnimator;
+    [Header("Animation Set Up")]
+    public RuntimeAnimatorController animationControllerTemplate;
+    public animationList animationSystem = new animationList();
+    private Animator monstroPartAnimator;
     AnimatorOverrideController instancedAnimator;
-    public AnimationClip idleAnimation;
-    public AnimationClip runAnimation;
-    public AnimationClip walkAnimation;
-    public AnimationClip fallAnimation;
-    public AnimationClip jumpAnimation;
-    public AnimationClip doubleJumpAnimation;
-    public AnimationClip landAnimation;
-    public AnimationClip windUpAnimation;
-    public AnimationClip lightAttackAnimation;
-    public AnimationClip heavyAttackAnimation;
+
+    [Header("Meshes, Damage Visuals, and Colliders")]
     public MeshRenderer[] myMeshes;
     public SkinnedMeshRenderer[] mySkinnedMeshes;
     public SpriteRenderer[] mySpriteRenderers;
@@ -84,26 +110,113 @@ public class monstroPart : MonoBehaviour
     public SkinnedMeshRenderer[] myDamageSkinnedMeshes;
     public GameObject breakawayColliders;
 
-    private bool isAttacking = false;
-    private bool isRemoved = false;
-
     public void createNewAnimator() // this works, Im really just looking to make sure all the transitions feel good before a mass roll out
     {
         monstroPartAnimator = GetComponent<Animator>();
-        instancedAnimator = new AnimatorOverrideController(monstroPartAnimator.runtimeAnimatorController);
+        instancedAnimator = new AnimatorOverrideController(animationControllerTemplate);
 
-        instancedAnimator["idle"] = idleAnimation;
-        instancedAnimator["run"] = runAnimation;
-        instancedAnimator["walk"] = walkAnimation;
-        instancedAnimator["fall"] = fallAnimation;
-        instancedAnimator["jump"] = jumpAnimation;
-        instancedAnimator["double jump"] = doubleJumpAnimation;
-        instancedAnimator["land"] = landAnimation;
-        instancedAnimator["wind up"] = windUpAnimation;
-        instancedAnimator["light attack"] = lightAttackAnimation;
-        instancedAnimator["heavy attack"] = heavyAttackAnimation;
+        //static
+        if(animationSystem.staticAnimation != null)
+        {
+            instancedAnimator["static"] = animationSystem.staticAnimation;
+        }
+
+        if (animationSystem.idleAnimation != null)
+        {
+            instancedAnimator["idle"] = animationSystem.idleAnimation;
+        }
+
+        if (animationSystem.runAnimation != null)
+        {
+            instancedAnimator["run"] = animationSystem.runAnimation;
+        }
+
+        if (animationSystem.walkAnimation != null)
+        {
+            instancedAnimator["walk"] = animationSystem.walkAnimation;
+        }
+
+        if (animationSystem.fallAnimation != null)
+        {
+            instancedAnimator["fall"] = animationSystem.fallAnimation;
+        }
+
+        if (animationSystem.jumpAnimation != null)
+        {
+            instancedAnimator["jump"] = animationSystem.jumpAnimation;
+        }
+
+        if (animationSystem.doubleJumpAnimation != null)
+        {
+            instancedAnimator["double jump"] = animationSystem.doubleJumpAnimation;
+        }
+
+        if (animationSystem.landAnimation != null)
+        {
+            instancedAnimator["land"] = animationSystem.landAnimation;
+        }
+
+        if (animationSystem.windUpAnimation != null)
+        {
+            instancedAnimator["wind up"] = animationSystem.windUpAnimation;
+        }
+
+        if (animationSystem.lightAttackAnimation != null)
+        {
+            instancedAnimator["light attack"] = animationSystem.lightAttackAnimation;
+        }
+
+        if (animationSystem.altLightAttackAnimation != null)
+        {
+            instancedAnimator["alt light attack"] = animationSystem.altLightAttackAnimation;
+        }
+
+        if (animationSystem.heavyAttackAnimation != null)
+        {
+            instancedAnimator["heavy attack"] = animationSystem.heavyAttackAnimation;
+        }
+
+        if (animationSystem.braceAnimation != null)
+        {
+            instancedAnimator["brace"] = animationSystem.braceAnimation;
+        }
+
+        if (animationSystem.altBraceAnimation != null)
+        {
+            instancedAnimator["alt brace"] = animationSystem.altBraceAnimation;
+        }
+
+        if (animationSystem.lightHitAnimation != null)
+        {
+            instancedAnimator["light hit"] = animationSystem.lightHitAnimation;
+        }
+
+        if (animationSystem.heavyHitAnimation != null)
+        {
+            instancedAnimator["heavy hit"] = animationSystem.heavyHitAnimation;
+        }
+
+        if (animationSystem.dissolveAnimation != null)
+        {
+            instancedAnimator["dissolve"] = animationSystem.dissolveAnimation;
+        }
+
+        if (animationSystem.burningAnimation != null)
+        {
+            instancedAnimator["burning"] = animationSystem.burningAnimation;
+        }
+
+        if (animationSystem.electrocutionAnimation != null)
+        {
+            instancedAnimator["electrocution"] = animationSystem.electrocutionAnimation;
+        }
 
         monstroPartAnimator.runtimeAnimatorController = instancedAnimator;
+
+        if (this.transform.localScale.x < 0 && monstroPartDropDown.ToString() == "leg")
+        {
+            monstroPartAnimator.SetFloat("legOffset", 0.5f);
+        }
     }
 
     public void cleanAnimations()
@@ -263,6 +376,8 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (isAttacking) return;
+        if (animationSystem.idleAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetBool("isRunning", false);
@@ -274,6 +389,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.walkAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetBool("isWalking", true);
@@ -285,6 +401,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.runAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetBool("isRunning", true);
@@ -296,15 +413,18 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.jumpAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("jump");
+        monstroPartAnimator.SetBool("isGrounded", false);
     }
 
     public void playDoubleJump()
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.doubleJumpAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("double jump");
@@ -315,9 +435,11 @@ public class monstroPart : MonoBehaviour
         if (monstroPartAnimator == null) return;
         if (isAttacking) return;
         if (isRemoved) return;
+        if (animationSystem.fallAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("fall");
+        monstroPartAnimator.SetBool("isGrounded", false);
     }
 
     public void playLand()
@@ -325,15 +447,18 @@ public class monstroPart : MonoBehaviour
         if (monstroPartAnimator == null) return;
         if (isAttacking) return;
         if (isRemoved) return;
+        if (animationSystem.landAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("land");
+        monstroPartAnimator.SetBool("isGrounded", true);
     }
 
     public void playWindUp()
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.windUpAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("wind up");
@@ -343,6 +468,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.lightAttackAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("light attack");
@@ -352,24 +478,53 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.heavyAttackAnimation == null) return;
         cleanAnimations();
 
         monstroPartAnimator.SetTrigger("heavy attack");
     }
 
-    public void playBrace()
+    public void playRightBrace()
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (isAttacking) return;
+        if (animationSystem.braceAnimation == null) return;
         cleanAnimations();
 
-        monstroPartAnimator.SetTrigger("brace");
+        if (this.transform.localScale.x < 0 && animationSystem.altBraceAnimation != null)
+        {
+            monstroPartAnimator.SetTrigger("alt brace");
+        }
+        else
+        {
+            monstroPartAnimator.SetTrigger("brace");
+        }
+    }
+
+    public void playLeftBrace()
+    {
+        if (monstroPartAnimator == null) return;
+        if (isRemoved) return;
+        if (isAttacking) return;
+        if (animationSystem.braceAnimation == null) return;
+        cleanAnimations();
+
+        if (this.transform.localScale.x > 0 && animationSystem.altBraceAnimation != null)
+        {
+            monstroPartAnimator.SetTrigger("alt brace");
+        }
+        else
+        {
+            monstroPartAnimator.SetTrigger("brace");
+        }
     }
 
     public void playLightHit()
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.lightHitAnimation == null) return;
 
         cleanAnimations();
         unlockAttackAnimation();
@@ -381,6 +536,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.heavyHitAnimation == null) return;
 
         cleanAnimations();
         unlockAttackAnimation();
@@ -392,6 +548,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.burningAnimation == null) return;
 
         cleanAnimations();
 
@@ -403,6 +560,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (animationSystem.electrocutionAnimation == null) return;
 
         cleanAnimations();
 
