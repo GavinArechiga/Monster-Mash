@@ -14,6 +14,7 @@ Material:
   - _ALPHABLEND_ON
   - _CFXR_DISSOLVE
   - _CFXR_DITHERED_SHADOWS_ON
+  - _CFXR_EDGE_FADING
   - _FADING_ON
   m_InvalidKeywords:
   - _
@@ -72,11 +73,11 @@ Material:
     - _DebugDissolveTime: 0
     - _DirLightScreenAtten: 1
     - _DirectLightingRamp: 1
-    - _DissolveSmooth: 0.15
+    - _DissolveSmooth: 0.135
     - _Distort: 0.1
     - _DoubleDissolve: 0
     - _DstBlend: 10
-    - _EdgeFadePow: 1
+    - _EdgeFadePow: 15.37
     - _FadeAlongU: 0
     - _HdrBoost: 0
     - _HdrMultiply: 3
@@ -89,15 +90,15 @@ Material:
     - _SecondColorSmooth: 0.2
     - _ShadowStrength: 0.5
     - _SingleChannel: 0
-    - _SoftParticlesFadeDistanceFar: 1
-    - _SoftParticlesFadeDistanceNear: 0
+    - _SoftParticlesFadeDistanceFar: -0.33
+    - _SoftParticlesFadeDistanceNear: 1.8
     - _SrcBlend: 5
     - _UVDistortionAdd: 0
     - _UseAlphaClip: 0
     - _UseBackLighting: 0
     - _UseDissolve: 1
     - _UseDissolveOffsetUV: 0
-    - _UseEF: 0
+    - _UseEF: 1
     - _UseEmission: 0
     - _UseFB: 0
     - _UseFontColor: 0
