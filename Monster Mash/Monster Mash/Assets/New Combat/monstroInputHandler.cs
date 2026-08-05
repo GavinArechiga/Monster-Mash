@@ -253,7 +253,13 @@ public class monstroInputHandler : MonoBehaviour
         }
     }
 
-    public void switchToMonsterControls()
+    public void switchToFightControls()
+    {
+        locomotion.enabled = true;
+        playerInput.SwitchCurrentActionMap("Monstro Fighter");
+    }
+
+    public void switchToHubControls()
     {
         locomotion.enabled = true;
         playerInput.SwitchCurrentActionMap("Monstro Movement");

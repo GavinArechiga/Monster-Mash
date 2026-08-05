@@ -2,7 +2,7 @@
     "name": "monstroControls",
     "maps": [
         {
-            "name": "Monstro Movement",
+            "name": "Monstro Fighter",
             "id": "729db50a-e3af-4c72-ba10-2e3e35aa1a92",
             "actions": [
                 {
@@ -204,6 +204,54 @@
                     "processors": "",
                     "groups": "",
                     "action": "Right Trigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Monstro Movement",
+            "id": "047908a0-cf91-4f91-a531-2ce851533b69",
+            "actions": [
+                {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "1e38cce5-e903-4cc6-a39a-bd7c190254cf",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "4c8a3342-18f5-47d0-a0bd-028650e0c582",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e8abc84c-0589-49c5-a28c-8e38999861ea",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1f0e731-a1e2-4a43-a6eb-69f6b54f9d76",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

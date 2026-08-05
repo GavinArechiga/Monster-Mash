@@ -96,7 +96,7 @@ public class monstroFightManager : MonoBehaviour
         }
 
         //change monster controls from UI to character movement
-        spawningMonster.switchToMonsterControls();
+        spawningMonster.switchToFightControls();
     }
 
     public void respawnPlayer(GameObject outOfBoundsMonster)

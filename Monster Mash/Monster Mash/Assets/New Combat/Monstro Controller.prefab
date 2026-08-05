@@ -142583,6 +142583,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4025e467-67be-4c61-8d94-44e47c649465
     m_ActionName: Monstro Movement/Right Trigger[/XInputControllerWindows/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1e38cce5-e903-4cc6-a39a-bd7c190254cf
+    m_ActionName: Monstro Movement/Movement
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4c8a3342-18f5-47d0-a0bd-028650e0c582
+    m_ActionName: Monstro Movement/Jump
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Monstro UI
