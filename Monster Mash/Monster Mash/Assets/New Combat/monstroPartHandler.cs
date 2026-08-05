@@ -29,6 +29,11 @@ public class monstroPartHandler : MonoBehaviour
         myMonsterPartHolder = newMonsterPartHolder.GetComponent<monstroHolder>();
         availableAttackingParts.Clear();
 
+        if(myInputHandler == null)
+        {
+            myInputHandler = GetComponent<monstroInputHandler>();
+        }
+
         if (myMonsterPartHolder.buttonEast_MonstroPart != null)
         {
             myInputHandler.mappedMonstroParts[0] = myMonsterPartHolder.buttonEast_MonstroPart;

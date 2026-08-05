@@ -24,7 +24,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     ""name"": ""monstroControls"",
     ""maps"": [
         {
-            ""name"": ""Monstro Movement"",
+            ""name"": ""Monstro Fighter"",
             ""id"": ""729db50a-e3af-4c72-ba10-2e3e35aa1a92"",
             ""actions"": [
                 {
@@ -232,6 +232,54 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""Monstro Movement"",
+            ""id"": ""047908a0-cf91-4f91-a531-2ce851533b69"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""1e38cce5-e903-4cc6-a39a-bd7c190254cf"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""4c8a3342-18f5-47d0-a0bd-028650e0c582"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e8abc84c-0589-49c5-a28c-8e38999861ea"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1f0e731-a1e2-4a43-a6eb-69f6b54f9d76"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Monstro UI"",
             ""id"": ""8f1bb257-5cca-4986-9e39-3f475aad3785"",
             ""actions"": [
@@ -262,18 +310,22 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
+        // Monstro Fighter
+        m_MonstroFighter = asset.FindActionMap("Monstro Fighter", throwIfNotFound: true);
+        m_MonstroFighter_Movement = m_MonstroFighter.FindAction("Movement", throwIfNotFound: true);
+        m_MonstroFighter_Jump = m_MonstroFighter.FindAction("Jump", throwIfNotFound: true);
+        m_MonstroFighter_Pause = m_MonstroFighter.FindAction("Pause", throwIfNotFound: true);
+        m_MonstroFighter_ButtonEast = m_MonstroFighter.FindAction("Button East", throwIfNotFound: true);
+        m_MonstroFighter_ButtonWest = m_MonstroFighter.FindAction("Button West", throwIfNotFound: true);
+        m_MonstroFighter_ButtonNorth = m_MonstroFighter.FindAction("Button North", throwIfNotFound: true);
+        m_MonstroFighter_LeftBumper = m_MonstroFighter.FindAction("Left Bumper", throwIfNotFound: true);
+        m_MonstroFighter_RightBumper = m_MonstroFighter.FindAction("Right Bumper", throwIfNotFound: true);
+        m_MonstroFighter_LeftTrigger = m_MonstroFighter.FindAction("Left Trigger", throwIfNotFound: true);
+        m_MonstroFighter_RightTrigger = m_MonstroFighter.FindAction("Right Trigger", throwIfNotFound: true);
         // Monstro Movement
         m_MonstroMovement = asset.FindActionMap("Monstro Movement", throwIfNotFound: true);
         m_MonstroMovement_Movement = m_MonstroMovement.FindAction("Movement", throwIfNotFound: true);
         m_MonstroMovement_Jump = m_MonstroMovement.FindAction("Jump", throwIfNotFound: true);
-        m_MonstroMovement_Pause = m_MonstroMovement.FindAction("Pause", throwIfNotFound: true);
-        m_MonstroMovement_ButtonEast = m_MonstroMovement.FindAction("Button East", throwIfNotFound: true);
-        m_MonstroMovement_ButtonWest = m_MonstroMovement.FindAction("Button West", throwIfNotFound: true);
-        m_MonstroMovement_ButtonNorth = m_MonstroMovement.FindAction("Button North", throwIfNotFound: true);
-        m_MonstroMovement_LeftBumper = m_MonstroMovement.FindAction("Left Bumper", throwIfNotFound: true);
-        m_MonstroMovement_RightBumper = m_MonstroMovement.FindAction("Right Bumper", throwIfNotFound: true);
-        m_MonstroMovement_LeftTrigger = m_MonstroMovement.FindAction("Left Trigger", throwIfNotFound: true);
-        m_MonstroMovement_RightTrigger = m_MonstroMovement.FindAction("Right Trigger", throwIfNotFound: true);
         // Monstro UI
         m_MonstroUI = asset.FindActionMap("Monstro UI", throwIfNotFound: true);
         m_MonstroUI_Newaction = m_MonstroUI.FindAction("New action", throwIfNotFound: true);
@@ -335,42 +387,42 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Monstro Movement
-    private readonly InputActionMap m_MonstroMovement;
-    private List<IMonstroMovementActions> m_MonstroMovementActionsCallbackInterfaces = new List<IMonstroMovementActions>();
-    private readonly InputAction m_MonstroMovement_Movement;
-    private readonly InputAction m_MonstroMovement_Jump;
-    private readonly InputAction m_MonstroMovement_Pause;
-    private readonly InputAction m_MonstroMovement_ButtonEast;
-    private readonly InputAction m_MonstroMovement_ButtonWest;
-    private readonly InputAction m_MonstroMovement_ButtonNorth;
-    private readonly InputAction m_MonstroMovement_LeftBumper;
-    private readonly InputAction m_MonstroMovement_RightBumper;
-    private readonly InputAction m_MonstroMovement_LeftTrigger;
-    private readonly InputAction m_MonstroMovement_RightTrigger;
-    public struct MonstroMovementActions
+    // Monstro Fighter
+    private readonly InputActionMap m_MonstroFighter;
+    private List<IMonstroFighterActions> m_MonstroFighterActionsCallbackInterfaces = new List<IMonstroFighterActions>();
+    private readonly InputAction m_MonstroFighter_Movement;
+    private readonly InputAction m_MonstroFighter_Jump;
+    private readonly InputAction m_MonstroFighter_Pause;
+    private readonly InputAction m_MonstroFighter_ButtonEast;
+    private readonly InputAction m_MonstroFighter_ButtonWest;
+    private readonly InputAction m_MonstroFighter_ButtonNorth;
+    private readonly InputAction m_MonstroFighter_LeftBumper;
+    private readonly InputAction m_MonstroFighter_RightBumper;
+    private readonly InputAction m_MonstroFighter_LeftTrigger;
+    private readonly InputAction m_MonstroFighter_RightTrigger;
+    public struct MonstroFighterActions
     {
         private @MonstroControls m_Wrapper;
-        public MonstroMovementActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_MonstroMovement_Movement;
-        public InputAction @Jump => m_Wrapper.m_MonstroMovement_Jump;
-        public InputAction @Pause => m_Wrapper.m_MonstroMovement_Pause;
-        public InputAction @ButtonEast => m_Wrapper.m_MonstroMovement_ButtonEast;
-        public InputAction @ButtonWest => m_Wrapper.m_MonstroMovement_ButtonWest;
-        public InputAction @ButtonNorth => m_Wrapper.m_MonstroMovement_ButtonNorth;
-        public InputAction @LeftBumper => m_Wrapper.m_MonstroMovement_LeftBumper;
-        public InputAction @RightBumper => m_Wrapper.m_MonstroMovement_RightBumper;
-        public InputAction @LeftTrigger => m_Wrapper.m_MonstroMovement_LeftTrigger;
-        public InputAction @RightTrigger => m_Wrapper.m_MonstroMovement_RightTrigger;
-        public InputActionMap Get() { return m_Wrapper.m_MonstroMovement; }
+        public MonstroFighterActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_MonstroFighter_Movement;
+        public InputAction @Jump => m_Wrapper.m_MonstroFighter_Jump;
+        public InputAction @Pause => m_Wrapper.m_MonstroFighter_Pause;
+        public InputAction @ButtonEast => m_Wrapper.m_MonstroFighter_ButtonEast;
+        public InputAction @ButtonWest => m_Wrapper.m_MonstroFighter_ButtonWest;
+        public InputAction @ButtonNorth => m_Wrapper.m_MonstroFighter_ButtonNorth;
+        public InputAction @LeftBumper => m_Wrapper.m_MonstroFighter_LeftBumper;
+        public InputAction @RightBumper => m_Wrapper.m_MonstroFighter_RightBumper;
+        public InputAction @LeftTrigger => m_Wrapper.m_MonstroFighter_LeftTrigger;
+        public InputAction @RightTrigger => m_Wrapper.m_MonstroFighter_RightTrigger;
+        public InputActionMap Get() { return m_Wrapper.m_MonstroFighter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MonstroMovementActions set) { return set.Get(); }
-        public void AddCallbacks(IMonstroMovementActions instance)
+        public static implicit operator InputActionMap(MonstroFighterActions set) { return set.Get(); }
+        public void AddCallbacks(IMonstroFighterActions instance)
         {
-            if (instance == null || m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_MonstroFighterActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonstroFighterActionsCallbackInterfaces.Add(instance);
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
@@ -403,7 +455,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @RightTrigger.canceled += instance.OnRightTrigger;
         }
 
-        private void UnregisterCallbacks(IMonstroMovementActions instance)
+        private void UnregisterCallbacks(IMonstroFighterActions instance)
         {
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
@@ -435,6 +487,60 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @RightTrigger.started -= instance.OnRightTrigger;
             @RightTrigger.performed -= instance.OnRightTrigger;
             @RightTrigger.canceled -= instance.OnRightTrigger;
+        }
+
+        public void RemoveCallbacks(IMonstroFighterActions instance)
+        {
+            if (m_Wrapper.m_MonstroFighterActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMonstroFighterActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MonstroFighterActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MonstroFighterActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MonstroFighterActions @MonstroFighter => new MonstroFighterActions(this);
+
+    // Monstro Movement
+    private readonly InputActionMap m_MonstroMovement;
+    private List<IMonstroMovementActions> m_MonstroMovementActionsCallbackInterfaces = new List<IMonstroMovementActions>();
+    private readonly InputAction m_MonstroMovement_Movement;
+    private readonly InputAction m_MonstroMovement_Jump;
+    public struct MonstroMovementActions
+    {
+        private @MonstroControls m_Wrapper;
+        public MonstroMovementActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_MonstroMovement_Movement;
+        public InputAction @Jump => m_Wrapper.m_MonstroMovement_Jump;
+        public InputActionMap Get() { return m_Wrapper.m_MonstroMovement; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MonstroMovementActions set) { return set.Get(); }
+        public void AddCallbacks(IMonstroMovementActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Add(instance);
+            @Movement.started += instance.OnMovement;
+            @Movement.performed += instance.OnMovement;
+            @Movement.canceled += instance.OnMovement;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+        }
+
+        private void UnregisterCallbacks(IMonstroMovementActions instance)
+        {
+            @Movement.started -= instance.OnMovement;
+            @Movement.performed -= instance.OnMovement;
+            @Movement.canceled -= instance.OnMovement;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IMonstroMovementActions instance)
@@ -498,7 +604,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         }
     }
     public MonstroUIActions @MonstroUI => new MonstroUIActions(this);
-    public interface IMonstroMovementActions
+    public interface IMonstroFighterActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
@@ -510,6 +616,11 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         void OnRightBumper(InputAction.CallbackContext context);
         void OnLeftTrigger(InputAction.CallbackContext context);
         void OnRightTrigger(InputAction.CallbackContext context);
+    }
+    public interface IMonstroMovementActions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
     public interface IMonstroUIActions
     {
