@@ -13,6 +13,11 @@ public class RotGizmo : MonoBehaviour
 
     private Vector3 ogScale;
     private Transform target;
+
+    [SerializeField] Material xRed;
+    [SerializeField] Material yYellow;
+    [SerializeField] Material zBlue;
+
     void Start()
     {
         ogScale = transform.localScale;
@@ -80,5 +85,29 @@ public class RotGizmo : MonoBehaviour
         Vector3 rot = transform.eulerAngles;
         rot.y = target.eulerAngles.y;
         transform.eulerAngles = rot;
+    }
+
+    public void MakeTransparent(string axis, bool trans) //true is transparent, false if opaque
+    {
+        int x = trans ? 1: 0;
+
+        if (axis == "all")
+        {
+            MakeTransparent("x", trans);
+            MakeTransparent("y", trans);
+            MakeTransparent("z", trans);
+        }
+        else if (axis == "x" && xRed.GetFloat("_Surface") != x)
+        {
+            xRed.SetFloat("_Surface", x);
+        }
+        else if (axis == "y" && yYellow.GetFloat("_Surface") != x)
+        {
+            yYellow.SetFloat("_Surface", x);
+        }
+        else if (axis == "z" && zBlue.GetFloat("_Surface") != x)
+        {
+            zBlue.SetFloat("_Surface", x);
+        }
     }
 }

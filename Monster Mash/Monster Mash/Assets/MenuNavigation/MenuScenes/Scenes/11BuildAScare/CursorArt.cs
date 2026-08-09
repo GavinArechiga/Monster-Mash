@@ -14,8 +14,12 @@ public class CursorArt : MonoBehaviour
 
     [SerializeField] private GameObject[] handAssets = new GameObject[3];
 
+    private Hands currHand;
+
     public void Change(Hands pose)
     {
+        currHand = pose;
+
         if (pose == Hands.point)
         {
             ChangeFR(0);
@@ -36,5 +40,10 @@ public class CursorArt : MonoBehaviour
         {
             handAssets[i].SetActive(x == i);
         }
+    }
+
+    public Hands GetHand()
+    {
+        return currHand;
     }
 }

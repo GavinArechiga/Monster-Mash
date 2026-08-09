@@ -36,6 +36,8 @@ public class BAS_PartSelect : MonoBehaviour
 
     public void SelectTorso(int x)
     {
+        print("torso select");
+
         selectedPart = partPool.GetMonsterParts()[0][x];
 
         var monsterPartLoad = Resources.Load<GameObject>(selectedPart);
@@ -121,5 +123,10 @@ public class BAS_PartSelect : MonoBehaviour
 
         //turn on the meshcollider cuz i actually need that
         monsterPart.GetComponentInChildren<MeshCollider>().enabled = true;
+    }
+
+    public void Hello()
+    {
+        print("Hello this button works");
     }
 }
