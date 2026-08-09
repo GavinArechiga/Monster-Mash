@@ -5,29 +5,35 @@ using UnityEngine;
 public class monstroHealth : MonoBehaviour
 {
     private monstroLocomotion locomotion;
+    private monstroPartHandler monstroVisuals;
     private monstroMiscVisuals monstroMiscVis;
     public int health = 200;
     private int healthPerPart = 200;
     public int mappedParts = 1;
     private int partsLeft = 1;
+    public Transform launchPoint;
+    public Collider hurtBox;
 
     //built in damage from hazards
     //hazard damage is built in to limit the traffic and back and forth needed for info that could just be sourced locally
     private int fireDamagePerSecond = 10;
     private bool isOnFire = false;
+    private bool enteredFireCollider = false;
     private int carDamage = 50;
     private int sharkDamage = 30;
-    private int toothDamage = 50;
     private int pressDamage = 50;
+    private int electricityDamage = 20;
 
     private void Awake()
     {
         locomotion = GetComponent<monstroLocomotion>();
+        monstroVisuals = GetComponent<monstroPartHandler>();
         monstroMiscVis = GetComponent<monstroMiscVisuals>();
     }
 
     public void resetHealth()
     {
+        mappedParts = monstroVisuals.numberOfMappedParts;
         partsLeft = mappedParts;
         health = healthPerPart * partsLeft;
     }
@@ -53,67 +59,127 @@ public class monstroHealth : MonoBehaviour
 
     private void loseMonsterPart()
     {
-        print("lost a monster part!");
+        //print("lost a monster part!");
+        monstroVisuals.removeRandomPart();
         partsLeft = partsLeft - 1;
+        monstroMiscVis.playLostLimbEffect();
     }
 
     private void totalDestruction()
     {
-        print("I have been destroyed!");
+        //print("I have been destroyed!");
+        locomotion.enabled = false;
+        hurtBox.enabled = false;
+        GetComponent<CharacterController>().enabled = false;
         health = 0;
+        monstroFightManager fightManager = FindFirstObjectByType<monstroFightManager>();
+        fightManager.focusDamageCam(this.transform);
+        StartCoroutine(destructionDelay());
+    }
+
+    IEnumerator destructionDelay()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        monstroMiscVis.playDestroyedMonsterEffect();
+        yield return new WaitForSecondsRealtime(1f);
+        monstroVisuals.destroyMonster();
     }
 
     private void OnTriggerEnter(Collider other)//Damage Triggers
     {
+
         if (other.gameObject.tag == "Hazard") //Hazards just need a trigger box, the hazard tag, and a hazard script
         {
             hazard hazardHandler = other.GetComponent<hazard>();
             string hazardName = hazardHandler.selectedHazard;
+            bool reverseLaunchNeeded = hazardHandler.needsDirectLaunchTarget;
+
+            if (reverseLaunchNeeded)
+            {
+                launchPoint.transform.position = hazardHandler.directLaunchTarget.position;
+            }
+            else
+            {
+                Vector3 exactHitPoint = other.ClosestPoint(other.transform.position);
+                launchPoint.transform.position = exactHitPoint;
+            }
 
             if (hazardName == "fire" && isOnFire == false)
             {
                 StartCoroutine(takeFireDamage());
+                hazardHandler.playHazardAnimation();
+                enteredFireCollider = true;
             }
 
             if(hazardName == "car")
             {
-                locomotion.damageLaunch(other, true);
+                locomotion.damageLaunch(launchPoint, true, reverseLaunchNeeded);
                 takeDamage(carDamage);
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "trap")
             {
                 hazardHandler.playTrapAnimation();
+                hazardHandler.playHazardAnimation();
             }
 
-            if (hazardName == "shark")
+            if (hazardName == "slice")
             {
-                locomotion.damageLaunch(other, false);
+                locomotion.damageLaunch(launchPoint, false, reverseLaunchNeeded);
                 takeDamage(sharkDamage);
-            }
-
-            if(hazardName == "teeth")
-            {
-                takeDamage(toothDamage);
-                locomotion.forceRespawn();//we put things like a respawn first through the locomotion script to stop all velocity and movement
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "press")
             {
-                takeDamage(pressDamage);
                 locomotion.forceRespawn();
+                takeDamage(pressDamage);
+                hazardHandler.playHazardAnimation();
             }
 
             if (hazardName == "rubberBand")
             {
                 if (locomotion.isStunLocked) //you will only bounce back if you were punched into the rubber band, otherwise it will ignore it
                 {
+                    locomotion.damageLaunch(launchPoint, false, reverseLaunchNeeded);
                     hazardHandler.playHazardAnimation();
-                    locomotion.damageLaunch(other, false);
                 }
             }
 
+            if (hazardName == "electricity")
+            {
+                if (locomotion.isElectricLocked) return;
 
+                locomotion.electricDamageLaunch(launchPoint, true, reverseLaunchNeeded);
+                takeDamage(electricityDamage);
+                monstroVisuals.electrocutionReaction();
+                monstroMiscVis.playElectricEffect();
+                hazardHandler.playHazardAnimation();
+            }
+
+            if (hazardName == "antiAir")
+            {
+                locomotion.antiAirDamageLaunch(launchPoint, true, reverseLaunchNeeded);
+                hazardHandler.playHazardAnimation();
+            }
+
+        }
+
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Hazard")
+        {
+            hazard hazardHandler = other.GetComponent<hazard>();
+            string hazardName = hazardHandler.selectedHazard;
+
+            if (hazardName == "fire")
+            {
+                enteredFireCollider = false;
+            }
         }
     }
 
@@ -121,7 +187,9 @@ public class monstroHealth : MonoBehaviour
     {
         //fire will inflict 50 damage overall over 4 seconds
         isOnFire = true;
+        monstroVisuals.burningReaction();
         monstroMiscVis.playFireEffect();
+        locomotion.fieryRun();
         takeDamage(fireDamagePerSecond);
         yield return new WaitForSeconds(1);
         takeDamage(fireDamagePerSecond);
@@ -133,5 +201,20 @@ public class monstroHealth : MonoBehaviour
         takeDamage(fireDamagePerSecond);
         isOnFire = false;
         monstroMiscVis.stopFireEffect();
+        monstroVisuals.endStatusEffect();
+        locomotion.endFieryRun();
+        /*
+        if (enteredFireCollider)//they're still in the fire
+        {
+            StartCoroutine(takeFireDamage());
+            print("one more round of fire!");
+        }
+        else
+        {
+            isOnFire = false;
+            monstroMiscVis.stopFireEffect();
+        }
+        */
+        //I'll come back to this later, still not really sure if its a real issue that fire isn't reapplying while standing in the fire
     }
 }

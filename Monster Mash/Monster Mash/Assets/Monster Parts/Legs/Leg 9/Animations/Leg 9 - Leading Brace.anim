@@ -591,6 +591,66 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
+    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn/Leg9_Ankle_bn
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn/Leg9_Ankle_bn
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn/Leg9_Ankle_bn
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
     path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn
     classID: 4
     script: {fileID: 0}
@@ -620,7 +680,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
+    attribute: m_LocalEulerAngles.x
     path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn
     classID: 4
     script: {fileID: 0}
@@ -640,68 +700,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
+    attribute: m_LocalEulerAngles.z
     path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn/Leg9_Ankle_bn
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn/Leg9_Ankle_bn
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Monster Mash - Leg 9 - Rig/Leg9_Base/Leg9_Thigh_bn/Leg9_Bend1_bn/Leg9_Knee_bn/Leg9_Bend2_bn/Leg9_Ankle_bn
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

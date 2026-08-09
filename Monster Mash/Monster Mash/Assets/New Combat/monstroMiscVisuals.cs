@@ -11,6 +11,10 @@ public class monstroMiscVisuals : MonoBehaviour
 
     //effects
     public ParticleSystem burningEffect;
+    public ParticleSystem electricEffect;
+    public ParticleSystem lostLimbEffect;
+    public ParticleSystem destroyedMonsterEffect;
+    public GameObject destroyedBrainBall;
 
     void Update()
     {
@@ -53,5 +57,30 @@ public class monstroMiscVisuals : MonoBehaviour
         burningEffect.Stop();
     }
 
+    public void playElectricEffect()
+    {
+        electricEffect.Play();
+    }
 
+    public void stopElectricEffect()
+    {
+        electricEffect.Stop();
+    }
+
+    public void playLostLimbEffect()
+    {
+        lostLimbEffect.Play();
+    }
+
+    public void playDestroyedMonsterEffect()
+    {
+        destroyedMonsterEffect.Play();
+        StartCoroutine(brainBallVisualDelay());
+    }
+
+    IEnumerator brainBallVisualDelay()
+    {
+        yield return new WaitForSecondsRealtime(1.5f);
+        destroyedBrainBall.SetActive(true);
+    }
 }

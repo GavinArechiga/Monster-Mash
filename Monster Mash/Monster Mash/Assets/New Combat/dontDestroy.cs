@@ -26,4 +26,9 @@ public class dontDestroy : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
+
+    public void reassignDontDestroyStatus()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 }
