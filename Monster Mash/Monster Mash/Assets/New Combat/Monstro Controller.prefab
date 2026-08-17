@@ -142603,7 +142603,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4530839509604072967}
         m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
-        m_MethodName: OnJump
+        m_MethodName: onHubInteraction
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

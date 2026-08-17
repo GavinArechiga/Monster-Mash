@@ -16,12 +16,6 @@ public class monstroHubManager : MonoBehaviour
 
     public CinemachineVirtualCamera followCamera;
     public CinemachineVirtualCamera overheadCamera;
-    public CinemachineVirtualCamera portalCamera;
-    public CinemachineVirtualCamera buildAScareDoorCamera;
-    public CinemachineVirtualCamera buildAScareCamera;
-    public CinemachineVirtualCamera chopShopCamera;
-    public CinemachineVirtualCamera galleryDoorCamera;
-    public CinemachineVirtualCamera galleryCamera;
 
     public Animation introLogo;
     public AnimationClip pressAnything;
@@ -64,7 +58,7 @@ public class monstroHubManager : MonoBehaviour
         player1PartHandler.showMonster();
         player1PartHandler.startMonstroAnimations();
         player1MiscVisuals.showPlayerRing();
-        player1Inputs.switchToHubControls();
+        player1Inputs.switchToFightControls();
         StartCoroutine(followCamDelay());
     }
 

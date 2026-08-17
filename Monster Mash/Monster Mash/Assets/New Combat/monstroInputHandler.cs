@@ -18,6 +18,9 @@ public class monstroInputHandler : MonoBehaviour
     private float heavyAttackCooldownTime = 0.5f;
     private float lightAttackCooldownTime = 0.2f;
 
+    private bool inInteractionZone = false;
+    private hubInteractionTrigger currentPotentialInteraction;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -44,6 +47,23 @@ public class monstroInputHandler : MonoBehaviour
         }
     }
 
+    #region Switching Controls
+
+    public void switchToFightControls()
+    {
+        locomotion.enabled = true;
+        playerInput.SwitchCurrentActionMap("Monstro Fighter");
+    }
+
+    public void switchToHubInteractionControls()
+    {
+        locomotion.enabled = true;
+        playerInput.SwitchCurrentActionMap("Monstro Movement");
+    }
+
+    #endregion
+
+    #region Combat Functions
     public void OnButtonEast(CallbackContext context)
     {
         int buttonIndex = 0;
@@ -253,15 +273,59 @@ public class monstroInputHandler : MonoBehaviour
         }
     }
 
-    public void switchToFightControls()
+    #endregion
+
+    #region Hub Interaction
+    public void onHubInteraction(CallbackContext context)
     {
-        locomotion.enabled = true;
-        playerInput.SwitchCurrentActionMap("Monstro Fighter");
+        if (inInteractionZone == false) return;
+        if (currentPotentialInteraction == null) return;
+
+        if (context.started)
+        {
+            currentPotentialInteraction.buttonInteraction();
+        }
+    }
+    #endregion
+
+    #region Level Interaction
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Hub Interaction")
+        {
+            inInteractionZone = true;
+            hubInteractionTrigger potentialInteraction = other.gameObject.GetComponent<hubInteractionTrigger>();
+            if(potentialInteraction != null)
+            {
+                currentPotentialInteraction = potentialInteraction;
+            }
+
+            if (currentPotentialInteraction != null)
+            {
+                if (currentPotentialInteraction.requiresButtonPrompt)
+                {
+                    switchToHubInteractionControls();
+                }
+
+                currentPotentialInteraction.enterInteractionArea();
+            }
+        }
     }
 
-    public void switchToHubControls()
+    private void OnTriggerExit(Collider other)
     {
-        locomotion.enabled = true;
-        playerInput.SwitchCurrentActionMap("Monstro Movement");
+        if (other.gameObject.tag == "Hub Interaction")
+        {
+            inInteractionZone = false;
+            switchToFightControls();
+
+            if (currentPotentialInteraction != null)
+            {
+                currentPotentialInteraction.exitInteractionArea();
+            }
+
+            currentPotentialInteraction = null;
+        }
     }
+    #endregion
 }
