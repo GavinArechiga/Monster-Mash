@@ -245,7 +245,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""4c8a3342-18f5-47d0-a0bd-028650e0c582"",
                     ""expectedControlType"": ""Button"",
@@ -273,7 +273,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -325,7 +325,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         // Monstro Movement
         m_MonstroMovement = asset.FindActionMap("Monstro Movement", throwIfNotFound: true);
         m_MonstroMovement_Movement = m_MonstroMovement.FindAction("Movement", throwIfNotFound: true);
-        m_MonstroMovement_Jump = m_MonstroMovement.FindAction("Jump", throwIfNotFound: true);
+        m_MonstroMovement_Interact = m_MonstroMovement.FindAction("Interact", throwIfNotFound: true);
         // Monstro UI
         m_MonstroUI = asset.FindActionMap("Monstro UI", throwIfNotFound: true);
         m_MonstroUI_Newaction = m_MonstroUI.FindAction("New action", throwIfNotFound: true);
@@ -509,13 +509,13 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_MonstroMovement;
     private List<IMonstroMovementActions> m_MonstroMovementActionsCallbackInterfaces = new List<IMonstroMovementActions>();
     private readonly InputAction m_MonstroMovement_Movement;
-    private readonly InputAction m_MonstroMovement_Jump;
+    private readonly InputAction m_MonstroMovement_Interact;
     public struct MonstroMovementActions
     {
         private @MonstroControls m_Wrapper;
         public MonstroMovementActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_MonstroMovement_Movement;
-        public InputAction @Jump => m_Wrapper.m_MonstroMovement_Jump;
+        public InputAction @Interact => m_Wrapper.m_MonstroMovement_Interact;
         public InputActionMap Get() { return m_Wrapper.m_MonstroMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -528,9 +528,9 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IMonstroMovementActions instance)
@@ -538,9 +538,9 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IMonstroMovementActions instance)
@@ -620,7 +620,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     public interface IMonstroMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
     public interface IMonstroUIActions
     {
