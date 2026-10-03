@@ -210,7 +210,7 @@
             ]
         },
         {
-            "name": "Monstro Movement",
+            "name": "Monstro Interaction",
             "id": "047908a0-cf91-4f91-a531-2ce851533b69",
             "actions": [
                 {
@@ -226,6 +226,69 @@
                     "name": "Interact",
                     "type": "Button",
                     "id": "4c8a3342-18f5-47d0-a0bd-028650e0c582",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Button East",
+                    "type": "Button",
+                    "id": "84433da3-c1d7-4391-a5b1-e6b867b00839",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Button West",
+                    "type": "Button",
+                    "id": "e2ce29df-8ce0-414b-b43f-9cea6e99c6e9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Button North",
+                    "type": "Button",
+                    "id": "feb8861d-b8f7-4881-a38a-cf19951cbae2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Left Bumper",
+                    "type": "Button",
+                    "id": "0df313f5-f489-4bd2-bce5-3e9f2c1ff472",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right Bumper",
+                    "type": "Button",
+                    "id": "72f91105-2107-4bcb-b4b2-08f5b6ad4d8d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Left Trigger",
+                    "type": "Button",
+                    "id": "5b9e8ccd-2b57-4efc-b72b-cc43c1311f23",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right Trigger",
+                    "type": "Button",
+                    "id": "e68e6947-a869-4c68-bc72-ac0cbd0bc024",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -252,6 +315,83 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4abd478a-084e-467b-8505-9e745bef61b7",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Trigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42948baa-5add-49de-99ec-1e08c408894f",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button West",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "557495d7-a7bd-4640-a140-799e2e2ab3f0",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button East",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba2b47f7-45d6-4496-823f-92c03f1595e7",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button North",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ecf8e093-4d35-4522-8bf1-fd5318b70fa3",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Bumper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e9b89ad9-b980-421c-95af-802f0efd9f42",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Bumper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58608d7b-1d97-44f8-92c1-2d19db8b102d",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Trigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

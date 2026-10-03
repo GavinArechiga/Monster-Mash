@@ -40,7 +40,7 @@ public class hubInteractionTrigger : MonoBehaviour
 
     public void exitInteractionArea()
     {
-        //resetAimationTriggers();
+        resetAimationTriggers();
 
         if (interactionAnimator != null)
         {
