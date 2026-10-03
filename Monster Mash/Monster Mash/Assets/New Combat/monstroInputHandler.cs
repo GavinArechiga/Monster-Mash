@@ -58,7 +58,7 @@ public class monstroInputHandler : MonoBehaviour
     public void switchToHubInteractionControls()
     {
         locomotion.enabled = true;
-        playerInput.SwitchCurrentActionMap("Monstro Movement");
+        playerInput.SwitchCurrentActionMap("Monstro Interaction");
     }
 
     #endregion
@@ -318,6 +318,13 @@ public class monstroInputHandler : MonoBehaviour
         {
             inInteractionZone = false;
             switchToFightControls();
+
+            hubInteractionTrigger potentialInteraction = other.gameObject.GetComponent<hubInteractionTrigger>();
+            if (potentialInteraction != null)
+            {
+                currentPotentialInteraction = potentialInteraction;
+            }
+
 
             if (currentPotentialInteraction != null)
             {

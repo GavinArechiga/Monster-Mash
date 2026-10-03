@@ -232,7 +232,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Monstro Movement"",
+            ""name"": ""Monstro Interaction"",
             ""id"": ""047908a0-cf91-4f91-a531-2ce851533b69"",
             ""actions"": [
                 {
@@ -248,6 +248,69 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""4c8a3342-18f5-47d0-a0bd-028650e0c582"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Button East"",
+                    ""type"": ""Button"",
+                    ""id"": ""84433da3-c1d7-4391-a5b1-e6b867b00839"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Button West"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2ce29df-8ce0-414b-b43f-9cea6e99c6e9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Button North"",
+                    ""type"": ""Button"",
+                    ""id"": ""feb8861d-b8f7-4881-a38a-cf19951cbae2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left Bumper"",
+                    ""type"": ""Button"",
+                    ""id"": ""0df313f5-f489-4bd2-bce5-3e9f2c1ff472"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right Bumper"",
+                    ""type"": ""Button"",
+                    ""id"": ""72f91105-2107-4bcb-b4b2-08f5b6ad4d8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left Trigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b9e8ccd-2b57-4efc-b72b-cc43c1311f23"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right Trigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""e68e6947-a869-4c68-bc72-ac0cbd0bc024"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -274,6 +337,83 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4abd478a-084e-467b-8505-9e745bef61b7"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right Trigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42948baa-5add-49de-99ec-1e08c408894f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button West"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""557495d7-a7bd-4640-a140-799e2e2ab3f0"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button East"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba2b47f7-45d6-4496-823f-92c03f1595e7"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button North"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ecf8e093-4d35-4522-8bf1-fd5318b70fa3"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Bumper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9b89ad9-b980-421c-95af-802f0efd9f42"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right Bumper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58608d7b-1d97-44f8-92c1-2d19db8b102d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Trigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -322,10 +462,17 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         m_MonstroFighter_RightBumper = m_MonstroFighter.FindAction("Right Bumper", throwIfNotFound: true);
         m_MonstroFighter_LeftTrigger = m_MonstroFighter.FindAction("Left Trigger", throwIfNotFound: true);
         m_MonstroFighter_RightTrigger = m_MonstroFighter.FindAction("Right Trigger", throwIfNotFound: true);
-        // Monstro Movement
-        m_MonstroMovement = asset.FindActionMap("Monstro Movement", throwIfNotFound: true);
-        m_MonstroMovement_Movement = m_MonstroMovement.FindAction("Movement", throwIfNotFound: true);
-        m_MonstroMovement_Interact = m_MonstroMovement.FindAction("Interact", throwIfNotFound: true);
+        // Monstro Interaction
+        m_MonstroInteraction = asset.FindActionMap("Monstro Interaction", throwIfNotFound: true);
+        m_MonstroInteraction_Movement = m_MonstroInteraction.FindAction("Movement", throwIfNotFound: true);
+        m_MonstroInteraction_Interact = m_MonstroInteraction.FindAction("Interact", throwIfNotFound: true);
+        m_MonstroInteraction_ButtonEast = m_MonstroInteraction.FindAction("Button East", throwIfNotFound: true);
+        m_MonstroInteraction_ButtonWest = m_MonstroInteraction.FindAction("Button West", throwIfNotFound: true);
+        m_MonstroInteraction_ButtonNorth = m_MonstroInteraction.FindAction("Button North", throwIfNotFound: true);
+        m_MonstroInteraction_LeftBumper = m_MonstroInteraction.FindAction("Left Bumper", throwIfNotFound: true);
+        m_MonstroInteraction_RightBumper = m_MonstroInteraction.FindAction("Right Bumper", throwIfNotFound: true);
+        m_MonstroInteraction_LeftTrigger = m_MonstroInteraction.FindAction("Left Trigger", throwIfNotFound: true);
+        m_MonstroInteraction_RightTrigger = m_MonstroInteraction.FindAction("Right Trigger", throwIfNotFound: true);
         // Monstro UI
         m_MonstroUI = asset.FindActionMap("Monstro UI", throwIfNotFound: true);
         m_MonstroUI_Newaction = m_MonstroUI.FindAction("New action", throwIfNotFound: true);
@@ -505,35 +652,70 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     }
     public MonstroFighterActions @MonstroFighter => new MonstroFighterActions(this);
 
-    // Monstro Movement
-    private readonly InputActionMap m_MonstroMovement;
-    private List<IMonstroMovementActions> m_MonstroMovementActionsCallbackInterfaces = new List<IMonstroMovementActions>();
-    private readonly InputAction m_MonstroMovement_Movement;
-    private readonly InputAction m_MonstroMovement_Interact;
-    public struct MonstroMovementActions
+    // Monstro Interaction
+    private readonly InputActionMap m_MonstroInteraction;
+    private List<IMonstroInteractionActions> m_MonstroInteractionActionsCallbackInterfaces = new List<IMonstroInteractionActions>();
+    private readonly InputAction m_MonstroInteraction_Movement;
+    private readonly InputAction m_MonstroInteraction_Interact;
+    private readonly InputAction m_MonstroInteraction_ButtonEast;
+    private readonly InputAction m_MonstroInteraction_ButtonWest;
+    private readonly InputAction m_MonstroInteraction_ButtonNorth;
+    private readonly InputAction m_MonstroInteraction_LeftBumper;
+    private readonly InputAction m_MonstroInteraction_RightBumper;
+    private readonly InputAction m_MonstroInteraction_LeftTrigger;
+    private readonly InputAction m_MonstroInteraction_RightTrigger;
+    public struct MonstroInteractionActions
     {
         private @MonstroControls m_Wrapper;
-        public MonstroMovementActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_MonstroMovement_Movement;
-        public InputAction @Interact => m_Wrapper.m_MonstroMovement_Interact;
-        public InputActionMap Get() { return m_Wrapper.m_MonstroMovement; }
+        public MonstroInteractionActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_MonstroInteraction_Movement;
+        public InputAction @Interact => m_Wrapper.m_MonstroInteraction_Interact;
+        public InputAction @ButtonEast => m_Wrapper.m_MonstroInteraction_ButtonEast;
+        public InputAction @ButtonWest => m_Wrapper.m_MonstroInteraction_ButtonWest;
+        public InputAction @ButtonNorth => m_Wrapper.m_MonstroInteraction_ButtonNorth;
+        public InputAction @LeftBumper => m_Wrapper.m_MonstroInteraction_LeftBumper;
+        public InputAction @RightBumper => m_Wrapper.m_MonstroInteraction_RightBumper;
+        public InputAction @LeftTrigger => m_Wrapper.m_MonstroInteraction_LeftTrigger;
+        public InputAction @RightTrigger => m_Wrapper.m_MonstroInteraction_RightTrigger;
+        public InputActionMap Get() { return m_Wrapper.m_MonstroInteraction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MonstroMovementActions set) { return set.Get(); }
-        public void AddCallbacks(IMonstroMovementActions instance)
+        public static implicit operator InputActionMap(MonstroInteractionActions set) { return set.Get(); }
+        public void AddCallbacks(IMonstroInteractionActions instance)
         {
-            if (instance == null || m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_MonstroInteractionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonstroInteractionActionsCallbackInterfaces.Add(instance);
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @ButtonEast.started += instance.OnButtonEast;
+            @ButtonEast.performed += instance.OnButtonEast;
+            @ButtonEast.canceled += instance.OnButtonEast;
+            @ButtonWest.started += instance.OnButtonWest;
+            @ButtonWest.performed += instance.OnButtonWest;
+            @ButtonWest.canceled += instance.OnButtonWest;
+            @ButtonNorth.started += instance.OnButtonNorth;
+            @ButtonNorth.performed += instance.OnButtonNorth;
+            @ButtonNorth.canceled += instance.OnButtonNorth;
+            @LeftBumper.started += instance.OnLeftBumper;
+            @LeftBumper.performed += instance.OnLeftBumper;
+            @LeftBumper.canceled += instance.OnLeftBumper;
+            @RightBumper.started += instance.OnRightBumper;
+            @RightBumper.performed += instance.OnRightBumper;
+            @RightBumper.canceled += instance.OnRightBumper;
+            @LeftTrigger.started += instance.OnLeftTrigger;
+            @LeftTrigger.performed += instance.OnLeftTrigger;
+            @LeftTrigger.canceled += instance.OnLeftTrigger;
+            @RightTrigger.started += instance.OnRightTrigger;
+            @RightTrigger.performed += instance.OnRightTrigger;
+            @RightTrigger.canceled += instance.OnRightTrigger;
         }
 
-        private void UnregisterCallbacks(IMonstroMovementActions instance)
+        private void UnregisterCallbacks(IMonstroInteractionActions instance)
         {
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
@@ -541,23 +723,44 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @ButtonEast.started -= instance.OnButtonEast;
+            @ButtonEast.performed -= instance.OnButtonEast;
+            @ButtonEast.canceled -= instance.OnButtonEast;
+            @ButtonWest.started -= instance.OnButtonWest;
+            @ButtonWest.performed -= instance.OnButtonWest;
+            @ButtonWest.canceled -= instance.OnButtonWest;
+            @ButtonNorth.started -= instance.OnButtonNorth;
+            @ButtonNorth.performed -= instance.OnButtonNorth;
+            @ButtonNorth.canceled -= instance.OnButtonNorth;
+            @LeftBumper.started -= instance.OnLeftBumper;
+            @LeftBumper.performed -= instance.OnLeftBumper;
+            @LeftBumper.canceled -= instance.OnLeftBumper;
+            @RightBumper.started -= instance.OnRightBumper;
+            @RightBumper.performed -= instance.OnRightBumper;
+            @RightBumper.canceled -= instance.OnRightBumper;
+            @LeftTrigger.started -= instance.OnLeftTrigger;
+            @LeftTrigger.performed -= instance.OnLeftTrigger;
+            @LeftTrigger.canceled -= instance.OnLeftTrigger;
+            @RightTrigger.started -= instance.OnRightTrigger;
+            @RightTrigger.performed -= instance.OnRightTrigger;
+            @RightTrigger.canceled -= instance.OnRightTrigger;
         }
 
-        public void RemoveCallbacks(IMonstroMovementActions instance)
+        public void RemoveCallbacks(IMonstroInteractionActions instance)
         {
-            if (m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_MonstroInteractionActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IMonstroMovementActions instance)
+        public void SetCallbacks(IMonstroInteractionActions instance)
         {
-            foreach (var item in m_Wrapper.m_MonstroMovementActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_MonstroInteractionActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_MonstroMovementActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_MonstroInteractionActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public MonstroMovementActions @MonstroMovement => new MonstroMovementActions(this);
+    public MonstroInteractionActions @MonstroInteraction => new MonstroInteractionActions(this);
 
     // Monstro UI
     private readonly InputActionMap m_MonstroUI;
@@ -617,10 +820,17 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         void OnLeftTrigger(InputAction.CallbackContext context);
         void OnRightTrigger(InputAction.CallbackContext context);
     }
-    public interface IMonstroMovementActions
+    public interface IMonstroInteractionActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnButtonEast(InputAction.CallbackContext context);
+        void OnButtonWest(InputAction.CallbackContext context);
+        void OnButtonNorth(InputAction.CallbackContext context);
+        void OnLeftBumper(InputAction.CallbackContext context);
+        void OnRightBumper(InputAction.CallbackContext context);
+        void OnLeftTrigger(InputAction.CallbackContext context);
+        void OnRightTrigger(InputAction.CallbackContext context);
     }
     public interface IMonstroUIActions
     {

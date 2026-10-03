@@ -20,15 +20,24 @@ public class monstroHubManager : MonoBehaviour
     public Animation introLogo;
     public AnimationClip pressAnything;
     public AnimationClip anythingPressed;
+    public GameObject pressStartVisual;
 
     private void Awake()
     {
         followCamera.Priority = 0;
         overheadCamera.Priority = 20;
+        StartCoroutine(delayedStartVisual());
+    }
+
+    IEnumerator delayedStartVisual()
+    {
+        yield return new WaitForSeconds(1f);
+        pressStartVisual.SetActive(true);
     }
 
     public void placeStarterMonster()
     {
+        StopCoroutine(delayedStartVisual());
         cameraTargetGroup = FindFirstObjectByType<CinemachineTargetGroup>();
         player1Inputs = FindFirstObjectByType<monstroInputHandler>();
         player1PartHandler = FindFirstObjectByType<monstroPartHandler>();
@@ -43,6 +52,7 @@ public class monstroHubManager : MonoBehaviour
     {
         introLogo.clip = anythingPressed;
         introLogo.Play();
+        pressStartVisual.SetActive(false);
         followCamera.Priority = 20;
         overheadCamera.Priority = 0;
         yield return new WaitForSeconds(1);
