@@ -91,7 +91,8 @@ MonoBehaviour:
     windUpAnimation: {fileID: 7400000, guid: 2a1254e6a7babef419ef179a37a16444, type: 2}
     lightAttackAnimation: {fileID: 7400000, guid: 187f2360526875248884a7d5ee43dc57,
       type: 2}
-    altLightAttackAnimation: {fileID: 0}
+    altLightAttackAnimation: {fileID: 7400000, guid: 178434cede66153438dccd4389c12402,
+      type: 2}
     heavyAttackAnimation: {fileID: 7400000, guid: 178434cede66153438dccd4389c12402,
       type: 2}
     braceAnimation: {fileID: 7400000, guid: 0047cef1da95f98468f39e44b27d7926, type: 2}
