@@ -15,6 +15,7 @@ public class monstroPartHandler : MonoBehaviour
     private monstroPart[] myMonstroParts;
     public List<monstroPart> availableAttackingParts = new List<monstroPart>();
     public int numberOfMappedParts = 0;
+    public string currentAnimation = "null";
 
     private void Awake()
     {
@@ -99,6 +100,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playIdle();
+            currentAnimation = "idle";
         }
     }
 
@@ -131,6 +133,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playIdle();
+            currentAnimation = "idle";
         }
     }
     
@@ -139,6 +142,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playWalk();
+            currentAnimation = "walk";
         }
     }
 
@@ -147,6 +151,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playRun();
+            currentAnimation = "run";
         }
     }
 
@@ -155,6 +160,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playJump();
+            currentAnimation = "jump";
         }
     }
 
@@ -165,6 +171,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playDoubleJump();
+            currentAnimation = "double jump";
         }
     }
 
@@ -173,6 +180,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playFall();
+            currentAnimation = "fall";
         }
     }
 
@@ -181,6 +189,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playLand();
+            currentAnimation = "land";
         }
     }
 
@@ -193,6 +202,7 @@ public class monstroPartHandler : MonoBehaviour
             if (myMonstroParts[i].monstroPartDropDown.ToString() == "torso")
             {
                 myMonstroParts[i].playWindUp();
+                currentAnimation = "wind up";
             }
             else
             {
@@ -206,6 +216,7 @@ public class monstroPartHandler : MonoBehaviour
         if (attackMarkedHeavy)
         {
             attackingPart.playHeavyAttack();
+            currentAnimation = "heavy attack";
         }
         else
         {
@@ -220,10 +231,12 @@ public class monstroPartHandler : MonoBehaviour
                 if (attackMarkedHeavy)
                 {
                     myMonstroParts[i].playHeavyAttack();
+                    currentAnimation = "heavy attack";
                 }
                 else
                 {
                     myMonstroParts[i].playLightAttack();
+                    currentAnimation = "light attack";
                 }
             }
             else
@@ -234,6 +247,7 @@ public class monstroPartHandler : MonoBehaviour
                     if (myMonstroParts[i] != attackingPart)
                     {
                         myMonstroParts[i].playLeftBrace();
+                        currentAnimation = "left brace";
                     }
                 }
                 else
@@ -241,6 +255,7 @@ public class monstroPartHandler : MonoBehaviour
                     if (myMonstroParts[i] != attackingPart)
                     {
                         myMonstroParts[i].playRightBrace();
+                        currentAnimation = "right brace";
                     }
                 }
             }
@@ -264,6 +279,7 @@ public class monstroPartHandler : MonoBehaviour
             myMonstroParts[i].showDamageVisual();
             myMonstroParts[i].hideMonster();
             myMonstroParts[i].playLightHit();
+            currentAnimation = "light hit";
         }
 
         StartCoroutine(damageFlash());
@@ -278,6 +294,7 @@ public class monstroPartHandler : MonoBehaviour
             myMonstroParts[i].showDamageVisual();
             myMonstroParts[i].hideMonster();
             myMonstroParts[i].playHeavyHit();
+            currentAnimation = "heavy hit";
         }
 
         StartCoroutine(damageFlash());
@@ -328,6 +345,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playBurningReaction();
+            currentAnimation = "burning";
         }
     }
 
@@ -336,6 +354,7 @@ public class monstroPartHandler : MonoBehaviour
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
             myMonstroParts[i].playElectrocutionReaction();
+            currentAnimation = "electrocution";
         }
     }
 

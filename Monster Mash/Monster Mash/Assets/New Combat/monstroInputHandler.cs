@@ -15,8 +15,8 @@ public class monstroInputHandler : MonoBehaviour
     private bool attackMarkedHeavy;
     private bool attackStarted = false;
     private bool attackCooled = true;
-    private float heavyAttackCooldownTime = 0.5f;
-    private float lightAttackCooldownTime = 0.2f;
+    private float heavyAttackCooldownTime = 0.5f;//0.5
+    private float lightAttackCooldownTime = 0.25f;//0.2
 
     private bool inInteractionZone = false;
     private hubInteractionTrigger currentPotentialInteraction;
@@ -31,7 +31,7 @@ public class monstroInputHandler : MonoBehaviour
     public void OnMove(CallbackContext context)
     {
         if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
-        if (attackCooled == false) return;
+        //if (attackCooled == false) return;
 
         locomotion.movementInput(context.ReadValue<Vector2>());
     }
@@ -207,36 +207,28 @@ public class monstroInputHandler : MonoBehaviour
     private void attackStart(int mappedButton)
     {
         attackStarted = true;
-        StartCoroutine(buttonPressTimer());
         currentlyAttackingPart = mappedMonstroParts[mappedButton];
         partHandler.windUp(currentlyAttackingPart);
         partHandler.lockAttackAnimation(currentlyAttackingPart);
-        locomotion.attackEngaged();
+        StartCoroutine(buttonPressTimer());
     }
 
     private void attackRelease(int mappedButton)
     {
         StopCoroutine(buttonPressTimer());
         StartCoroutine(attackCooldown());
-        bool needsAttackMovement = false;
+        locomotion.attackEngaged();
+        partHandler.attack(mappedMonstroParts[mappedButton], attackMarkedHeavy);
 
         if (attackMarkedHeavy)
         {
-            if (mappedMonstroParts[mappedButton].heavyAttackTypeDropDown.ToString() == "physical")
-            {
-                needsAttackMovement = true;
-            }
+            locomotion.attackMovementConfirmed(attackMarkedHeavy, mappedMonstroParts[mappedButton].heavyAttackTypeDropDown.ToString());
         }
         else
         {
-            if (mappedMonstroParts[mappedButton].lightAttackTypeDropDown.ToString() == "physical")
-            {
-                needsAttackMovement = true;
-            }
+            locomotion.attackMovementConfirmed(attackMarkedHeavy, mappedMonstroParts[mappedButton].lightAttackTypeDropDown.ToString());
         }
 
-        partHandler.attack(mappedMonstroParts[mappedButton], attackMarkedHeavy);
-        locomotion.attackMovementConfirmed(attackMarkedHeavy, needsAttackMovement);
         attackStarted = false;
     }
 
@@ -244,6 +236,7 @@ public class monstroInputHandler : MonoBehaviour
     {
         attackMarkedHeavy = false;
         yield return new WaitForSeconds(heavyDetectionTime);
+        locomotion.attackEngaged();
         attackMarkedHeavy = true;
     }
 
@@ -263,6 +256,8 @@ public class monstroInputHandler : MonoBehaviour
         partHandler.unlockAttackAnimation(currentlyAttackingPart);
         currentlyAttackingPart = null;
         attackCooled = true;
+        attackMarkedHeavy = false;
+        locomotion.attackCleanup();
     }
 
     public void OnPause(CallbackContext context)
