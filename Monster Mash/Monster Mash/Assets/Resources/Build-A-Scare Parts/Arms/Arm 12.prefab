@@ -72,7 +72,7 @@ MonoBehaviour:
   monstroPartDropDown: 3
   lightAttackTypeDropDown: 1
   lightAttackDamage: 0
-  heavyAttackTypeDropDown: 3
+  heavyAttackTypeDropDown: 1
   heavyStatusEffectDropDown: 0
   heavyAttackDamage: 0
   bodyPlacementDropDown: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
     windUpAnimation: {fileID: 7400000, guid: 2a1254e6a7babef419ef179a37a16444, type: 2}
     lightAttackAnimation: {fileID: 7400000, guid: 187f2360526875248884a7d5ee43dc57,
       type: 2}
-    altLightAttackAnimation: {fileID: 7400000, guid: 178434cede66153438dccd4389c12402,
+    altLightAttackAnimation: {fileID: 7400000, guid: 1b423766509512b43aa1c4c651de8f36,
       type: 2}
     heavyAttackAnimation: {fileID: 7400000, guid: 178434cede66153438dccd4389c12402,
       type: 2}

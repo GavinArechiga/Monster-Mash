@@ -137,20 +137,24 @@ public class monstroPartHandler : MonoBehaviour
         }
     }
     
-    public void walk()
+    public void walk(bool midAttack)
     {
+        if (currentAnimation == "fall") return;
+
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
-            myMonstroParts[i].playWalk();
+            myMonstroParts[i].playWalk(midAttack);
             currentAnimation = "walk";
         }
     }
 
-    public void run()
+    public void run(bool midAttack)
     {
+        if (currentAnimation == "fall") return;
+
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
-            myMonstroParts[i].playRun();
+            myMonstroParts[i].playRun(midAttack);
             currentAnimation = "run";
         }
     }

@@ -11,7 +11,7 @@ public class monstroLocomotion : MonoBehaviour
     public bool playerLock = true;
     private float moveSpeed = 30f;
     private float walkSpeed = 20f;
-    private float runSpeed = 40f;
+    private float runSpeed = 35f;//40
     private float chargedAttackWalkSpeed = 10f;
     bool needsMovementAnimationRefresh = false;
     private Vector3 moveDirection = Vector3.zero;
@@ -55,8 +55,10 @@ public class monstroLocomotion : MonoBehaviour
 
     //attack movement
     private monstroPartHandler monstroVisuals;
+    private monstroInputHandler monstroInputs;
     private bool attackLocked;
     private bool rotationLocked;
+    private bool chargedAttackActive;
     private int attackMovementPower = 50;
     private int lightAttackMovement = 50;
     private int heavyAttackMovement = 100;
@@ -80,6 +82,7 @@ public class monstroLocomotion : MonoBehaviour
     private void OnEnable()
     {
         controller = GetComponent<CharacterController>();
+        monstroInputs = GetComponent<monstroInputHandler>();
         monstroVisuals = GetComponent<monstroPartHandler>();
         resetCharacterRotation();
         velocity.x = 0f;
@@ -123,8 +126,39 @@ public class monstroLocomotion : MonoBehaviour
         if (rotationLocked) return;
         inputVector = direction;
 
+        if (attackLocked)
+        {
+            if ((direction.x > 0.4f || direction.x < -0.4f) || (direction.y > 0.4f || direction.y < -0.4f))
+            {
 
-        if (attackLocked) return;//this happens after getting the input vector so that we can still aim while in a heavy stance
+                if (moveSpeed != chargedAttackWalkSpeed || needsMovementAnimationRefresh)
+                {
+                    if (chargedAttackActive)
+                    {
+                        if (isGrounded)
+                        {
+                            monstroVisuals.run(false);
+                        }
+
+                        moveSpeed = chargedAttackWalkSpeed;
+                    }
+
+                    needsMovementAnimationRefresh = false;
+                }
+            }
+            else
+            {
+                if (moveSpeed != 0)
+                {
+                    moveSpeed = 0;
+                    monstroVisuals.idle();
+                }
+            }
+
+            return;
+        }
+
+        //if (attackLocked) return;//this happens after getting the input vector so that we can still aim while in a heavy stance
 
         if (onFire)
         {
@@ -138,7 +172,12 @@ public class monstroLocomotion : MonoBehaviour
             if (moveSpeed != runSpeed || needsMovementAnimationRefresh)
             {
                 moveSpeed = runSpeed;
-                monstroVisuals.run();
+
+                if (isGrounded)
+                {
+                    monstroVisuals.run(false);
+                }
+
                 needsMovementAnimationRefresh = false;
             }
         }
@@ -148,7 +187,12 @@ public class monstroLocomotion : MonoBehaviour
             if (moveSpeed != walkSpeed || needsMovementAnimationRefresh)
             {
                 moveSpeed = walkSpeed;
-                monstroVisuals.walk();
+
+                if (isGrounded)
+                {
+                    monstroVisuals.walk(false);
+                }
+
                 needsMovementAnimationRefresh = false;
             }
         }
@@ -163,13 +207,13 @@ public class monstroLocomotion : MonoBehaviour
         }
 
         //this makes sure that there's no weird miscommunication between the idle, run, and walk animations after attacks
-        if(moveSpeed == runSpeed && monstroVisuals.currentAnimation != "run")
+        if(moveSpeed == runSpeed && monstroVisuals.currentAnimation != "run" && isGrounded)
         {
-            monstroVisuals.run();
+            monstroVisuals.run(false);
         }
-        else if (moveSpeed == walkSpeed && monstroVisuals.currentAnimation != "walk")
+        else if (moveSpeed == walkSpeed && monstroVisuals.currentAnimation != "walk" && isGrounded)
         {
-            monstroVisuals.walk();
+            monstroVisuals.walk(false);
         }
     }
 
@@ -244,15 +288,13 @@ public class monstroLocomotion : MonoBehaviour
         if (playerLock != false) return; //world has asked me to stop all controllers
         if (isElectricLocked != false) return; //I have been electrocuted and im paralyzed
 
-        /*
-        if (attackLocked && rotationLocked == false) //I am engaging an attack but the player hasn't confirmed a target by letting go of the button
+        
+        if (attackLocked && rotationLocked == false && chargedAttackActive == false) //I am engaging an attack but the player hasn't confirmed a target by letting go of the button
         {
             moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
             moveDirection = transform.TransformDirection(moveDirection);
             return;
         }
-        */
-
 
         if (isStunLocked) //I have been punched and launched in a direction
         {
@@ -391,7 +433,14 @@ public class monstroLocomotion : MonoBehaviour
                 //put a velocity cap
                 if (velocity.y > -120)
                 {
-                    velocity.y += gravity * Time.deltaTime;
+                    if (attackLocked && rotationLocked) //added for air attacks and promoting juggling
+                    {
+                        velocity.y += 0 * Time.deltaTime;
+                    }
+                    else
+                    {
+                        velocity.y += gravity * Time.deltaTime;
+                    }
                 }
                 else
                 {
@@ -412,7 +461,16 @@ public class monstroLocomotion : MonoBehaviour
         stuckOnWall = false;
         isStunLocked = false;
         needsMovementAnimationRefresh = true;
-        monstroVisuals.land();
+
+        if (attackLocked == false && rotationLocked == false)
+        {
+            monstroVisuals.land();
+        }
+
+        if (chargedAttackActive)
+        {
+            monstroInputs.forceReleaseAttack();
+        }
     }
     #endregion
 
@@ -720,7 +778,11 @@ public class monstroLocomotion : MonoBehaviour
     {
         attackLocked = true;
         rotationLocked = false;
-        moveSpeed = chargedAttackWalkSpeed;
+    }
+
+    public void activateChargedAttackMovement()
+    {
+        chargedAttackActive = true;
     }
 
     public void attackMovementConfirmed(bool isHeavy, string attackType)
@@ -753,14 +815,14 @@ public class monstroLocomotion : MonoBehaviour
     {
         if (isHeavy)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.25f);
         }
         else
         {
             yield return new WaitForSeconds(0.1f);
         }
 
-        if (attackType == "physical")
+        if (attackType == "physical" && isHeavy)
         {
             velocity.x = 0;
             velocity.z = 0;
@@ -772,16 +834,17 @@ public class monstroLocomotion : MonoBehaviour
             inputVector = Vector3.zero;
         }
 
-        attackLocked = false;
+        //attackLocked = false;
         rotationLocked = false;
-        monstroVisuals.idle();
+        moveSpeed = runSpeed;
     }
 
     public void attackCleanup()
     {
+        monstroVisuals.idle();
         attackLocked = false;
         rotationLocked = false;
-        moveSpeed = runSpeed;
+        chargedAttackActive = false;
     }
 
     #endregion
