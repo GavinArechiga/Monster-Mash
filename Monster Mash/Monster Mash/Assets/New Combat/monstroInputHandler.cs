@@ -11,6 +11,7 @@ public class monstroInputHandler : MonoBehaviour
     private monstroPartHandler partHandler;
     public monstroPart[] mappedMonstroParts = new monstroPart[7];
     private monstroPart currentlyAttackingPart;
+    private int currentlyAttackingPartIndex;
     private float heavyDetectionTime = 0.2f; //how long should a press be before it registers as a heavy
     private bool attackMarkedHeavy;
     private bool attackStarted = false;
@@ -208,6 +209,7 @@ public class monstroInputHandler : MonoBehaviour
     {
         attackStarted = true;
         currentlyAttackingPart = mappedMonstroParts[mappedButton];
+        currentlyAttackingPartIndex = mappedButton;
         partHandler.windUp(currentlyAttackingPart);
         partHandler.lockAttackAnimation(currentlyAttackingPart);
         StartCoroutine(buttonPressTimer());
@@ -215,6 +217,8 @@ public class monstroInputHandler : MonoBehaviour
 
     private void attackRelease(int mappedButton)
     {
+        if (attackStarted == false) return;
+
         StopCoroutine(buttonPressTimer());
         StartCoroutine(attackCooldown());
         locomotion.attackEngaged();
@@ -236,13 +240,20 @@ public class monstroInputHandler : MonoBehaviour
     {
         attackMarkedHeavy = false;
         yield return new WaitForSeconds(heavyDetectionTime);
-        locomotion.attackEngaged();
-        attackMarkedHeavy = true;
+
+        if (attackCooled && attackStarted)//double checks that the attack is still active and ready to be adjusted to a heavy 
+        {
+            attackMarkedHeavy = true;
+            locomotion.attackEngaged();
+            yield return new WaitForSeconds(heavyDetectionTime);//additional time here reduces stuttering with model
+            locomotion.activateChargedAttackMovement();
+        }
     }
 
     IEnumerator attackCooldown()
     {
         attackCooled = false;
+        StopCoroutine(buttonPressTimer());
 
         if (attackMarkedHeavy)
         {
@@ -258,6 +269,11 @@ public class monstroInputHandler : MonoBehaviour
         attackCooled = true;
         attackMarkedHeavy = false;
         locomotion.attackCleanup();
+    }
+
+    public void forceReleaseAttack()
+    {
+        attackRelease(currentlyAttackingPartIndex);
     }
 
     public void OnPause(CallbackContext context)

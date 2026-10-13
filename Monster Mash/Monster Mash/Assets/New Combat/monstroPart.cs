@@ -95,6 +95,9 @@ public class monstroPart : MonoBehaviour
     public typesOfBodyPlacement bodyPlacementDropDown = new typesOfBodyPlacement();
     private bool isAttacking = false;
     private bool isRemoved = false;
+    private bool isSpammed = false;
+    private float spammingPartTime = 1f;
+    private int attackAnimationSwitch = 1;
 
     [Header("Animation Set Up")]
     public RuntimeAnimatorController animationControllerTemplate;
@@ -110,7 +113,7 @@ public class monstroPart : MonoBehaviour
     public SkinnedMeshRenderer[] myDamageSkinnedMeshes;
     public GameObject breakawayColliders;
 
-    public void createNewAnimator() // this works, Im really just looking to make sure all the transitions feel good before a mass roll out
+    public void createNewAnimator()
     {
         monstroPartAnimator = GetComponent<Animator>();
         instancedAnimator = new AnimatorOverrideController(animationControllerTemplate);
@@ -385,11 +388,13 @@ public class monstroPart : MonoBehaviour
         monstroPartAnimator.SetTrigger("idle");
     }
 
-    public void playWalk()
+    public void playWalk(bool midAttack)
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (isAttacking) return;
         if (animationSystem.walkAnimation == null) return;
+        if (monstroPartDropDown.ToString() == "torso" && midAttack) return;
         cleanAnimations();
 
         monstroPartAnimator.SetBool("isWalking", true);
@@ -397,11 +402,13 @@ public class monstroPart : MonoBehaviour
         monstroPartAnimator.SetTrigger("walk");
     }
 
-    public void playRun()
+    public void playRun(bool midAttack)
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (isAttacking) return;
         if (animationSystem.runAnimation == null) return;
+        if (monstroPartDropDown.ToString() == "torso" && midAttack) return;
         cleanAnimations();
 
         monstroPartAnimator.SetBool("isRunning", true);
@@ -413,6 +420,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (isAttacking) return;
         if (animationSystem.jumpAnimation == null) return;
         cleanAnimations();
 
@@ -424,6 +432,7 @@ public class monstroPart : MonoBehaviour
     {
         if (monstroPartAnimator == null) return;
         if (isRemoved) return;
+        if (isAttacking) return;
         if (animationSystem.doubleJumpAnimation == null) return;
         cleanAnimations();
 
@@ -470,8 +479,32 @@ public class monstroPart : MonoBehaviour
         if (isRemoved) return;
         if (animationSystem.lightAttackAnimation == null) return;
         cleanAnimations();
+        StopCoroutine(spamTimer());
 
-        monstroPartAnimator.SetTrigger("light attack");
+        if (attackAnimationSwitch == 1)
+        {
+            monstroPartAnimator.SetTrigger("light attack");
+        }
+        else
+        {
+            if (animationSystem.altLightAttackAnimation != null)
+            {
+                monstroPartAnimator.SetTrigger("alt light attack");
+            }
+            else
+            {
+                monstroPartAnimator.SetTrigger("light attack");
+            }
+        }
+
+        attackAnimationSwitch = attackAnimationSwitch * -1;
+        //StartCoroutine(spamTimer());
+    }
+
+    IEnumerator spamTimer()
+    {
+        yield return new WaitForSeconds(spammingPartTime);
+        attackAnimationSwitch = 1;
     }
 
     public void playHeavyAttack()
