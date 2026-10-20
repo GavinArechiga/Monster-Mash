@@ -38,6 +38,11 @@ public class monstroHealth : MonoBehaviour
         health = healthPerPart * partsLeft;
     }
 
+    public void turnOnHurtBox()
+    {
+        hurtBox.enabled = true;
+    }
+
     public void takeDamage(int damageTotal)
     {
         if (health > damageTotal)
@@ -87,6 +92,8 @@ public class monstroHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)//Damage Triggers
     {
+
+        //
 
         if (other.gameObject.tag == "Hazard") //Hazards just need a trigger box, the hazard tag, and a hazard script
         {

@@ -5,6 +5,64 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class monstroLocomotion : MonoBehaviour
 {
+    //Brawler, 1 grounded jump and 1 mid air jump, can bounce on players for extra bounce that eats jumps, holding and releasing A does simple trampoline recovery
+    //Aviator, 1 grounded jump and 4 mid air jumps of diminishing return, hold A for slow fall/glide which maybe returns all mid air jumps
+    //Heavy, 1 grounded jump and 1 mid air jump half the size of the OG, hold and release A for smashing recovery
+    //Ghost, 1 Grounded Jump and 2 mid air jump with 2nd jump doing slow fall, hold A for slow fall and aiming teleportation point
+
+    //Locomotion Class built in stats
+    public string locomotionClass;
+    private int defaultGroundJumps = 0;
+    private int defaultMidAirJumps = 0;
+    private int defaultPostBounceGroundJumps = 0;
+    private int defaultPostBounceMidAirJumps = 0;
+    private float defaultWalkSpeed = 0;
+    private float defaultRunSpeed = 0;
+    private float defaultJumpPower = 0;
+    private float defaultGravity = 0;
+
+    //brawler
+    private int brawler_groundJumps = 1;
+    private int brawler_midAirJumps = 1;
+    private int brawler_PostBounceGroundJumps = 0;
+    private int brawler_PostBounceMidAirJumps = 1;
+    private float brawler_WalkSpeed = 20f;
+    private float brawler_RunSpeed = 30f;
+    private float brawler_JumpPower = 10f;
+    private float brawler_Gravity = -120f;
+
+    //aviator
+    private int aviator_groundJumps = 1;
+    private int aviator_midAirJumps = 6;
+    private int aviator_PostBounceGroundJumps = 0;
+    private int aviator_PostBounceMidAirJumps = 5;
+    private float aviator_WalkSpeed = 20f;
+    private float aviator_RunSpeed = 35f;
+    private float aviator_JumpPower = 10f;
+    private float aviator_Gravity = -120f;
+
+    //heavy
+    private int heavy_groundJumps = 1;
+    private int heavy_midAirJumps = 1;
+    private int heavy_PostBounceGroundJumps = 0;
+    private int heavy_PostBounceMidAirJumps = 1;
+    private float heavy_WalkSpeed = 15f;
+    private float heavy_RunSpeed = 25f;
+    private float heavy_JumpPower = 7f;
+    private float heavy_Gravity = -200f;
+
+    //ghost
+    private int ghost_groundJumps = 1;
+    private int ghost_midAirJumps = 2;
+    private int ghost_PostBounceGroundJumps = 0;
+    private int ghost_PostBounceMidAirJumps = 1;
+    private float ghost_WalkSpeed = 20f;
+    private float ghost_RunSpeed = 35f;
+    private float ghost_JumpPower = 10f;
+    private float ghost_Gravity = -100f;
+    private Vector3 lastSolidGroundPosition;
+    //
+
 
     //Walking and Running
     private CharacterController controller;
@@ -34,7 +92,8 @@ public class monstroLocomotion : MonoBehaviour
     private float flightedJumpPower = 10f;
     public bool wingedMonster = false;
     private bool isFlying = false;
-    private int jumpsLeft = 2;
+    private int groundJumpsLeft = 1;
+    private int midAirJumpsLeft = 1;
     private bool isLanded = true;//used to ensure that landing functions only happen once. Also used to tell if players walk or fell off terrain as opposed to jumping
     Vector3 velocity;
 
@@ -84,11 +143,11 @@ public class monstroLocomotion : MonoBehaviour
         controller = GetComponent<CharacterController>();
         monstroInputs = GetComponent<monstroInputHandler>();
         monstroVisuals = GetComponent<monstroPartHandler>();
+        updateLocomotionStats();
         resetCharacterRotation();
         velocity.x = 0f;
         velocity.z = 0f;
         velocity.y = 0f;
-        jumpsLeft = 2;
         moveSpeed = 0;
         flightedJumpPower = jumpPower;
         isFlying = false;
@@ -114,6 +173,68 @@ public class monstroLocomotion : MonoBehaviour
         monstroFightManager fightManager = Object.FindFirstObjectByType<monstroFightManager>();
         fightManager.respawnPlayer(this.gameObject);
         velocity.y = 0f;
+    }
+
+    public void updateLocomotionStats()
+    {
+        //set the defaults to whatever the class dictates
+        if(locomotionClass == "")
+        {
+            locomotionClass = "brawler";
+        }
+
+        if(locomotionClass == "brawler")
+        {
+            defaultGroundJumps = brawler_groundJumps;
+            defaultMidAirJumps = brawler_midAirJumps;
+            defaultPostBounceGroundJumps = brawler_PostBounceGroundJumps;
+            defaultPostBounceMidAirJumps = brawler_PostBounceMidAirJumps;
+            defaultWalkSpeed = brawler_WalkSpeed;
+            defaultRunSpeed = brawler_RunSpeed;
+            defaultJumpPower = brawler_JumpPower;
+            defaultGravity = brawler_Gravity;
+        }
+
+        if (locomotionClass == "aviator")
+        {
+            defaultGroundJumps = aviator_groundJumps;
+            defaultMidAirJumps = aviator_midAirJumps;
+            defaultPostBounceGroundJumps = aviator_PostBounceGroundJumps;
+            defaultPostBounceMidAirJumps = aviator_PostBounceMidAirJumps;
+            defaultWalkSpeed = aviator_WalkSpeed;
+            defaultRunSpeed = aviator_RunSpeed;
+            defaultJumpPower = aviator_JumpPower;
+            defaultGravity = aviator_Gravity;
+        }
+
+        if (locomotionClass == "heavy")
+        {
+            defaultGroundJumps = heavy_groundJumps;
+            defaultMidAirJumps = heavy_midAirJumps;
+            defaultPostBounceGroundJumps = heavy_PostBounceGroundJumps;
+            defaultPostBounceMidAirJumps = heavy_PostBounceMidAirJumps;
+            defaultWalkSpeed = heavy_WalkSpeed;
+            defaultRunSpeed = heavy_RunSpeed;
+            defaultJumpPower = heavy_JumpPower;
+            defaultGravity = heavy_Gravity;
+        }
+
+        if (locomotionClass == "ghost")
+        {
+            defaultGroundJumps = ghost_groundJumps;
+            defaultMidAirJumps = ghost_midAirJumps;
+            defaultPostBounceGroundJumps = ghost_PostBounceGroundJumps;
+            defaultPostBounceMidAirJumps = ghost_PostBounceMidAirJumps;
+            defaultWalkSpeed = ghost_WalkSpeed;
+            defaultRunSpeed = ghost_RunSpeed;
+            defaultJumpPower = ghost_JumpPower;
+            defaultGravity = ghost_Gravity;
+        }
+
+        //set the changing stats to the defaults
+        groundJumpsLeft = defaultGroundJumps;
+        midAirJumpsLeft = defaultMidAirJumps;
+        
     }
     #endregion
 
@@ -169,9 +290,9 @@ public class monstroLocomotion : MonoBehaviour
         if ((direction.x > 0.4f || direction.x < -0.4f) || (direction.y > 0.4f || direction.y < -0.4f))
         {
 
-            if (moveSpeed != runSpeed || needsMovementAnimationRefresh)
+            if (moveSpeed != defaultRunSpeed || needsMovementAnimationRefresh)
             {
-                moveSpeed = runSpeed;
+                moveSpeed = defaultRunSpeed;
 
                 if (isGrounded)
                 {
@@ -184,9 +305,9 @@ public class monstroLocomotion : MonoBehaviour
         else if ((direction.x > 0.15f || direction.x < -0.15f) || (direction.y > 0.15f || direction.y < -0.15f))
         {
 
-            if (moveSpeed != walkSpeed || needsMovementAnimationRefresh)
+            if (moveSpeed != defaultWalkSpeed || needsMovementAnimationRefresh)
             {
-                moveSpeed = walkSpeed;
+                moveSpeed = defaultWalkSpeed;
 
                 if (isGrounded)
                 {
@@ -207,11 +328,11 @@ public class monstroLocomotion : MonoBehaviour
         }
 
         //this makes sure that there's no weird miscommunication between the idle, run, and walk animations after attacks
-        if(moveSpeed == runSpeed && monstroVisuals.currentAnimation != "run" && isGrounded)
+        if(moveSpeed == defaultRunSpeed && monstroVisuals.currentAnimation != "run" && isGrounded)
         {
             monstroVisuals.run(false);
         }
-        else if (moveSpeed == walkSpeed && monstroVisuals.currentAnimation != "walk" && isGrounded)
+        else if (moveSpeed == defaultWalkSpeed && monstroVisuals.currentAnimation != "walk" && isGrounded)
         {
             monstroVisuals.walk(false);
         }
@@ -219,11 +340,12 @@ public class monstroLocomotion : MonoBehaviour
 
     #endregion
 
-    #region Button South Input - Jump and Flight
+    #region Button South Input - Jump, Flight, and Recovery
 
     public void jumpInput()
     {
-        if (jumpsLeft == 0) return;
+        if (groundJumpsLeft == 0 && isGrounded) return;
+        if (midAirJumpsLeft == 0 && isGrounded == false) return;
         if (flightedJumpPower == 0) return;
         if (playerLock) return;
         if (isStunLocked) return;
@@ -234,51 +356,132 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = false;
         isGravityBlind = false;
 
-        if (wingedMonster == false)
+        if (locomotionClass == "brawler")
         {
-            #region Jump and Double Jump - Non Winged Monsters
+            #region Jump and Double Jump - Platformer Style Controller
 
-            if (jumpsLeft == 2)
+            if (isGrounded)
             {
                 monstroVisuals.jump();
+                groundJumpsLeft = groundJumpsLeft - 1;
             }
             else
             {
                 monstroVisuals.doubleJump();
+                midAirJumpsLeft = midAirJumpsLeft - 1;
             }
 
-            jumpsLeft = jumpsLeft - 1;
             velocity.y = 0f;
-            velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+            velocity.y += Mathf.Sqrt(defaultJumpPower * -2f * gravity);
             #endregion
         }
-        else
+        else if(locomotionClass == "aviator")
         {
-            #region Jump and Flight - Winged Monsters
+            #region Jump and Flight - Flying Style Controller
             if (isGrounded)
             {
                 velocity.y = 0f;
-                velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+                velocity.y += Mathf.Sqrt(defaultJumpPower * -2f * gravity);
+                monstroVisuals.jump();
+                groundJumpsLeft = groundJumpsLeft - 1;
             }
             else
             {
                 if (isFlying)
                 {
+                    monstroVisuals.jump();
                     velocity.y = 0f;
                     flightedJumpPower = flightedJumpPower - 2;
                     velocity.y += Mathf.Sqrt(flightedJumpPower * -2f * gravity);
+                    midAirJumpsLeft = midAirJumpsLeft - 1;
                 }
                 else
                 {
+                    monstroVisuals.jump();
                     velocity.y = 0f;
-                    velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+                    velocity.y += Mathf.Sqrt(defaultJumpPower * -2f * gravity);
                     isFlying = true;
+                    midAirJumpsLeft = midAirJumpsLeft - 1;
                 }
             }
 
             #endregion
         }
+        else if (locomotionClass == "heavy")
+        {
+            #region Jump and Double Jump - Heavy Style Controller
+
+            if (isGrounded)
+            {
+                monstroVisuals.jump();
+                groundJumpsLeft = groundJumpsLeft - 1;
+            }
+            else
+            {
+                monstroVisuals.jump();
+                midAirJumpsLeft = midAirJumpsLeft - 1;
+            }
+
+            groundJumpsLeft = groundJumpsLeft - 1;
+            velocity.y = 0f;
+            velocity.y += Mathf.Sqrt(defaultJumpPower * -2f * gravity);
+            #endregion
+        }
+        else if (locomotionClass == "ghost")
+        {
+            #region Jump and Double Jump - Teleporter Style Controller
+
+            if (isGrounded)
+            {
+                monstroVisuals.jump();
+                groundJumpsLeft = groundJumpsLeft - 1;
+            }
+            else
+            {
+                monstroVisuals.doubleJump();
+                midAirJumpsLeft = midAirJumpsLeft - 1;
+            }
+
+            velocity.y = 0f;
+            velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
+            #endregion
+        }
     }
+
+    public void recover()
+    {
+        print("recovery");
+
+        if (locomotionClass == "brawler")
+        {
+            #region Trampoline Jump - Platformer Style Controller
+
+           
+            #endregion
+        }
+        else if (locomotionClass == "aviator")
+        {
+            #region Jump and Flight - Flying Style Controller
+            
+
+            #endregion
+        }
+        else if (locomotionClass == "heavy")
+        {
+            #region From the Top Ropes - Heavy Style Controller
+
+            
+            #endregion
+        }
+        else if (locomotionClass == "ghost")
+        {
+            #region Teleport - Teleporter Style Controller
+
+            
+            #endregion
+        }
+    }
+
     #endregion
 
     void Update()
@@ -288,13 +491,14 @@ public class monstroLocomotion : MonoBehaviour
         if (playerLock != false) return; //world has asked me to stop all controllers
         if (isElectricLocked != false) return; //I have been electrocuted and im paralyzed
 
-        
+        /*
         if (attackLocked && rotationLocked == false && chargedAttackActive == false) //I am engaging an attack but the player hasn't confirmed a target by letting go of the button
         {
             moveDirection = new Vector3(inputVector.x, 0, inputVector.y);
             moveDirection = transform.TransformDirection(moveDirection);
             return;
         }
+        */
 
         if (isStunLocked) //I have been punched and launched in a direction
         {
@@ -454,7 +658,8 @@ public class monstroLocomotion : MonoBehaviour
     private void land()
     {
         velocity.y = 0f;
-        jumpsLeft = 2;
+        groundJumpsLeft = defaultGroundJumps;
+        midAirJumpsLeft = defaultMidAirJumps;
         flightedJumpPower = jumpPower;
         isFlying = false;
         isLanded = true;
@@ -501,13 +706,34 @@ public class monstroLocomotion : MonoBehaviour
     }
     #endregion
 
+    #region Locomotion Class Specific Functions
+
+    IEnumerator ghostTracker()
+    {
+        //grab position
+        updateLastSolidPosition();
+        yield return new WaitForSeconds(5);
+        StartCoroutine(ghostTracker());
+    }
+
+    private void updateLastSolidPosition()
+    {
+        if (isGrounded && onMovingPlatform == false)
+        {
+            lastSolidGroundPosition = this.transform.position;
+        }
+    }
+
+    #endregion
+
     #region Level Interactions
 
     private void bounce() //when the monster lands on a trampoline
     {
         velocity.y = 0f;
         velocity.y += Mathf.Sqrt((jumpPower * 1.5f) * -2f * gravity);
-        jumpsLeft = 2;
+        groundJumpsLeft = defaultPostBounceGroundJumps;
+        midAirJumpsLeft = defaultPostBounceMidAirJumps;
         flightedJumpPower = jumpPower;
         isFlying = false;
         monstroVisuals.jump();
@@ -737,7 +963,8 @@ public class monstroLocomotion : MonoBehaviour
         velocity.y = 0;
         velocity.y += Mathf.Sqrt(jumpPower * -2f * gravity);
         isFlying = false;
-        jumpsLeft = 0;
+        groundJumpsLeft = 0;
+        midAirJumpsLeft = 0;
         flightedJumpPower = 0;
         attackLocked = false;
         rotationLocked = false;
@@ -822,7 +1049,7 @@ public class monstroLocomotion : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        if (attackType == "physical" && isHeavy)
+        if (attackType == "physical")
         {
             velocity.x = 0;
             velocity.z = 0;
@@ -831,7 +1058,16 @@ public class monstroLocomotion : MonoBehaviour
             {
                 moveSpeed = 0;
             }
-            inputVector = Vector3.zero;
+
+            if (isHeavy)
+            {
+                inputVector = Vector3.zero;
+            }
+            else
+            {
+                moveSpeed = 0;
+                yield return new WaitForSeconds(0.4f);
+            }
         }
 
         //attackLocked = false;

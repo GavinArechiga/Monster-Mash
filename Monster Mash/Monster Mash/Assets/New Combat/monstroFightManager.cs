@@ -57,8 +57,9 @@ public class monstroFightManager : MonoBehaviour
     IEnumerator playIntroSpawnPortal(monstroInputHandler spawningMonster)
     {
         //reset data
-        spawningMonster.gameObject.GetComponent<monstroHealth>().resetHealth();
         spawningMonster.GetComponent<monstroLocomotion>().enabled = false;
+        spawningMonster.GetComponent<CharacterController>().enabled = false;
+        spawningMonster.gameObject.GetComponent<monstroHealth>().resetHealth();
 
         //grab spawn point
         GameObject playerSpawnPoint = GameObject.Find(spawningMonster.name + " Spawn");
@@ -75,10 +76,9 @@ public class monstroFightManager : MonoBehaviour
 
         //move location of spawning player to correct spawn point
         spawningMonster.transform.position = playerSpawnPoint.transform.position;
+        spawningMonster.GetComponent<CharacterController>().enabled = true;
 
-        //this is a temp visual enabler and disabler because james is annoying me lol
-
-        //spawningMonster.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        //turn on visuals
         spawningMonster.GetComponent<monstroLocomotion>().enabled = true;
         spawningMonster.gameObject.GetComponent<monstroPartHandler>().showMonster();
         spawningMonster.gameObject.GetComponent<monstroPartHandler>().startMonstroAnimations();
@@ -97,6 +97,7 @@ public class monstroFightManager : MonoBehaviour
 
         //change monster controls from UI to character movement
         spawningMonster.switchToFightControls();
+        spawningMonster.gameObject.GetComponent<monstroHealth>().turnOnHurtBox();
     }
 
     public void respawnPlayer(GameObject outOfBoundsMonster)

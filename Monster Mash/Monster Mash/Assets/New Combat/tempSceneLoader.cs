@@ -8,10 +8,12 @@ public class tempSceneLoader : MonoBehaviour
     public GameObject[] flightButtons;
     public GameObject[] nonFlightButtons;
     private monstroPartHandler player1;
+    private monstroPartHandler player2;
     public GameObject testRoomEnabler;
     public GameObject stageButtons;
     public GameObject monsterHolderButton;
     public GameObject playerJoinMessage;
+    public Transform[] monstroHolders;
 
     public void player1Join()
     {
@@ -45,9 +47,15 @@ public class tempSceneLoader : MonoBehaviour
         SceneManager.LoadScene(4);
     }
 
+    public void loadTestStageCharacter()
+    {
+        SceneManager.LoadScene(5);
+    }
+
     public void loadTestRoom()
     {
         testRoomEnabler.SetActive(true);
+        stageButtons.SetActive(false);
     }
 
     public void givePlayerFlight(int playerNumber)
@@ -89,6 +97,42 @@ public class tempSceneLoader : MonoBehaviour
         monsterPartHolder.gameObject.SetActive(true);
         player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
         player1.assignMonstroPartHolder(monsterPartHolder);
+        monsterSelected();
+    }
+
+    public void monsterCombo1()
+    {
+        monstroHolders[0].gameObject.SetActive(true);
+        player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
+        player1.assignMonstroPartHolder(monstroHolders[0]);
+
+        monstroPartHandler[] players = FindObjectsByType<monstroPartHandler>(FindObjectsSortMode.None);
+
+        if(players.Length > 1)
+        {
+            player2 = GameObject.Find("Player " + 2).GetComponent<monstroPartHandler>();
+            monstroHolders[1].gameObject.SetActive(true);
+            player2.assignMonstroPartHolder(monstroHolders[1]);
+        }
+
+        monsterSelected();
+    }
+
+    public void monsterCombo2()
+    {
+        monstroHolders[1].gameObject.SetActive(true);
+        player1 = GameObject.Find("Player " + 1).GetComponent<monstroPartHandler>();
+        player1.assignMonstroPartHolder(monstroHolders[1]);
+
+        monstroPartHandler[] players = FindObjectsByType<monstroPartHandler>(FindObjectsSortMode.None);
+
+        if (players.Length > 1)
+        {
+            player2 = GameObject.Find("Player " + 2).GetComponent<monstroPartHandler>();
+            monstroHolders[0].gameObject.SetActive(true);
+            player2.assignMonstroPartHolder(monstroHolders[0]);
+        }
+
         monsterSelected();
     }
 }

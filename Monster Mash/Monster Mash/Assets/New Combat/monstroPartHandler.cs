@@ -10,6 +10,7 @@ public class monstroPartHandler : MonoBehaviour
     //Deep thinking should be handled by other scripts before calling on these functions
     private monstroInputHandler myInputHandler;
     private monstroHolder myMonsterPartHolder;
+    private monstroLocomotion myLocomotion;
     public Transform characterRotator;
     private Transform monsterPartHolderTransform;
     private monstroPart[] myMonstroParts;
@@ -20,6 +21,7 @@ public class monstroPartHandler : MonoBehaviour
     private void Awake()
     {
         myInputHandler = GetComponent<monstroInputHandler>();
+        myLocomotion = GetComponent<monstroLocomotion>();
     }
     public void assignMonstroPartHolder(Transform newMonsterPartHolder)
     {
@@ -28,6 +30,7 @@ public class monstroPartHandler : MonoBehaviour
         monsterPartHolderTransform.parent = characterRotator; //parent the new selected monster under the player and specifically under the object we rotate with movement
         myMonstroParts = GetComponentsInChildren<monstroPart>();
         myMonsterPartHolder = newMonsterPartHolder.GetComponent<monstroHolder>();
+        myLocomotion.locomotionClass = myMonsterPartHolder.monstroLocomotionDropDown.ToString();
         availableAttackingParts.Clear();
 
         if(myInputHandler == null)

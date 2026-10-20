@@ -142277,6 +142277,7 @@ GameObject:
   - component: {fileID: 4530839509604072969}
   - component: {fileID: 9212448444777258301}
   - component: {fileID: 4530839509604072967}
+  - component: {fileID: 2454275246701154166}
   - component: {fileID: 1516043871922068913}
   - component: {fileID: 4530839509604072968}
   - component: {fileID: 753867557221236637}
@@ -142615,9 +142616,41 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4c8a3342-18f5-47d0-a0bd-028650e0c582
     m_ActionName: Monstro Movement/Jump
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 84433da3-c1d7-4391-a5b1-e6b867b00839
+    m_ActionName: Monstro Interaction/Button East[/DualShock4GamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e2ce29df-8ce0-414b-b43f-9cea6e99c6e9
+    m_ActionName: Monstro Interaction/Button West[/DualShock4GamepadHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: feb8861d-b8f7-4881-a38a-cf19951cbae2
+    m_ActionName: Monstro Interaction/Button North[/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0df313f5-f489-4bd2-bce5-3e9f2c1ff472
+    m_ActionName: Monstro Interaction/Left Bumper[/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 72f91105-2107-4bcb-b4b2-08f5b6ad4d8d
+    m_ActionName: Monstro Interaction/Right Bumper[/DualShock4GamepadHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5b9e8ccd-2b57-4efc-b72b-cc43c1311f23
+    m_ActionName: Monstro Interaction/Left Trigger[/DualShock4GamepadHID/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e68e6947-a869-4c68-bc72-ac0cbd0bc024
+    m_ActionName: Monstro Interaction/Right Trigger[/DualShock4GamepadHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8c13c32a-55c5-435d-aa86-079cfa8860d0
+    m_ActionName: Monstro UI Cursor/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Monstro UI
+  m_DefaultActionMap: Monstro Fighter
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &9212448444777258301
@@ -142653,6 +142686,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &2454275246701154166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530839509604072970}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edbecd307544c1d4085b346011bef380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1516043871922068913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142711,6 +142756,7 @@ MonoBehaviour:
   characterRotator: {fileID: 7059590689308201318}
   availableAttackingParts: []
   numberOfMappedParts: 0
+  currentAnimation: null
 --- !u!114 &8603333251107464328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186775,7 +186821,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 6057734724292299777}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1

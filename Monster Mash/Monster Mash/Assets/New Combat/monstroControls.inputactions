@@ -398,7 +398,7 @@
             ]
         },
         {
-            "name": "Monstro UI",
+            "name": "Monstro UI Buttons",
             "id": "8f1bb257-5cca-4986-9e39-3f475aad3785",
             "actions": [
                 {
@@ -415,6 +415,34 @@
                 {
                     "name": "",
                     "id": "e64b2b8e-589c-409b-a219-31156b642d2f",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Monstro UI Cursor",
+            "id": "574e8655-84aa-42fe-ba3f-c0e8ea9a86a5",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "8c13c32a-55c5-435d-aa86-079cfa8860d0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9ff794dc-e9b5-4812-b4f5-638acb4c7a19",
                     "path": "",
                     "interactions": "",
                     "processors": "",

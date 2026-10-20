@@ -420,7 +420,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Monstro UI"",
+            ""name"": ""Monstro UI Buttons"",
             ""id"": ""8f1bb257-5cca-4986-9e39-3f475aad3785"",
             ""actions"": [
                 {
@@ -437,6 +437,34 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e64b2b8e-589c-409b-a219-31156b642d2f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Monstro UI Cursor"",
+            ""id"": ""574e8655-84aa-42fe-ba3f-c0e8ea9a86a5"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c13c32a-55c5-435d-aa86-079cfa8860d0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9ff794dc-e9b5-4812-b4f5-638acb4c7a19"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -473,9 +501,12 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         m_MonstroInteraction_RightBumper = m_MonstroInteraction.FindAction("Right Bumper", throwIfNotFound: true);
         m_MonstroInteraction_LeftTrigger = m_MonstroInteraction.FindAction("Left Trigger", throwIfNotFound: true);
         m_MonstroInteraction_RightTrigger = m_MonstroInteraction.FindAction("Right Trigger", throwIfNotFound: true);
-        // Monstro UI
-        m_MonstroUI = asset.FindActionMap("Monstro UI", throwIfNotFound: true);
-        m_MonstroUI_Newaction = m_MonstroUI.FindAction("New action", throwIfNotFound: true);
+        // Monstro UI Buttons
+        m_MonstroUIButtons = asset.FindActionMap("Monstro UI Buttons", throwIfNotFound: true);
+        m_MonstroUIButtons_Newaction = m_MonstroUIButtons.FindAction("New action", throwIfNotFound: true);
+        // Monstro UI Cursor
+        m_MonstroUICursor = asset.FindActionMap("Monstro UI Cursor", throwIfNotFound: true);
+        m_MonstroUICursor_Newaction = m_MonstroUICursor.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -762,51 +793,97 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     }
     public MonstroInteractionActions @MonstroInteraction => new MonstroInteractionActions(this);
 
-    // Monstro UI
-    private readonly InputActionMap m_MonstroUI;
-    private List<IMonstroUIActions> m_MonstroUIActionsCallbackInterfaces = new List<IMonstroUIActions>();
-    private readonly InputAction m_MonstroUI_Newaction;
-    public struct MonstroUIActions
+    // Monstro UI Buttons
+    private readonly InputActionMap m_MonstroUIButtons;
+    private List<IMonstroUIButtonsActions> m_MonstroUIButtonsActionsCallbackInterfaces = new List<IMonstroUIButtonsActions>();
+    private readonly InputAction m_MonstroUIButtons_Newaction;
+    public struct MonstroUIButtonsActions
     {
         private @MonstroControls m_Wrapper;
-        public MonstroUIActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_MonstroUI_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_MonstroUI; }
+        public MonstroUIButtonsActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_MonstroUIButtons_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_MonstroUIButtons; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MonstroUIActions set) { return set.Get(); }
-        public void AddCallbacks(IMonstroUIActions instance)
+        public static implicit operator InputActionMap(MonstroUIButtonsActions set) { return set.Get(); }
+        public void AddCallbacks(IMonstroUIButtonsActions instance)
         {
-            if (instance == null || m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces.Add(instance);
             @Newaction.started += instance.OnNewaction;
             @Newaction.performed += instance.OnNewaction;
             @Newaction.canceled += instance.OnNewaction;
         }
 
-        private void UnregisterCallbacks(IMonstroUIActions instance)
+        private void UnregisterCallbacks(IMonstroUIButtonsActions instance)
         {
             @Newaction.started -= instance.OnNewaction;
             @Newaction.performed -= instance.OnNewaction;
             @Newaction.canceled -= instance.OnNewaction;
         }
 
-        public void RemoveCallbacks(IMonstroUIActions instance)
+        public void RemoveCallbacks(IMonstroUIButtonsActions instance)
         {
-            if (m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IMonstroUIActions instance)
+        public void SetCallbacks(IMonstroUIButtonsActions instance)
         {
-            foreach (var item in m_Wrapper.m_MonstroUIActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_MonstroUIActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public MonstroUIActions @MonstroUI => new MonstroUIActions(this);
+    public MonstroUIButtonsActions @MonstroUIButtons => new MonstroUIButtonsActions(this);
+
+    // Monstro UI Cursor
+    private readonly InputActionMap m_MonstroUICursor;
+    private List<IMonstroUICursorActions> m_MonstroUICursorActionsCallbackInterfaces = new List<IMonstroUICursorActions>();
+    private readonly InputAction m_MonstroUICursor_Newaction;
+    public struct MonstroUICursorActions
+    {
+        private @MonstroControls m_Wrapper;
+        public MonstroUICursorActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_MonstroUICursor_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_MonstroUICursor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MonstroUICursorActions set) { return set.Get(); }
+        public void AddCallbacks(IMonstroUICursorActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces.Add(instance);
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
+        }
+
+        private void UnregisterCallbacks(IMonstroUICursorActions instance)
+        {
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
+        }
+
+        public void RemoveCallbacks(IMonstroUICursorActions instance)
+        {
+            if (m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMonstroUICursorActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MonstroUICursorActions @MonstroUICursor => new MonstroUICursorActions(this);
     public interface IMonstroFighterActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -832,7 +909,11 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         void OnLeftTrigger(InputAction.CallbackContext context);
         void OnRightTrigger(InputAction.CallbackContext context);
     }
-    public interface IMonstroUIActions
+    public interface IMonstroUIButtonsActions
+    {
+        void OnNewaction(InputAction.CallbackContext context);
+    }
+    public interface IMonstroUICursorActions
     {
         void OnNewaction(InputAction.CallbackContext context);
     }
