@@ -9,6 +9,7 @@ public class monstroInputHandler : MonoBehaviour
     PlayerInput playerInput;
     private monstroLocomotion locomotion;
     private monstroPartHandler partHandler;
+    private MonstroUI uiHandler;
     public monstroPart[] mappedMonstroParts = new monstroPart[7];
     private monstroPart currentlyAttackingPart;
     private int currentlyAttackingPartIndex;
@@ -16,8 +17,12 @@ public class monstroInputHandler : MonoBehaviour
     private bool attackMarkedHeavy;
     private bool attackStarted = false;
     private bool attackCooled = true;
+    private bool jumpStarted = false;
+    private bool jumpRecoveryCooled = true;
+    private bool jumpMarkedForRecovery = false;
     private float heavyAttackCooldownTime = 0.5f;//0.5
     private float lightAttackCooldownTime = 0.25f;//0.2
+    private float jumpRecoveryCooldownTime = 1f;
 
     private bool inInteractionZone = false;
     private hubInteractionTrigger currentPotentialInteraction;
@@ -27,8 +32,42 @@ public class monstroInputHandler : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         locomotion = GetComponent<monstroLocomotion>();
         partHandler = GetComponent<monstroPartHandler>();
+        uiHandler = GetComponent<MonstroUI>();
     }
 
+    #region Switching Controls
+
+    public void switchToFightControls()
+    {
+        locomotion.enabled = true;
+        uiHandler.enabled = false;
+        playerInput.SwitchCurrentActionMap("Monstro Fighter");
+    }
+
+    public void switchToHubInteractionControls()
+    {
+        locomotion.enabled = true;
+        uiHandler.enabled = false;
+        playerInput.SwitchCurrentActionMap("Monstro Interaction");
+    }
+
+    public void switchToUIbuttonsControls()
+    {
+        locomotion.enabled = false;
+        uiHandler.enabled = true;
+        playerInput.SwitchCurrentActionMap("Monstro UI Buttons");
+    }
+
+    public void switchToUICursorControls()
+    {
+        locomotion.enabled = false;
+        uiHandler.enabled = true;
+        playerInput.SwitchCurrentActionMap("Monstro UI Cursor");
+    }
+
+    #endregion
+
+    #region Movement, Jumping, and Recovery
     public void OnMove(CallbackContext context)
     {
         if (locomotion.playerLock || locomotion.isStunLocked || locomotion.isElectricLocked) return;
@@ -44,23 +83,50 @@ public class monstroInputHandler : MonoBehaviour
 
         if (context.started)
         {
+            if(jumpStarted == false)
+            {
+                StopCoroutine(jumpInputTimer());
+                StartCoroutine(jumpInputTimer());
+                jumpStarted = true;
+            }
+        }
+
+        if (context.canceled && jumpMarkedForRecovery == false)
+        {
             locomotion.jumpInput();
+            jumpStarted = false;
+            jumpMarkedForRecovery = false;
+        }
+        else if (context.canceled && jumpMarkedForRecovery)
+        {
+            locomotion.recover();
+            jumpStarted = false;
+            jumpMarkedForRecovery = false;
+        }
+
+
+    }
+
+    private void jumpStart()
+    {
+        
+    }
+
+    private void jumpRelease()
+    {
+       
+    }
+
+    IEnumerator jumpInputTimer()
+    {
+        jumpMarkedForRecovery = false;
+        yield return new WaitForSeconds(heavyDetectionTime);
+        if (jumpStarted)
+        {
+            jumpMarkedForRecovery = true;
         }
     }
 
-    #region Switching Controls
-
-    public void switchToFightControls()
-    {
-        locomotion.enabled = true;
-        playerInput.SwitchCurrentActionMap("Monstro Fighter");
-    }
-
-    public void switchToHubInteractionControls()
-    {
-        locomotion.enabled = true;
-        playerInput.SwitchCurrentActionMap("Monstro Interaction");
-    }
 
     #endregion
 
