@@ -20,7 +20,7 @@ public class CursorManager : MonoBehaviour
 
     [SerializeField] private GameObject roster;
 
-    [SerializeField] private int nextScene = 5;
+    [SerializeField] private int nextScene = 6;
 
     // Start is called before the first frame update
     void Start()

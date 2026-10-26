@@ -424,24 +424,84 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             ""id"": ""8f1bb257-5cca-4986-9e39-3f475aad3785"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
-                    ""id"": ""192198a7-152a-4f3a-8200-ae2926402636"",
+                    ""id"": ""0d6d7836-0fab-4405-8b6f-82436e105342"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""8bee0ff2-abfe-456a-8825-4a05d55b5b1a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""27fccaa2-c838-4619-b176-585cedebbb3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigate"",
+                    ""type"": ""Value"",
+                    ""id"": ""7d739723-ed35-4736-8c27-99a4b33db0df"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""e64b2b8e-589c-409b-a219-31156b642d2f"",
-                    ""path"": """",
+                    ""id"": ""468b6bbe-ebcd-45de-9bec-e936e8f5cfad"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48c736b1-48a9-429d-985d-9edbbc2f41a5"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c143162-67f8-4549-b652-cb096724e6f2"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a619d099-0ff5-454c-bac1-d7fc6196dd49"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -452,9 +512,36 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             ""id"": ""574e8655-84aa-42fe-ba3f-c0e8ea9a86a5"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""NavigateCS"",
+                    ""type"": ""Value"",
+                    ""id"": ""0c5adbd0-a4e4-49e7-b1f1-fc03b8a38280"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SubmitCS"",
                     ""type"": ""Button"",
-                    ""id"": ""8c13c32a-55c5-435d-aa86-079cfa8860d0"",
+                    ""id"": ""0272d0db-03cc-4182-b3e9-bf5132a17f3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CancelCS"",
+                    ""type"": ""Button"",
+                    ""id"": ""16ef49f9-0686-4ba1-8ca7-ec00b461d07f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ConfirmCS"",
+                    ""type"": ""Button"",
+                    ""id"": ""88e64abd-dea9-4274-ade1-8bf1fe6361bd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -464,12 +551,45 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""9ff794dc-e9b5-4812-b4f5-638acb4c7a19"",
-                    ""path"": """",
+                    ""id"": ""deddc12d-a873-4cfa-a356-9a0449359650"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""ConfirmCS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b097b169-86fd-4406-a29a-f66520792817"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CancelCS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6becbb4-8af8-406a-83b0-a0742821f12b"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubmitCS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26dcae17-c7f3-4751-b258-afc83fe7e9aa"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateCS"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -503,10 +623,16 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         m_MonstroInteraction_RightTrigger = m_MonstroInteraction.FindAction("Right Trigger", throwIfNotFound: true);
         // Monstro UI Buttons
         m_MonstroUIButtons = asset.FindActionMap("Monstro UI Buttons", throwIfNotFound: true);
-        m_MonstroUIButtons_Newaction = m_MonstroUIButtons.FindAction("New action", throwIfNotFound: true);
+        m_MonstroUIButtons_Pause = m_MonstroUIButtons.FindAction("Pause", throwIfNotFound: true);
+        m_MonstroUIButtons_Cancel = m_MonstroUIButtons.FindAction("Cancel", throwIfNotFound: true);
+        m_MonstroUIButtons_Submit = m_MonstroUIButtons.FindAction("Submit", throwIfNotFound: true);
+        m_MonstroUIButtons_Navigate = m_MonstroUIButtons.FindAction("Navigate", throwIfNotFound: true);
         // Monstro UI Cursor
         m_MonstroUICursor = asset.FindActionMap("Monstro UI Cursor", throwIfNotFound: true);
-        m_MonstroUICursor_Newaction = m_MonstroUICursor.FindAction("New action", throwIfNotFound: true);
+        m_MonstroUICursor_NavigateCS = m_MonstroUICursor.FindAction("NavigateCS", throwIfNotFound: true);
+        m_MonstroUICursor_SubmitCS = m_MonstroUICursor.FindAction("SubmitCS", throwIfNotFound: true);
+        m_MonstroUICursor_CancelCS = m_MonstroUICursor.FindAction("CancelCS", throwIfNotFound: true);
+        m_MonstroUICursor_ConfirmCS = m_MonstroUICursor.FindAction("ConfirmCS", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -796,12 +922,18 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     // Monstro UI Buttons
     private readonly InputActionMap m_MonstroUIButtons;
     private List<IMonstroUIButtonsActions> m_MonstroUIButtonsActionsCallbackInterfaces = new List<IMonstroUIButtonsActions>();
-    private readonly InputAction m_MonstroUIButtons_Newaction;
+    private readonly InputAction m_MonstroUIButtons_Pause;
+    private readonly InputAction m_MonstroUIButtons_Cancel;
+    private readonly InputAction m_MonstroUIButtons_Submit;
+    private readonly InputAction m_MonstroUIButtons_Navigate;
     public struct MonstroUIButtonsActions
     {
         private @MonstroControls m_Wrapper;
         public MonstroUIButtonsActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_MonstroUIButtons_Newaction;
+        public InputAction @Pause => m_Wrapper.m_MonstroUIButtons_Pause;
+        public InputAction @Cancel => m_Wrapper.m_MonstroUIButtons_Cancel;
+        public InputAction @Submit => m_Wrapper.m_MonstroUIButtons_Submit;
+        public InputAction @Navigate => m_Wrapper.m_MonstroUIButtons_Navigate;
         public InputActionMap Get() { return m_Wrapper.m_MonstroUIButtons; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -811,16 +943,34 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MonstroUIButtonsActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
+            @Submit.started += instance.OnSubmit;
+            @Submit.performed += instance.OnSubmit;
+            @Submit.canceled += instance.OnSubmit;
+            @Navigate.started += instance.OnNavigate;
+            @Navigate.performed += instance.OnNavigate;
+            @Navigate.canceled += instance.OnNavigate;
         }
 
         private void UnregisterCallbacks(IMonstroUIButtonsActions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
+            @Submit.started -= instance.OnSubmit;
+            @Submit.performed -= instance.OnSubmit;
+            @Submit.canceled -= instance.OnSubmit;
+            @Navigate.started -= instance.OnNavigate;
+            @Navigate.performed -= instance.OnNavigate;
+            @Navigate.canceled -= instance.OnNavigate;
         }
 
         public void RemoveCallbacks(IMonstroUIButtonsActions instance)
@@ -842,12 +992,18 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     // Monstro UI Cursor
     private readonly InputActionMap m_MonstroUICursor;
     private List<IMonstroUICursorActions> m_MonstroUICursorActionsCallbackInterfaces = new List<IMonstroUICursorActions>();
-    private readonly InputAction m_MonstroUICursor_Newaction;
+    private readonly InputAction m_MonstroUICursor_NavigateCS;
+    private readonly InputAction m_MonstroUICursor_SubmitCS;
+    private readonly InputAction m_MonstroUICursor_CancelCS;
+    private readonly InputAction m_MonstroUICursor_ConfirmCS;
     public struct MonstroUICursorActions
     {
         private @MonstroControls m_Wrapper;
         public MonstroUICursorActions(@MonstroControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_MonstroUICursor_Newaction;
+        public InputAction @NavigateCS => m_Wrapper.m_MonstroUICursor_NavigateCS;
+        public InputAction @SubmitCS => m_Wrapper.m_MonstroUICursor_SubmitCS;
+        public InputAction @CancelCS => m_Wrapper.m_MonstroUICursor_CancelCS;
+        public InputAction @ConfirmCS => m_Wrapper.m_MonstroUICursor_ConfirmCS;
         public InputActionMap Get() { return m_Wrapper.m_MonstroUICursor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -857,16 +1013,34 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MonstroUICursorActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @NavigateCS.started += instance.OnNavigateCS;
+            @NavigateCS.performed += instance.OnNavigateCS;
+            @NavigateCS.canceled += instance.OnNavigateCS;
+            @SubmitCS.started += instance.OnSubmitCS;
+            @SubmitCS.performed += instance.OnSubmitCS;
+            @SubmitCS.canceled += instance.OnSubmitCS;
+            @CancelCS.started += instance.OnCancelCS;
+            @CancelCS.performed += instance.OnCancelCS;
+            @CancelCS.canceled += instance.OnCancelCS;
+            @ConfirmCS.started += instance.OnConfirmCS;
+            @ConfirmCS.performed += instance.OnConfirmCS;
+            @ConfirmCS.canceled += instance.OnConfirmCS;
         }
 
         private void UnregisterCallbacks(IMonstroUICursorActions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @NavigateCS.started -= instance.OnNavigateCS;
+            @NavigateCS.performed -= instance.OnNavigateCS;
+            @NavigateCS.canceled -= instance.OnNavigateCS;
+            @SubmitCS.started -= instance.OnSubmitCS;
+            @SubmitCS.performed -= instance.OnSubmitCS;
+            @SubmitCS.canceled -= instance.OnSubmitCS;
+            @CancelCS.started -= instance.OnCancelCS;
+            @CancelCS.performed -= instance.OnCancelCS;
+            @CancelCS.canceled -= instance.OnCancelCS;
+            @ConfirmCS.started -= instance.OnConfirmCS;
+            @ConfirmCS.performed -= instance.OnConfirmCS;
+            @ConfirmCS.canceled -= instance.OnConfirmCS;
         }
 
         public void RemoveCallbacks(IMonstroUICursorActions instance)
@@ -911,10 +1085,16 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     }
     public interface IMonstroUIButtonsActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
+        void OnSubmit(InputAction.CallbackContext context);
+        void OnNavigate(InputAction.CallbackContext context);
     }
     public interface IMonstroUICursorActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnNavigateCS(InputAction.CallbackContext context);
+        void OnSubmitCS(InputAction.CallbackContext context);
+        void OnCancelCS(InputAction.CallbackContext context);
+        void OnConfirmCS(InputAction.CallbackContext context);
     }
 }

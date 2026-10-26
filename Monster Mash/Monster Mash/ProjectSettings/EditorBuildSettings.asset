@@ -5,42 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/7Battle/Battle.unity
-    guid: d561846097fc6d846a1904a8e58e4c5c
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/1MainMenu/MainMenu.unity
-    guid: 2b90c38465a41c04c9b0854119cced77
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/0GameStart/GameStart.unity
-    guid: cd04b3a2b1dcd4d4d8d2039dac9f32d1
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/2CharacterSelect/CharacterSelect.unity
-    guid: ab4769f98c2780c4595d1a80ca0c69a2
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/5StageSelect/StageSelect.unity
-    guid: 4a17694910eb34b4ca1f80fe7173e8f8
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/6StageLoad/StageLoad.unity
-    guid: eb0ab29e7f2035d4f93beaef955a3a83
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/8BattleResults/BattleResults.unity
-    guid: 4ddf21d5eac0733489d8777243daa0f7
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/4Beastiary/Beastiary.unity
-    guid: daecf43c6e8b6ab438a125bb6f7ee505
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/11BuildAScare/TestBAS.unity
-    guid: 09b64145619fea64ab078cb1ad7866f6
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/11BuildAScare/BuildAScare.unity
-    guid: b029ee2870ace074fa3802cdd3afcc87
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/9TempStageA/TempStageA.unity
-    guid: 6011c13b51e4596408fe3495b2793ce5
-  - enabled: 0
-    path: Assets/MenuNavigation/MenuScenes/Scenes/10TempStageB/TempStageB.unity
-    guid: 6ddf928ac63e7334fa8c576f2f99a922
   - enabled: 1
     path: Assets/New Combat/Gavins New Combat.unity
     guid: 49a892d0111b94c4d9871ab0028a2e12
@@ -59,6 +23,45 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/New Combat/Test Stage and Character.unity
     guid: 3e49c1f5c0e8351408a1598d846a689b
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/5CharacterSelect/NewCharacterSelect.unity
+    guid: ebc3933f6508bc347a26c20cb5cf6b17
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/7Battle/Battle.unity
+    guid: d561846097fc6d846a1904a8e58e4c5c
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/1MainMenu/MainMenu.unity
+    guid: 2b90c38465a41c04c9b0854119cced77
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/0GameStart/GameStart.unity
+    guid: cd04b3a2b1dcd4d4d8d2039dac9f32d1
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/5CharacterSelect/CharacterSelect.unity
+    guid: ab4769f98c2780c4595d1a80ca0c69a2
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/2StageSelect/StageSelect.unity
+    guid: 4a17694910eb34b4ca1f80fe7173e8f8
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/6StageLoad/StageLoad.unity
+    guid: eb0ab29e7f2035d4f93beaef955a3a83
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/8BattleResults/BattleResults.unity
+    guid: 4ddf21d5eac0733489d8777243daa0f7
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/4Beastiary/Beastiary.unity
+    guid: daecf43c6e8b6ab438a125bb6f7ee505
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/11BuildAScare/TestBAS.unity
+    guid: 09b64145619fea64ab078cb1ad7866f6
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/11BuildAScare/BuildAScare.unity
+    guid: b029ee2870ace074fa3802cdd3afcc87
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/9TempStageA/TempStageA.unity
+    guid: 6011c13b51e4596408fe3495b2793ce5
+  - enabled: 1
+    path: Assets/MenuNavigation/MenuScenes/Scenes/10TempStageB/TempStageB.unity
+    guid: 6ddf928ac63e7334fa8c576f2f99a922
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4aac50c1861c91e4e92485c9846f0c18,
       type: 2}

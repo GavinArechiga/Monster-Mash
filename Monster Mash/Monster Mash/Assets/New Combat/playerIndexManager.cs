@@ -16,4 +16,9 @@ public class playerIndexManager : MonoBehaviour
             newPlayer.name = "Player " + players.Count;
         }
     }
+
+    public List<GameObject> GetPlayers()
+    {
+        return players;
+    }
 }

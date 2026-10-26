@@ -10,6 +10,7 @@ public class monstroInputHandler : MonoBehaviour
     private monstroLocomotion locomotion;
     private monstroPartHandler partHandler;
     private MonstroUI uiHandler;
+    public MonstroUICursor cursorHandler;
     public monstroPart[] mappedMonstroParts = new monstroPart[7];
     private monstroPart currentlyAttackingPart;
     private int currentlyAttackingPartIndex;
@@ -33,6 +34,7 @@ public class monstroInputHandler : MonoBehaviour
         locomotion = GetComponent<monstroLocomotion>();
         partHandler = GetComponent<monstroPartHandler>();
         uiHandler = GetComponent<MonstroUI>();
+        cursorHandler = GetComponent<MonstroUICursor>();
     }
 
     #region Switching Controls
@@ -41,6 +43,7 @@ public class monstroInputHandler : MonoBehaviour
     {
         locomotion.enabled = true;
         uiHandler.enabled = false;
+        cursorHandler.enabled = false;
         playerInput.SwitchCurrentActionMap("Monstro Fighter");
     }
 
@@ -48,6 +51,7 @@ public class monstroInputHandler : MonoBehaviour
     {
         locomotion.enabled = true;
         uiHandler.enabled = false;
+        cursorHandler.enabled = false;
         playerInput.SwitchCurrentActionMap("Monstro Interaction");
     }
 
@@ -55,13 +59,15 @@ public class monstroInputHandler : MonoBehaviour
     {
         locomotion.enabled = false;
         uiHandler.enabled = true;
+        cursorHandler.enabled = false;
         playerInput.SwitchCurrentActionMap("Monstro UI Buttons");
     }
 
     public void switchToUICursorControls()
     {
         locomotion.enabled = false;
-        uiHandler.enabled = true;
+        uiHandler.enabled = false;
+        cursorHandler.enabled = true;
         playerInput.SwitchCurrentActionMap("Monstro UI Cursor");
     }
 
@@ -411,5 +417,44 @@ public class monstroInputHandler : MonoBehaviour
             currentPotentialInteraction = null;
         }
     }
+    #endregion
+
+    #region Cursor Controls, Character Select
+    public void OnNavigateCS (CallbackContext context)
+    {
+        if (context.performed)
+        {
+            cursorHandler.CursorNavigate(true, context.ReadValue<Vector2>());
+        }
+        else if (context.canceled)
+        {
+            cursorHandler.CursorNavigate(false, context.ReadValue<Vector2>());
+        }
+    }
+
+    public void OnSubmitCS(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            cursorHandler.CursorSubmit();
+        }
+    }
+
+    public void OnCancelCS(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            cursorHandler.CursorCancel();
+        }
+    }
+
+    public void OnConfirmCS(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            cursorHandler.CursorConfirm();
+        }
+    }
+
     #endregion
 }
