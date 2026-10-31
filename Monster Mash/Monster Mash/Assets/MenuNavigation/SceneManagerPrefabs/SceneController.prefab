@@ -113,21 +113,24 @@ MonoBehaviour:
   - {fileID: 6009662734918998101}
   - {fileID: 4879475367657764269}
   - {fileID: 2924040534372872445}
-  controllerForThisScene: {fileID: 8722378828708286347, guid: 2f42f2e9e0ff3a547876c7ddf83283ba,
+  controllerForThisScene: {fileID: 47607940771883431, guid: 701fd9b551ad3574698a08600a83189f,
     type: 3}
   myScenes:
   - GameStart
   - MainMenu
-  - CharacterSelect
+  - StageSelect
   - BuildAScare
   - Beastiary
-  - StageSelect
+  - CharacterSelect
   - StageLoad
   - Battle
   - BattleResults
   - TempStageA
   - TempStageB
-  - Block Party Redux
+  - Block Party Redux 1
+  - Monsterberry Munch Mania 1
+  - The Beastdome
+  controls: 0
 --- !u!1 &3723062881592468777
 GameObject:
   m_ObjectHideFlags: 0

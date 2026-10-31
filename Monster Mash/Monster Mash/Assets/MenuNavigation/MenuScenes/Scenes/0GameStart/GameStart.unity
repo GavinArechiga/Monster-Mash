@@ -1132,6 +1132,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1658357182229871288, guid: bdc57fb0f3e4327448b8882f690d914a,
+        type: 3}
+      propertyPath: nextScene
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1658357182229871289, guid: bdc57fb0f3e4327448b8882f690d914a,
         type: 3}
       propertyPath: m_Name
@@ -1206,22 +1211,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneManager
       objectReference: {fileID: 0}
-    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
-        type: 3}
-      propertyPath: allowJoining
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
-        type: 3}
-      propertyPath: cutSceneDuration
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707773047803265863, guid: 6538ce9fdeec83b4494cab3c4123180e,
-        type: 3}
-      propertyPath: controllerForThisScene
-      value: 
-      objectReference: {fileID: 47607940771883431, guid: 701fd9b551ad3574698a08600a83189f,
-        type: 3}
     - target: {fileID: 1707773047803265864, guid: 6538ce9fdeec83b4494cab3c4123180e,
         type: 3}
       propertyPath: m_RootOrder

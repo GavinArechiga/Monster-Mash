@@ -142278,6 +142278,7 @@ GameObject:
   - component: {fileID: 9212448444777258301}
   - component: {fileID: 4530839509604072967}
   - component: {fileID: 2454275246701154166}
+  - component: {fileID: 880978441538758296}
   - component: {fileID: 1516043871922068913}
   - component: {fileID: 4530839509604072968}
   - component: {fileID: 753867557221236637}
@@ -142452,10 +142453,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 6fb83ecc-9bd1-48eb-bfd3-9e7a4eee40a3
     m_ActionName: Monstro Movement/Jump[/XInputControllerWindows/buttonSouth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 192198a7-152a-4f3a-8200-ae2926402636
-    m_ActionName: Monstro UI/New action
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4530839509604072967}
@@ -142646,8 +142643,84 @@ MonoBehaviour:
     m_ActionName: Monstro Interaction/Right Trigger[/DualShock4GamepadHID/rightTrigger]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 8c13c32a-55c5-435d-aa86-079cfa8860d0
-    m_ActionName: Monstro UI Cursor/New action
+    m_ActionId: 0d6d7836-0fab-4405-8b6f-82436e105342
+    m_ActionName: Monstro UI Buttons/Pause[/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8bee0ff2-abfe-456a-8825-4a05d55b5b1a
+    m_ActionName: Monstro UI Buttons/Cancel[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 27fccaa2-c838-4619-b176-585cedebbb3b
+    m_ActionName: Monstro UI Buttons/Submit[/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7d739723-ed35-4736-8c27-99a4b33db0df
+    m_ActionName: Monstro UI Buttons/Navigate[/XInputControllerWindows/leftStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnNavigateCS
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0c5adbd0-a4e4-49e7-b1f1-fc03b8a38280
+    m_ActionName: Monstro UI Cursor/NavigateCS[/XInputControllerWindows/leftStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnSubmitCS
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0272d0db-03cc-4182-b3e9-bf5132a17f3b
+    m_ActionName: Monstro UI Cursor/SubmitCS[/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnCancelCS
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 16ef49f9-0686-4ba1-8ca7-ec00b461d07f
+    m_ActionName: Monstro UI Cursor/CancelCS[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4530839509604072967}
+        m_TargetAssemblyTypeName: monstroInputHandler, Assembly-CSharp
+        m_MethodName: OnConfirmCS
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 88e64abd-dea9-4274-ade1-8bf1fe6361bd
+    m_ActionName: Monstro UI Cursor/ConfirmCS[/XInputControllerWindows/start]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Monstro Fighter
@@ -142698,6 +142771,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edbecd307544c1d4085b346011bef380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &880978441538758296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530839509604072970}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c256cca029b1df74189e1459cf083f48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCursor: {fileID: 0}
+  window: {fileID: 0}
+  selection: {fileID: 0}
+  selectionPos: {fileID: 0}
+  selectionOGPos: {x: 0, y: 0, z: 0}
 --- !u!114 &1516043871922068913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142726,6 +142816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 248250487eab85748b2547fb479cb1dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  locomotionClass: 
   playerLock: 1
   groundCheck: {fileID: 6125250477806772196}
   groundMask:

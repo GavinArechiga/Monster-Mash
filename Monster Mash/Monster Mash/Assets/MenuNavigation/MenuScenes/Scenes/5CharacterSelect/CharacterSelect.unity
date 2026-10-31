@@ -6197,6 +6197,11 @@ PrefabInstance:
       objectReference: {fileID: 395392756}
     - target: {fileID: 6288307439530595809, guid: 27681ab855b733c42be04365a0d3818d,
         type: 3}
+      propertyPath: nextScene
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6288307439530595809, guid: 27681ab855b733c42be04365a0d3818d,
+        type: 3}
       propertyPath: confirmButton
       value: 
       objectReference: {fileID: 409199041}

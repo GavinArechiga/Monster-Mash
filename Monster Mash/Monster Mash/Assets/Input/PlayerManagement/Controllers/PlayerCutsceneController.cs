@@ -21,12 +21,12 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
     {
         manager = FindObjectOfType<CutsceneManager>();
 
-        skipText = GameObject.Find("SkipText").GetComponent<TMP_Text>();
+        skipText = GameObject.Find("SkipText")?.GetComponent<TMP_Text>();
         if (!skipText)
         {
             Debug.LogWarning("SkipText not found, it should be a TMP_Text on the canvas");
         }
-        skipText.gameObject.SetActive(false);
+        skipText?.gameObject.SetActive(false);
 
         ring = FindObjectOfType<LoadRing>();
     }
@@ -70,7 +70,7 @@ public class PlayerCutsceneController : MonoBehaviour, IPlayerController
             var gamepad = context.control.device as Gamepad;
             string button = gamepad.buttonNorth.displayName;
 
-            StartSkipText(button);
+            if (skipText) StartSkipText(button);
         }
     }
 
