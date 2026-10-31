@@ -546,6 +546,24 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DLeftCS"",
+                    ""type"": ""Button"",
+                    ""id"": ""eda706e9-d8fd-479d-97ff-356b2fbc63b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DRightCS"",
+                    ""type"": ""Button"",
+                    ""id"": ""c1e95886-5580-4578-9a2d-bac80dca794b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -592,6 +610,28 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
                     ""action"": ""NavigateCS"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""217f8253-b04e-4f3b-8732-c4d5d286f7c3"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DLeftCS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c80653c-b197-437b-a9ae-14e2ac4fcb44"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DRightCS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -633,6 +673,8 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         m_MonstroUICursor_SubmitCS = m_MonstroUICursor.FindAction("SubmitCS", throwIfNotFound: true);
         m_MonstroUICursor_CancelCS = m_MonstroUICursor.FindAction("CancelCS", throwIfNotFound: true);
         m_MonstroUICursor_ConfirmCS = m_MonstroUICursor.FindAction("ConfirmCS", throwIfNotFound: true);
+        m_MonstroUICursor_DLeftCS = m_MonstroUICursor.FindAction("DLeftCS", throwIfNotFound: true);
+        m_MonstroUICursor_DRightCS = m_MonstroUICursor.FindAction("DRightCS", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -996,6 +1038,8 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_MonstroUICursor_SubmitCS;
     private readonly InputAction m_MonstroUICursor_CancelCS;
     private readonly InputAction m_MonstroUICursor_ConfirmCS;
+    private readonly InputAction m_MonstroUICursor_DLeftCS;
+    private readonly InputAction m_MonstroUICursor_DRightCS;
     public struct MonstroUICursorActions
     {
         private @MonstroControls m_Wrapper;
@@ -1004,6 +1048,8 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         public InputAction @SubmitCS => m_Wrapper.m_MonstroUICursor_SubmitCS;
         public InputAction @CancelCS => m_Wrapper.m_MonstroUICursor_CancelCS;
         public InputAction @ConfirmCS => m_Wrapper.m_MonstroUICursor_ConfirmCS;
+        public InputAction @DLeftCS => m_Wrapper.m_MonstroUICursor_DLeftCS;
+        public InputAction @DRightCS => m_Wrapper.m_MonstroUICursor_DRightCS;
         public InputActionMap Get() { return m_Wrapper.m_MonstroUICursor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1025,6 +1071,12 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @ConfirmCS.started += instance.OnConfirmCS;
             @ConfirmCS.performed += instance.OnConfirmCS;
             @ConfirmCS.canceled += instance.OnConfirmCS;
+            @DLeftCS.started += instance.OnDLeftCS;
+            @DLeftCS.performed += instance.OnDLeftCS;
+            @DLeftCS.canceled += instance.OnDLeftCS;
+            @DRightCS.started += instance.OnDRightCS;
+            @DRightCS.performed += instance.OnDRightCS;
+            @DRightCS.canceled += instance.OnDRightCS;
         }
 
         private void UnregisterCallbacks(IMonstroUICursorActions instance)
@@ -1041,6 +1093,12 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
             @ConfirmCS.started -= instance.OnConfirmCS;
             @ConfirmCS.performed -= instance.OnConfirmCS;
             @ConfirmCS.canceled -= instance.OnConfirmCS;
+            @DLeftCS.started -= instance.OnDLeftCS;
+            @DLeftCS.performed -= instance.OnDLeftCS;
+            @DLeftCS.canceled -= instance.OnDLeftCS;
+            @DRightCS.started -= instance.OnDRightCS;
+            @DRightCS.performed -= instance.OnDRightCS;
+            @DRightCS.canceled -= instance.OnDRightCS;
         }
 
         public void RemoveCallbacks(IMonstroUICursorActions instance)
@@ -1096,5 +1154,7 @@ public partial class @MonstroControls: IInputActionCollection2, IDisposable
         void OnSubmitCS(InputAction.CallbackContext context);
         void OnCancelCS(InputAction.CallbackContext context);
         void OnConfirmCS(InputAction.CallbackContext context);
+        void OnDLeftCS(InputAction.CallbackContext context);
+        void OnDRightCS(InputAction.CallbackContext context);
     }
 }

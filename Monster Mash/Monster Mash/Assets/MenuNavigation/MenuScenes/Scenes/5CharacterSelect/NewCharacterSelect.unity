@@ -3068,7 +3068,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 111.390015, y: -32.39}
+  m_AnchoredPosition: {x: -371.7, y: -32.39}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &94923788
@@ -4749,7 +4749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &240791707
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10041,7 +10041,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -312.56256, y: 132.92047}
+  m_AnchoredPosition: {x: -571.11, y: 132.92047}
   m_SizeDelta: {x: 80.6011, y: 100.4035}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &680047349
@@ -10632,7 +10632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &765344223
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17527,7 +17527,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1193149812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18254,7 +18254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1327550893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26151,7 +26151,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2123228453
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26533,7 +26533,7 @@ PrefabInstance:
     - target: {fileID: 8740333644435396495, guid: 312b92d8ad180a94a9f2ed8a61e7aab6,
         type: 3}
       propertyPath: m_Name
-      value: NewCursorManager
+      value: MonstroCursorManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 312b92d8ad180a94a9f2ed8a61e7aab6, type: 3}

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
-public class NewCursorManager : MonoBehaviour
+public class MonstroCursorManager : MonoBehaviour
 {
     private playerIndexManager playerManager;
     private tempSceneLoader sceneLoader;
@@ -127,13 +127,13 @@ public class NewCursorManager : MonoBehaviour
         }
     }
 
-    private IEnumerator Wait3Seconds()
+    private IEnumerator Wait3Seconds() //im taking out the wait cuz issues were not fixed like i hoped
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0f);
 
         uiManager.SwitchControlsOff();
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0f);
 
         uiManager.LoadSelectedStage();
 

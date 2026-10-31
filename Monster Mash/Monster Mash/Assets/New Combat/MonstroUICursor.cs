@@ -9,7 +9,7 @@ public class MonstroUICursor : MonoBehaviour
     private bool isActive = false;
 
     public RectTransform myCursor;
-    private NewCursorManager cManager;
+    private MonstroCursorManager cManager;
     private RectTransform canvas;
     public GameObject window;
     [SerializeField] public GameObject selection;
@@ -22,7 +22,7 @@ public class MonstroUICursor : MonoBehaviour
     public void Start()
     {
         isActive = true;
-        cManager = FindObjectOfType<NewCursorManager>();
+        cManager = FindObjectOfType<MonstroCursorManager>();
         cManager.AddPlayer(this);
         canvas = cManager.canvas;
         uiManager = FindObjectOfType<monstroUIManager>();
