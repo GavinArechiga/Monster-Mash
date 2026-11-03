@@ -17,6 +17,7 @@ public class monstroPartHandler : MonoBehaviour
     public List<monstroPart> availableAttackingParts = new List<monstroPart>();
     public int numberOfMappedParts = 0;
     public string currentAnimation = "null";
+    private float characterSpeed = 1;
 
     private void Awake()
     {
@@ -87,6 +88,24 @@ public class monstroPartHandler : MonoBehaviour
             numberOfMappedParts++;
         }
 
+        if (myLocomotion.locomotionClass == "brawler")
+        {
+            characterSpeed = 1;
+        }
+        else if (myLocomotion.locomotionClass == "aviator")
+        {
+            characterSpeed = 1;
+        }
+        else if (myLocomotion.locomotionClass == "heavy")
+        {
+            characterSpeed = 0.75f;
+        }
+        else if (myLocomotion.locomotionClass == "ghost")
+        {
+            characterSpeed = 1;
+        }
+
+
         generateAnimators();
     }
 
@@ -94,7 +113,7 @@ public class monstroPartHandler : MonoBehaviour
     {
         for (int i = 0; i < myMonstroParts.Length; i++)
         {
-            myMonstroParts[i].createNewAnimator();
+            myMonstroParts[i].createNewAnimator(characterSpeed);
         }
     }
 
