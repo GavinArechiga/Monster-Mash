@@ -113,7 +113,7 @@ public class monstroPart : MonoBehaviour
     public SkinnedMeshRenderer[] myDamageSkinnedMeshes;
     public GameObject breakawayColliders;
 
-    public void createNewAnimator()
+    public void createNewAnimator(float monsterSpeed)
     {
         monstroPartAnimator = GetComponent<Animator>();
         instancedAnimator = new AnimatorOverrideController(animationControllerTemplate);
@@ -220,6 +220,8 @@ public class monstroPart : MonoBehaviour
         {
             monstroPartAnimator.SetFloat("legOffset", 0.5f);
         }
+
+        monstroPartAnimator.SetFloat("Character Speed", monsterSpeed);
     }
 
     public void cleanAnimations()

@@ -86,6 +86,7 @@ public class monstroLocomotion : MonoBehaviour
     private float flightedGravity = -20f;
     private bool stuckOnWall;
     private bool isGravityBlind;
+    private bool slowFallOn;
 
     //Jumping and Flight
     private float jumpPower = 10f;
@@ -96,6 +97,7 @@ public class monstroLocomotion : MonoBehaviour
     private int midAirJumpsLeft = 1;
     private bool isLanded = true;//used to ensure that landing functions only happen once. Also used to tell if players walk or fell off terrain as opposed to jumping
     Vector3 velocity;
+    private bool recoverCooled = true;
 
     //Hazards and Level Interaction
     public LayerMask trampolineMask;
@@ -159,6 +161,7 @@ public class monstroLocomotion : MonoBehaviour
         isStunLocked = false;
         isElectricLocked = false;
         onFire = false;
+        slowFallOn = false;
         StartCoroutine(movementSpawnDelay());
     }
 
@@ -229,6 +232,7 @@ public class monstroLocomotion : MonoBehaviour
             defaultRunSpeed = ghost_RunSpeed;
             defaultJumpPower = ghost_JumpPower;
             defaultGravity = ghost_Gravity;
+            StartCoroutine(ghostTracker());
         }
 
         //set the changing stats to the defaults
@@ -448,15 +452,24 @@ public class monstroLocomotion : MonoBehaviour
         }
     }
 
+    public void readyToRecover()
+    {
+        slowFallOn = true;
+    }
+
     public void recover()
     {
-        print("recovery");
+        if (recoverCooled == false) return;
 
         if (locomotionClass == "brawler")
         {
             #region Trampoline Jump - Platformer Style Controller
+            isLanded = false;
+            isGravityBlind = false;
+            monstroVisuals.jump();
+            velocity.y = 0f;
+            velocity.y += Mathf.Sqrt((defaultJumpPower * 2) * -2f * gravity);
 
-           
             #endregion
         }
         else if (locomotionClass == "aviator")
@@ -477,9 +490,19 @@ public class monstroLocomotion : MonoBehaviour
         {
             #region Teleport - Teleporter Style Controller
 
-            
+            StartCoroutine(ghostTransport());
+            StartCoroutine(recoverCooldown());
             #endregion
         }
+
+        slowFallOn = false;
+    }
+
+    IEnumerator recoverCooldown()
+    {
+        recoverCooled = false;
+        yield return new WaitForSeconds(2);
+        recoverCooled = true;
     }
 
     #endregion
@@ -607,7 +630,19 @@ public class monstroLocomotion : MonoBehaviour
                 monstroVisuals.fall();
             }
 
-            if (isFlying && (velocity.y == 0 || velocity.y < 0)) //falling with flight
+            if(slowFallOn && (velocity.y == 0 || velocity.y < 0)) //slow fall while getting ready to use recovery
+            {
+                if (velocity.y > -120)
+                {
+                    velocity.y += flightedGravity * Time.deltaTime;
+                }
+                else
+                {
+                    velocity.y = -120;
+                }
+                controller.Move(velocity * Time.deltaTime);
+            }
+            else if (isFlying && (velocity.y == 0 || velocity.y < 0)) //falling with flight
             {
                 //put a velocity cap
                 if (velocity.y > -120)
@@ -665,6 +700,7 @@ public class monstroLocomotion : MonoBehaviour
         isLanded = true;
         stuckOnWall = false;
         isStunLocked = false;
+        slowFallOn = false;
         needsMovementAnimationRefresh = true;
 
         if (attackLocked == false && rotationLocked == false)
@@ -676,6 +712,8 @@ public class monstroLocomotion : MonoBehaviour
         {
             monstroInputs.forceReleaseAttack();
         }
+
+        updateLastSolidPosition();
     }
     #endregion
 
@@ -712,13 +750,25 @@ public class monstroLocomotion : MonoBehaviour
     {
         //grab position
         updateLastSolidPosition();
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         StartCoroutine(ghostTracker());
+    }
+
+    IEnumerator ghostTransport()
+    {
+        playerLock = true;
+        this.GetComponent<CharacterController>().enabled = false;
+        monstroVisuals.hideMonster();
+        this.transform.position = lastSolidGroundPosition;
+        yield return new WaitForSeconds(1);
+        monstroVisuals.showMonster();
+        this.GetComponent<CharacterController>().enabled = true;
+        playerLock = false;
     }
 
     private void updateLastSolidPosition()
     {
-        if (isGrounded && onMovingPlatform == false)
+        if (isGrounded)
         {
             lastSolidGroundPosition = this.transform.position;
         }
