@@ -14,6 +14,7 @@ public class MonstroCursorManager : MonoBehaviour
     [SerializeField] private Vector2[] startPos;
     [SerializeField] private Transform[] selectionPos;
     [SerializeField] private MonstroUICursor[] controllers;
+    [SerializeField] private Camera[] myCams;
 
     public RectTransform canvas;
     [SerializeField] public GameObject confirmButton;
@@ -49,6 +50,7 @@ public class MonstroCursorManager : MonoBehaviour
         player.window.transform.GetChild(0).gameObject.SetActive(true);
         player.window.transform.GetChild(1).gameObject.SetActive(false);
         player.selectionPos = selectionPos[index];
+        player.SetCamera(myCams[index]);
         CheckAllPlayersSelected();
     }
 
@@ -122,22 +124,10 @@ public class MonstroCursorManager : MonoBehaviour
         
         if (controllers[0])
         {
-            sceneLoader.monsterCombo1();
-            StartCoroutine("Wait3Seconds");
+            uiManager.SwitchControlsOff();
+            //sceneLoader.monsterCombo1();
+            uiManager.LoadSelectedStage();
         }
-    }
-
-    private IEnumerator Wait3Seconds() //im taking out the wait cuz issues were not fixed like i hoped
-    {
-        yield return new WaitForSeconds(0f);
-
-        uiManager.SwitchControlsOff();
-
-        yield return new WaitForSeconds(0f);
-
-        uiManager.LoadSelectedStage();
-
-        yield break;
     }
 
     public void ResetCursorPos(MonstroUICursor player)
@@ -157,5 +147,10 @@ public class MonstroCursorManager : MonoBehaviour
 
             cursors[index].anchoredPosition = startPos[index];
         }
+    }
+
+    public void LoadMonster()
+    {
+        sceneLoader.monsterCombo1();
     }
 }
